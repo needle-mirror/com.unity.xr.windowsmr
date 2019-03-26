@@ -1,0 +1,47 @@
+{
+  "name": "XRSDK Windows Mixed Reality",
+  "version": "1.0.0",
+  "libraryName": "WindowsMRXRSDK",
+  "properties": {
+    "Windows Mixed Reality Boot":true
+  },
+
+  "sessions": [
+    {
+      "id": "Windows Mixed Reality Session"
+    }
+  ],
+  "displays": [
+    {
+      "id": "Windows Mixed Reality Display",
+      "disablesLegacyVr" : true,
+      "splashScreenIsWorldLocked" :  false
+    }
+  ],
+  "inputs": [
+    {
+      "id": "Windows Mixed Reality Input"
+    }
+  ],
+  "gestures": [
+    {
+      "id": "Windows Mixed Reality Gesture",
+      "linkedInputSubsystemId": "Windows Mixed Reality Input"
+    }
+  ],
+  "referencePoints": [
+    {
+      "id": "Windows Mixed Reality Reference Point"
+    }
+  ],
+  "meshings": [
+    {
+      "id": "Windows Mixed Reality Meshing"
+    }
+  ],
+  "experience": [
+    { 
+      "id": "Windows Mixed Reality Experience" 
+    }
+  ]
+}

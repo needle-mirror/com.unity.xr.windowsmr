@@ -1,0 +1,21 @@
+{
+    "name": "Unity.XR.WindowsMR.Editor.Tests",
+    "references": [
+        "Unity.XR.WindowsMR.Editor",
+        "Unity.XR.WindowsMR",
+        "UnityEngine.SpatialTracking"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

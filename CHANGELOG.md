@@ -1,0 +1,125 @@
+# Changelog
+All notable changes to this package will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [1.0.0-preview.3] - 2019-03-26
+* Update package to point to latest management release verison.
+
+## [1.0.0-preview.2] - 2019-03-26
+* Updated min Unity version.
+
+## [1.0.0-preview.1] - 2019-03-26
+* Update version to show preliminary v1 release.
+* Remove all shim code. We no longer shim Legacy VR API support.
+* Bring Display Subsystem support up to current XR SDK version (Stabilization Plane/Focus Point, Content Protection, Reprojection mode)
+* Implement support for shared depth buffer.
+* Add Gesture Subsystem.
+* Add Meshing Subsystem implementation.
+* Add Experience Subsystem.
+* Add support for Historic Queries for controller/input subsystem data.
+* Add initial haptics support.
+* Number of bugs and QoL issues resolved.
+
+## [0.2.0-preview.11] - 2018-12-05
+* Support shim interface to allow for interoperation with UnityEngine.XR.WSA classes.
+* Fix input so that we report Head node through Tracked Pose Driver.
+* Add dependency on Windows Metro package to support shim implementation.
+
+## [0.2.0-preview.10] - 2018-11-27
+* Update XR Management dependency
+* Added dependency on Windows MR Metro package
+* QA Added some play mode testing
+* Added shim interface for interoperation with legacy VR WSA Classes
+* Fixed issues with updated Microsoft SDK 17763
+* Update bee and changed build to add Arm64 support
+* Fixed build to correctly create DLLs on CI. Removed DLLs from source repository.
+
+Known Issues:
+
+* Controllers will not work in Editor. Working with Microsoft on that currently.
+* Stability of integration shim is not great.
+* Integration has bugs that are beng tracked and dealt with.
+
+## [0.2.0-preview.9] - 2018-10-31
+* Update XR Management dependency
+
+## [0.2.0-preview.8] - 2018-10-29
+* Resolve CI issues.
+
+## [0.2.0-preview.7] - 2018-10-29
+* Test CI/CD for GitLab -> GitHub  move
+* Test pickup of XR Managmenet 0.2.0-preview.6 post GitLab -> GitHub move
+* Add copy of settings from VR Device for Windows MR to XR SDK Windows MR.
+
+
+## [0.2.0-preview.3] - 2018-10-24
+* Updated to pick up dependencies from XR Management
+* Support for splash screen merged in.
+
+
+## [0.2.0-preview.2] - 2018-10-16
+* Fix memory leaks
+* Rename generated managed DLLs to not conflict with the com.unity.xr.windowsmr.metro package.
+
+
+## [0.2.0-preview.1] - 2018-09-10
+* Updated XR Management dependency to 0.2.0-preview.1
+* Package initialization support added.
+* Support for more than one build target added for settings.
+
+## [0.1.0-preview.13] - 2018-01-01
+* Now supports HoloLens and Standalone builds
+* Supports Reference Points subsystem to allow for ephemeral world anchors.
+* Test project cleaned up and pointed to the correct location in the repo for the package.
+
+
+## [0.1.0-preview.12] - 2018-08-20
+* Update the package description and name.
+* Fixed a crash issue revealed when compositor layers were enabled
+* Several changes to attempt to get compisitor layers rendering
+
+## [0.1.0-preview.11] - 2018-08-20
+* Implemented XR Management API. We now have an XRLoader instance, a build processeor, configuration and data passing to native land.
+
+## [0.1.0-preview.10] - 2018-08-16
+* Rebuilt dll (hadn't been rebuilt since .7)
+
+## [0.1.0-preview.9] - 2018-08-16
+* Fixed incorrect library name in UnitySubsystemsManifest.json
+
+## [0.1.0-preview.8] - 2018-08-16
+* Merged local changes to master
+
+## [0.1.0-preview.7] - 2018-08-15
+* Fixed a crashing bug caused by uninitialized pointer that only shows up in Release builds.
+* Updated the bee.exe with a version that supports some custom work to handle C++/WinRT.
+* Updated README to be a bit more useful.
+* Add Packages folder for TestProject back into the repo.
+
+## [0.1.0-preview.6] - 2018-08-15
+
+* Correct naming of provider in native registration code.
+* Modify bee script to make sure PDB and lib files are copied as well as DLL
+* Modified yaml file to strip the PDBs and libs from the generated bits on package creation.
+
+## [0.1.0-preview.5] - 2018-08-14
+
+### Remove build folder and replace with the dll checked into the proto folder. When we can build on the runners we need to delete that checked in dll.
+
+## [0.1.0-preview.4] - 2018-08-14
+
+### More meta files changes
+
+## [0.1.0-preview.3] - 2018-08-14
+
+### Fix package layout to conform to expected XR SDK package layout.
+
+## [0.1.0-preview.2] - 2018-08-14
+
+### Add missing meta files to stop Unity from complaining
+
+## [0.1.0-preview.1] - 2018-08-13
+
+### This is the first release of *Unity Windows Mixed Reality XR SDK Provider*.

@@ -1,0 +1,26 @@
+{
+  "name": "com.unity.xr.windowsmr",
+  "displayName": "Windows MR XR Provider",
+  "version": "1.0.0-preview.3",
+  "unity": "2019.2",
+  "description": "Provides implementation and support for Unity XR SDK, allowing integration and use of Windows Mixed Reality devices.",
+  "keywords": [
+    "windows",
+    "ar",
+    "augmented",
+    "xr",
+    "reality",
+    "xreditorsubsystem",
+    "mixed",
+    "hololens"
+  ],
+  "dependencies": {
+    "com.unity.xr.windowsmr.metro": "1.0.8",
+    "com.unity.xr.management": "2.0.0-preview.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.cds.internal.unity3d.com/xr/sdk/windowsmr.git",
+    "revision": "61c805433eed7abf1118a54220faed955d816e75"
+  }
+}
