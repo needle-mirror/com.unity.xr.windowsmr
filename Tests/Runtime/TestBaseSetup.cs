@@ -1,7 +1,9 @@
-﻿using NUnit.Framework;
+﻿#if JENKINS
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using UnityEngine.TestTools;
+using UnityEngine.XR.Management;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,15 +12,24 @@ using UnityEditor;
 [PrebuildSetup(typeof(TestPrebuildSetup))]
 public class TestBaseSetup
 {
+    public static XRManagerSettings m_XrManagerSettings;
+
     public static GameObject m_Camera;
     public static GameObject m_Light;
     public static GameObject m_Cube;
 
-    public static GameObject m_XrManager;
     public static GameObject m_TrackingRig;
     public static TrackedPoseDriver m_TrackHead;
 
     public TestSetupHelpers m_TestSetupHelpers;
+
+    public XRLoader ActiveLoader
+    {
+        get
+        {
+            return XRGeneralSettings.Instance.Manager.activeLoader;
+        }
+    }
 
     [SetUp]
     public void XrSdkTestBaseSetup()
@@ -51,3 +62,4 @@ public class TestBaseSetup
         }
     }
 }
+#endif //JENKINS

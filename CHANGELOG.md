@@ -4,6 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.0-preview.4] - 2019-05-10
+* Update management version to point at Yamato build management.
+* Change package over to using Yamato for build/publish tasks. We'll still keep Jenkins for unit test verification for now.
+* Fix crash due to new streamlined management.
+* Fix culling frustum to correctly calculate the combined bounds of the eye projections.
+* Fix issue in projection creation to convert D3D depth bounds to OGL depth bounds.
+* Take dependency on new version of Metro package to handle a build break due to ugui.
+
 ## [1.0.0-preview.3] - 2019-03-26
 * Update package to point to latest management release verison.
 

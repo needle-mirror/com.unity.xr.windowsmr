@@ -1,3 +1,4 @@
+#if JENKINS
 using UnityEngine;
 using UnityEngine.Experimental.XR;
 using UnityEngine.XR;
@@ -17,7 +18,7 @@ namespace Unity.XR.WindowsMR.Tests
     {
         public IEnumerator ContentProtection()
         {
-            var disp = XRManager.activeLoader.GetLoadedSubsystem<XRDisplaySubsystem>();
+            var disp = ActiveLoader.GetLoadedSubsystem<XRDisplaySubsystem>();
             Assert.IsTrue(disp != null);
             yield return new WaitForEndOfFrame();
 
@@ -43,9 +44,8 @@ namespace Unity.XR.WindowsMR.Tests
         [UnityTest]
         public IEnumerator ReprojectionMode()
         {
-            var disp = XRManager.activeLoader.GetLoadedSubsystem<XRDisplaySubsystem>();
+            var disp = ActiveLoader.GetLoadedSubsystem<XRDisplaySubsystem>();
             Assert.IsTrue(disp != null);
-            yield return new WaitForEndOfFrame();
 
             XRDisplaySubsystem.ReprojectionMode oldContentState = disp.reprojectionMode;
             XRDisplaySubsystem.ReprojectionMode newContentState = oldContentState;
@@ -58,7 +58,7 @@ namespace Unity.XR.WindowsMR.Tests
 
                 case XRDisplaySubsystem.ReprojectionMode .OrientationOnly:
                     newContentState = XRDisplaySubsystem.ReprojectionMode .PositionAndOrientation;
-                    break;                
+                    break;
 
                 case XRDisplaySubsystem.ReprojectionMode .PositionAndOrientation:
                     newContentState = XRDisplaySubsystem.ReprojectionMode .None;
@@ -66,7 +66,7 @@ namespace Unity.XR.WindowsMR.Tests
 
                 case XRDisplaySubsystem.ReprojectionMode.None:
                     newContentState = XRDisplaySubsystem.ReprojectionMode.OrientationOnly;
-                    break;         
+                    break;
             }
 
             disp.reprojectionMode = newContentState;
@@ -75,8 +75,8 @@ namespace Unity.XR.WindowsMR.Tests
             yield return new WaitForEndOfFrame();
             yield return new WaitForEndOfFrame();
 
-            newContentState = disp.reprojectionMode;
-            Assert.IsTrue(oldContentState != newContentState);
+            var currentContentState = disp.reprojectionMode;
+            Assert.IsTrue(currentContentState == oldContentState || currentContentState == newContentState);
             newContentState = oldContentState;
             disp.reprojectionMode = newContentState;
 
@@ -92,7 +92,7 @@ namespace Unity.XR.WindowsMR.Tests
         [UnityTest]
         public IEnumerator FocusPoint()
         {
-            var disp = XRManager.activeLoader.GetLoadedSubsystem<XRDisplaySubsystem>();
+            var disp = ActiveLoader.GetLoadedSubsystem<XRDisplaySubsystem>();
             Assert.IsTrue(disp != null);
             yield return new WaitForEndOfFrame();
 
@@ -103,7 +103,7 @@ namespace Unity.XR.WindowsMR.Tests
         [UnityTest]
         public IEnumerator DisplayOpaque()
         {
-            var disp = XRManager.activeLoader.GetLoadedSubsystem<XRDisplaySubsystem>();
+            var disp = ActiveLoader.GetLoadedSubsystem<XRDisplaySubsystem>();
             Assert.IsTrue(disp != null);
             yield return new WaitForEndOfFrame();
 
@@ -114,3 +114,4 @@ namespace Unity.XR.WindowsMR.Tests
     }
 
 }
+#endif //JENKINS

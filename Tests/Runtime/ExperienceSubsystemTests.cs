@@ -1,3 +1,4 @@
+#if JENKINS
 using UnityEngine;
 using UnityEngine.Experimental.XR;
 using UnityEngine.XR;
@@ -10,14 +11,14 @@ using System;
 
 namespace Unity.XR.WindowsMR.Tests
 {
-    internal class ExperienceSubsystemTests : TestBaseSetup
+    public class ExperienceSubsystemTests : TestBaseSetup
     {
         [UnityTest]
         public IEnumerator TestExperienceSubsystem()
         {
             yield return new WaitForSeconds(1);
-            Assert.IsNotNull(m_XrManager);
-            XRExperienceSubsystem expSub = XRManager.activeLoader.GetLoadedSubsystem<XRExperienceSubsystem>();
+            Assert.IsNotNull(ActiveLoader);
+            XRExperienceSubsystem expSub =ActiveLoader.GetLoadedSubsystem<XRExperienceSubsystem>();
             Assert.IsNotNull(expSub);
         }
 
@@ -25,7 +26,7 @@ namespace Unity.XR.WindowsMR.Tests
         public IEnumerator TestExperienceType()
         {
             yield return new WaitForSeconds(1);
-            XRExperienceSubsystem expSub = XRManager.activeLoader.GetLoadedSubsystem<XRExperienceSubsystem>();
+            XRExperienceSubsystem expSub = ActiveLoader.GetLoadedSubsystem<XRExperienceSubsystem>();
             switch(expSub.experienceType)
             {
                 case XRExperienceSubsystem.ExperienceType.UnBounded:
@@ -40,7 +41,7 @@ namespace Unity.XR.WindowsMR.Tests
         public IEnumerator TestExperienceBoundary()
         {
             yield return new WaitForSeconds(1);
-            XRExperienceSubsystem expSub = XRManager.activeLoader.GetLoadedSubsystem<XRExperienceSubsystem>();
+            XRExperienceSubsystem expSub = ActiveLoader.GetLoadedSubsystem<XRExperienceSubsystem>();
             if (expSub.experienceType == XRExperienceSubsystem.ExperienceType.Bounded)
             {
                 List<Vector3> boundaryPoints = new List<Vector3>();
@@ -51,3 +52,4 @@ namespace Unity.XR.WindowsMR.Tests
     }
 
 }
+#endif //JENKINS

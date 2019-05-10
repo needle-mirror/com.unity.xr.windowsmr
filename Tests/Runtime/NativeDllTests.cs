@@ -1,4 +1,5 @@
-﻿using UnityEngine.TestTools;
+﻿#if JENKINS
+using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 using UnityEngine;
@@ -37,15 +38,23 @@ namespace Unity.XR.WindowsMR.Tests
             {
                 m_RenderPlain = Object.Instantiate(Resources.Load("Prefabs/_PlaneThatCallsIntoPlugin", typeof(GameObject)) as GameObject);
                 m_SpotLight = Object.Instantiate(Resources.Load("Prefabs/Spotlight", typeof(Light)) as Light);
-                m_BaseSphere = Object.Instantiate(Resources.Load("Prefabs/Sphere", typeof(GameObject)) as GameObject);
 
                 m_SceneObjectsLoaded = true;
+            }
+
+            private void CreatePerfSphere()
+            {
+                m_BaseSphere = Object.Instantiate(Resources.Load("Prefabs/Sphere", typeof(GameObject)) as GameObject);
             }
 
             private void CleanUpTestsObjects()
             {
                 Object.Destroy(m_RenderPlain);
-                Object.Destroy(m_BaseSphere);
+                if (m_BaseSphere != null)
+                {
+                    Object.Destroy(m_BaseSphere);
+                }
+
                 Object.Destroy(m_SpotLight);
 
                 if (GameObject.Find("Spotlight(Clone)"))
@@ -68,12 +77,14 @@ namespace Unity.XR.WindowsMR.Tests
                 Assert.IsTrue(m_RenderingImage, "Image rendering couldn't be found");
             }
 
-            [Ignore("Current Bug where start up is causing fps slow down due to spin up [1115410]")]
+            // Current Bug where start up is causing fps slow down due to spin up [1115410]
             [UnityTest]
             public IEnumerator RenderingFPSCheck()
             {
-                yield return new WaitForSeconds(4f);
+                yield return new WaitForSeconds(3f);
+                CreatePerfSphere();
                 m_NonPerformantFrameCount = m_BaseSphere.GetComponent<FpsMeasure>().m_NonPerformantFrameCount;
+                yield return new WaitForSeconds(10f);
                 Assert.AreEqual(0, m_NonPerformantFrameCount, "Failed to keep every frame inside the target frame time for the tested window");
             }
 
@@ -102,3 +113,4 @@ namespace Unity.XR.WindowsMR.Tests
         }
     }
 }
+#endif //JENKINS

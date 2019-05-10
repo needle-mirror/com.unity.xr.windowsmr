@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿#if JENKINS
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using UnityEngine.TestTools;
@@ -51,3 +52,4 @@ public class TestBaseSetup
         }
     }
 }
+#endif //JENKINS

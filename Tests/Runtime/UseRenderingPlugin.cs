@@ -1,3 +1,4 @@
+#if JENKINS
 using UnityEngine;
 using System;
 using System.Collections;
@@ -11,26 +12,26 @@ public class UseRenderingPlugin : MonoBehaviour
 	// one function in some active script.
 	// For this example, we'll call into plugin's SetTimeFromUnity
 	// function and pass the current time so the plugin can animate.
-	[DllImport ("RenderingPlugin")]
+	[DllImport ("RenderingPluginXRSDKWindowsMR")]
 
 	private static extern void SetTimeFromUnity(float t);
 
 
 	// We'll also pass native pointer to a texture in Unity.
 	// The plugin will fill texture data from native code.
-	[DllImport ("RenderingPlugin")]
+	[DllImport ("RenderingPluginXRSDKWindowsMR")]
 
 	private static extern void SetTextureFromUnity(System.IntPtr texture, int w, int h);
 
 	// We'll pass native pointer to the mesh vertex buffer.
 	// Also passing source unmodified mesh data.
 	// The plugin will fill vertex data from native code.
-	[DllImport ("RenderingPlugin")]
+	[DllImport ("RenderingPluginXRSDKWindowsMR")]
 
 	private static extern void SetMeshBuffersFromUnity (IntPtr vertexBuffer, int vertexCount, IntPtr sourceVertices, IntPtr sourceNormals, IntPtr sourceUVs);
 
 
-	[DllImport("RenderingPlugin")]
+	[DllImport("RenderingPluginXRSDKWindowsMR")]
 
 	private static extern IntPtr GetRenderEventFunc();
 
@@ -107,3 +108,4 @@ public class UseRenderingPlugin : MonoBehaviour
 		}
 	}
 }
+#endif //JENKINS

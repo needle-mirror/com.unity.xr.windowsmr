@@ -1,5 +1,7 @@
+#if JENKINS
 using UnityEngine;
 using UnityEngine.SpatialTracking;
+using UnityEngine.XR.Management;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -28,8 +30,8 @@ public class TestSetupHelpers : TestBaseSetup
 
     public void CreateXRGameObjects()
     {
-        m_XrManager = GameObject.Instantiate(Resources.Load("TestSetup/XR Manager")) as GameObject;
         m_TrackingRig = GameObject.Instantiate(Resources.Load("TestSetup/TrackingRig")) as GameObject;
+        XRGeneralSettings.Instance.Manager.StartSubsystems();
     }
 
     public void CameraLightSetup()
@@ -40,7 +42,7 @@ public class TestSetupHelpers : TestBaseSetup
         m_Camera.AddComponent<TrackedPoseDriver>();
         m_TrackHead = m_Camera.GetComponent<TrackedPoseDriver>();
         m_TrackHead.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Center);
-        
+
         m_Light = new GameObject("Light");
         Light light = m_Light.AddComponent<Light>();
         light.type = LightType.Directional;
@@ -181,13 +183,13 @@ public class TestSetupHelpers : TestBaseSetup
 
     public void CleanUpXRGameObjects()
     {
-        DestroyGameObject(ref m_XrManager);
         DestroyGameObject(ref m_TrackingRig);
+        XRGeneralSettings.Instance.Manager.StopSubsystems();
     }
 
 #if UNITY_EDITOR
     public void EnsureMultiPassRendering() => PlayerSettings.stereoRenderingPath = StereoRenderingPath.MultiPass;
-                
+
     public void EnsureInstancingRendering() => PlayerSettings.stereoRenderingPath = StereoRenderingPath.Instancing;
 #endif
 
@@ -241,3 +243,4 @@ public class TestSetupHelpers : TestBaseSetup
         }
     }
 }
+#endif //JENKINS
