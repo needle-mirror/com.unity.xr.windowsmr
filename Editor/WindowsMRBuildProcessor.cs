@@ -10,10 +10,12 @@ using UnityEditor.XR.Management;
 using UnityEngine;
 using UnityEngine.XR.Management;
 
-using Unity.XR.WindowsMR;
+using UnityEngine.XR.WindowsMR;
 
-namespace Unity.XR.WindowsMR.Editor
+namespace UnityEditor.XR.WindowsMR
 {
+    /// <summary>Build Processor class used to handle XR Plugin specific build actions/</summary>
+    /// <typeparam name="WindowsMRSettings">The settings instance type the build processor will use.</typeparam>
     public class WindowsMRBuildProcessor : XRBuildHelper<WindowsMRSettings>
     {
         public override string BuildSettingsKey { get { return Constants.k_SettingsKey; } }
@@ -42,6 +44,9 @@ namespace Unity.XR.WindowsMR.Editor
             return settings;
         }
 
+        /// <summary>Get the XR Plugin build settings for the specific build platform.</summary>
+        /// <param name="buildTargetGroup">The build platform we want to get settings for.</param>
+        /// <returns>An instance of WindowsMRBuildSettings, or null if there are none for the current build platform.</returns>
         public WindowsMRBuildSettings BuildSettingsForBuildTargetGroup(BuildTargetGroup buildTargetGroup)
         {
             WindowsMRPackageSettings settings = PackageSettingsForBuildTargetGroup(buildTargetGroup);
@@ -55,6 +60,9 @@ namespace Unity.XR.WindowsMR.Editor
             return null;
         }
 
+        /// <summary>Get a generic object reference for runtime settings for the build platform</summary>
+        /// <param name="buildTargetGroup">The build platform we want to get settings for.</param>
+        /// <returns>An object instance of the saved settings, or null if there are none.</returns>
         public override UnityEngine.Object SettingsForBuildTargetGroup(BuildTargetGroup buildTargetGroup)
         {
             WindowsMRPackageSettings settings = PackageSettingsForBuildTargetGroup(buildTargetGroup);
@@ -70,18 +78,27 @@ namespace Unity.XR.WindowsMR.Editor
 
         const string k_ForcePrimaryWindowHolographic = "force-primary-window-holographic";
 
+        /// <summary>OnPostprocessBuild override to provide XR Plugin specific build actions.</summary>
+        /// <param name="report">The build report.</param>
         public override void OnPostprocessBuild(BuildReport report)
         {
             base.OnPostprocessBuild(report);
-            WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(report.summary.platformGroup);
 
-            if (buildSettings == null)
+            XRGeneralSettings settings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(report.summary.platformGroup);
+            if (settings == null)
                 return;
 
             string bootConfigPath = report.summary.outputPath;
 
             if (report.summary.platformGroup == BuildTargetGroup.WSA)
             {
+                bool usePrimaryWindow = true;
+                WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(report.summary.platformGroup);
+                if (buildSettings != null)
+                {
+                    usePrimaryWindow = buildSettings.UsePrimaryWindowForDisplay;
+                }
+
                 // Boot Config data path is highly specific to the platform being built.
                 bootConfigPath = Path.Combine(bootConfigPath, PlayerSettings.productName);
                 bootConfigPath = Path.Combine(bootConfigPath, "Data");
@@ -89,7 +106,7 @@ namespace Unity.XR.WindowsMR.Editor
 
                 using (StreamWriter sw = File.AppendText(bootConfigPath))
                 {
-                    sw.WriteLine(String.Format("{0}={1}", k_ForcePrimaryWindowHolographic, buildSettings.UsePrimaryWindowForDisplay ? 1 : 0));
+                    sw.WriteLine(String.Format("{0}={1}", k_ForcePrimaryWindowHolographic, usePrimaryWindow ? 1 : 0));
                 }
             }
         }

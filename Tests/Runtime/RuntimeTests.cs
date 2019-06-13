@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System;
 
 #if JENKINS
-namespace Unity.XR.WindowsMR.Tests
+namespace UnityEngine.XR.WindowsMR.Tests
 {
     class RuntimeTests
     {
@@ -463,7 +463,7 @@ namespace Unity.XR.WindowsMR.Tests
     }
 }
 #else //JENKINS
-namespace Unity.XR.WindowsMR.Tests
+namespace UnityEngine.XR.WindowsMR.Tests
 {
     class RuntimeTests
     {

@@ -4,6 +4,35 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.0-preview.9] - 2019-06-13
+* Move documentation revision history out of documentation. Replaced with change log tracking of changes.
+* Add XmlDocs to the appropriate APIs.
+* Strip out session subsystem.
+* Add IsTracked property to HMD tracked device (though currently defaults to true all the time).
+* Remap Touchpad Axes to primary 2d axis and thumbstick axis to secondary to make grouping correct.
+* Move tumbstick pressed from Thumbrest to Secondary 2D Axis clicked.
+* Add package specific external APIs for getting the Holographic Space, The Spatial Coordinate Sysem and the Windows MR tracking state.
+* Update package requirements to XR Management 2.0.0-preview.24.
+* Add documentation for gestures.
+
+## [1.0.0-preview.8] - 2019-06-11
+* Update package promotion pipeline to latest CI scripts.
+
+## [1.0.0-preview.7] - 2019-05-29
+* Fix build issue when the user has decided to not create an instance of settings for WindowsMR.
+* Integrate latest standalone gesture manager subsystem.
+* Update XR Managmeent to 2.0.0-preview.19
+
+## [1.0.0-preview.6] - 2019-05-28
+* Update package naming.
+* Update namespaces to follow expected naming conventions.
+* Ensure input devices are disconnected when input subsystem stops.
+* Add standalone gesture subsystem.
+
+## [1.0.0-preview.5] - 2019-05-13
+* Fix for fog generation issue due to using D3D projection matrix instead of OpenGL.
+* Split render pose out of tracking pose to separate logical concerns.
+
 ## [1.0.0-preview.4] - 2019-05-10
 * Update management version to point at Yamato build management.
 * Change package over to using Yamato for build/publish tasks. We'll still keep Jenkins for unit test verification for now.

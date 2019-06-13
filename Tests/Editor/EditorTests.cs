@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System;
 
 #if JENKINS
-namespace Unity.XR.WindowsMR.Editor.Tests
+namespace UnityEditor.XR.WindowsMR.Tests
 {
     class EditorTests
     {
@@ -33,7 +33,7 @@ namespace Unity.XR.WindowsMR.Editor.Tests
     }
 }
 #else //JENKINS
-namespace Unity.XR.WindowsMR.Editor.Tests
+namespace UnityEditor.XR.WindowsMR.Tests
 {
     class EditorTests
     {

@@ -5,21 +5,26 @@ using System.IO;
 using System.Linq;
 
 using UnityEngine;
-using UnityEditor;
+using UnityEngine.XR.WindowsMR;
 
+using UnityEditor;
 using UnityEditor.XR.Management;
 
-namespace Unity.XR.WindowsMR.Editor
+namespace UnityEditor.XR.WindowsMR
 {
     class WindowsMRXRSDKPackageInitialization : XRPackageInitializationBase
     {
         public string PackageName { get { return "Windows MR XR SDK"; } }
-        public string LoaderFullTypeName { get { return "Unity.XR.WindowsMR.WindowsMRLoader"; } }
+        public string LoaderFullTypeName { get { return "UnityEngine.XR.WindowsMR.WindowsMRLoader"; } }
         public string LoaderTypeName { get { return "WindowsMRLoader"; } }
-        public string SettingsFullTypeName { get{ return "Unity.XR.WindowsMR.Editor.WindowsMRPackageSettings"; } }
+        public string SettingsFullTypeName { get{ return "UnityEditor.XR.WindowsMR.WindowsMRPackageSettings"; } }
         public string SettingsTypeName { get{ return "WindowsMRPackageSettings"; } }
         public string PackageInitKey { get { return "Windows MR Package Initialization"; } }
 
+        /// <summary>Will populate default settings on package initialization.</summary>
+        /// <param name="obj">The scriptable object instance from the Asset Database that is an instance of WindowsMRPacakgeSettings</param>
+        /// <returns>True if settings were populated, else false.</returns>
+        /// <seealso cref="WindowsMRPackageSettings" />
         public bool PopulateSettingsOnInitialization(ScriptableObject obj)
         {
             WindowsMRPackageSettings packageSettings = obj as WindowsMRPackageSettings;

@@ -2,7 +2,9 @@
     "name": "Unity.XR.WindowsMR.Tests",
     "references": [
         "UnityEngine.SpatialTracking",
-        "Unity.XR.Management"
+        "Unity.XR.WindowsMixedReality",
+        "Unity.XR.Management",
+        "Unity.XR.InteractionSubsystems"
     ],
     "optionalUnityReferences": [
         "TestAssemblies",

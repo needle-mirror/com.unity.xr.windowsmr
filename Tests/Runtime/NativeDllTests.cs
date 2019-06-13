@@ -4,7 +4,7 @@ using NUnit.Framework;
 using System.Collections;
 using UnityEngine;
 
-namespace Unity.XR.WindowsMR.Tests
+namespace UnityEngine.XR.WindowsMR.Tests
 {
     class DllTests
     {

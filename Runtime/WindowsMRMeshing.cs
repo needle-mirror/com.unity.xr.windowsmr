@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.Experimental;
 using UnityEngine.Experimental.XR;
 
-namespace Unity.XR.WindowsMixedReality
+namespace UnityEngine.XR.WindowsMR
 {
+    /// <summary>Extension methods for the XRMeshingSubsystem that provide Windows MR XR Plugin specific APIs on top of the standard subsystem feature set.</summary>
     public static class WindowsMRExtensions
     {
         [ StructLayout( LayoutKind.Sequential )]

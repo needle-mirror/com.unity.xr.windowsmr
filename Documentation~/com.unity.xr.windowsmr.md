@@ -33,9 +33,35 @@ Subsystem implementation provides for access to information about the current us
 
 ## Gesture
 
-Subsystem implementation to provide for recognition and tracking of gestures provided from the appropriate device.
+Subsystem implementation to provide for recognition and tracking of gestures provided from the appropriate device.  This subsystem relies on the `com.unity.xr.interactionsubsystem` package for it's core implementation (see that package's documentation for further details/types).
 
-See the relevant [Microsoft documentation](https://docs.microsoft.com/en-us/windows/mixed-reality/gestures) about Gestures for supported device information.
+The `WindowsMRGestureSubsystem` component manages a low-level interface for polling for Windows Mixed Reality gesture changes.  If this component is added to a scene, it is possible to poll for any gesture events each frame.  The following gestures and gesture data are provided:
+
+* __WindowsMRHoldGestureEvent__ - Event that fires when the state of a hold gesture changes.  Hold gesture indicating that a air tap or button has been held down my the user.
+  * __id__ - Unique `GestureId` that identifies this gesture. 
+  * __state__ - `GestureState` that indicates the state of this gesture (`Started`, `Updated`, `Completed`, `Canceled` or `Discrete`).
+* __WindowsMRTappedGestureEvent__ - Event that fires when the state of a tapped gesture changes.  Tapped gestures indicate an air tap or button has been tapped by the user.
+  * __id__ - Unique `GestureId` that identifies this gesture. 
+  * __state__ - `GestureState` that indicates the state of this gesture (`Started`, `Updated`, `Completed`, `Canceled` or `Discrete`).
+  * __tappedCount__ - Number of times that the tap has occurred.
+* __WindowsMRManipulationGestureEvent__ - Manipulation gestures can be used to move, resize or rotate an object when it should react 1:1 to the user's hand movements. One use for such 1:1 movements is to let the user draw or paint in the world. The initial targeting for a manipulation gesture should be done by gaze or pointing. Once the tap and hold starts, any manipulation of the object is then handled by hand movements, freeing the user to look around while they manipulate.
+  * __id__ - Unique `GestureId` that identifies this gesture. 
+  * __state__ - `GestureState` that indicates the state of this gesture (`Started`, `Updated`, `Completed`, `Canceled` or `Discrete`).
+  * __cumulativeDelta__ - `Vector3` indicating the total distance moved since the beginning of the manipulation gesture.
+* __WindowsMRNavigationGestureEvent__ - Navigation gestures operate like a virtual joystick, and can be used to navigate UI widgets, such as radial menus. You tap and hold to start the gesture and then move your hand within a normalized 3D cube, centered around the initial press. You can move your hand along the X, Y or Z axis from a value of -1 to 1, with 0 being the starting point.
+  * __id__ - Unique `GestureId` that identifies this gesture. 
+  * __state__ - `GestureState` that indicates the state of this gesture (`Started`, `Updated`, `Completed`, `Canceled` or `Discrete`).
+  * __normalizedOffset__ - `Vector3` indicating the normalized offset, since the navigation gesture began, of the input within the unit cube for the navigation gesture.
+
+Additionally, the `WindowsMRGestures` component can be used to provide a simpler polling mechanism for a simpler, event-based interface for listening to gestures.  This component provides a number of events that be hooked into to detect gesture events when they occur:
+
+* __onHoldChanged__ - Occurs whenever a hold gesture changes state.
+* __onManipulationChanged__ - Occurs whenever a manipulation gesture changes state.
+* __onNavigationChanged__ - Occurs whenever a navigation gesture changes state.
+* __onTappedChanged__ - Occurs whenever a tapped gesture changes state.
+* __onActivate__ - Occurs whenever the cross-platform activate gesture occurs.  See the `com.unity.xr.interactionsubsystems` package documentation for more details.
+
+Also see the relevant [Microsoft documentation](https://docs.microsoft.com/en-us/windows/mixed-reality/gestures) about Gestures for supported device information.
 
 ## Reference Point
 
@@ -90,12 +116,3 @@ The default loader provided by the _Windows Mixed Reality_ XR SDK implementation
 If __Session__ successfully initializes, then it is still possible for starting the subsystem could fail. If starting fails then the loader will clear all the subsystems and the app will fall through to standard Unity non-VR view.
 
 All other subsystems depend on session but, unlike session, failure to initialize or start will not cause the whole provider to fail.
-
-## Document revision history
-
-|Date|Reason|
-|---|---|
-|March 25th, 2019 | Adding subsystem support and implementation details, XR SDK Management, extensions, etc. |
-|December 13th, 2018 | Initial draft creation |
-
-

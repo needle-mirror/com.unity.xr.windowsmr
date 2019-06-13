@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Management;
 
-namespace Unity.XR.WindowsMR
+namespace UnityEngine.XR.WindowsMR
 {
+    /// <summary>Runtime settings for this XR Plugin.</summary>
     public class WindowsMRSettings : ScriptableObject
     {
         public enum DepthBufferOption
@@ -15,9 +16,11 @@ namespace Unity.XR.WindowsMR
         }
 
         [SerializeField, Tooltip("Set the size of the depth buffer")]
+        /// <summary>If using a shared depth buffer, this is the type of the depth buffer we should use.</summary>
         public DepthBufferOption DepthBufferFormat;
 
         [SerializeField, Tooltip("Enable depth buffer sharing")]
+        /// <summary>True if we want to use a shared depth buffer, false otherwise.</summary>
         public bool UseSharedDepthBuffer;
 
 #if !UNITY_EDITOR

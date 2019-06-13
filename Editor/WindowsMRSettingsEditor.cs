@@ -1,15 +1,15 @@
 using System;
 
-using Unity.XR.WindowsMR;
+using UnityEngine;
+using UnityEngine.XR.WindowsMR;
 
 using UnityEditor;
 using UnityEditor.XR.Management;
 
-using UnityEngine;
-
-namespace Unity.XR.WindowsMR.Editor
+namespace UnityEditor.XR.WindowsMR
 {
     [CustomEditor(typeof(WindowsMRPackageSettings))]
+    /// <summary>Custom editor settings support for this XR Plugin.</summary>
     public class SettingsEditor : UnityEditor.Editor
     {
         const string k_DepthBufferFormat = "DepthBufferFormat";
@@ -79,7 +79,7 @@ namespace Unity.XR.WindowsMR.Editor
                     serializedSettingsObject.ApplyModifiedProperties();
                 }
                 serializedObject.ApplyModifiedProperties();
-    
+
             }
             else
             {

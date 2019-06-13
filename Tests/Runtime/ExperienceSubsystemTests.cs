@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-namespace Unity.XR.WindowsMR.Tests
+namespace UnityEngine.XR.WindowsMR.Tests
 {
     public class ExperienceSubsystemTests : TestBaseSetup
     {

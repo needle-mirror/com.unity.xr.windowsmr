@@ -6,12 +6,14 @@ using UnityEngine.XR.Management;
 
 using UnityEditor;
 
-using Unity.XR.WindowsMR;
+using UnityEngine.XR.WindowsMR;
 
-namespace Unity.XR.WindowsMR.Editor
+namespace UnityEditor.XR.WindowsMR
 {
     [System.Serializable]
     [XRConfigurationData("Windows Mixed Reality", Constants.k_SettingsKey)]
+    /// <summary>XR Plugin settings, both build and runtime, for each build target that is supported.</summary>
+    /// <seealso cref='IWindowsMRPackageSettings'/>
     public class WindowsMRPackageSettings : ScriptableObject, ISerializationCallbackReceiver, IWindowsMRPackageSettings
     {
         [SerializeField]
@@ -24,6 +26,8 @@ namespace Unity.XR.WindowsMR.Editor
         Dictionary<BuildTargetGroup, WindowsMRSettings> Settings = new Dictionary<BuildTargetGroup, WindowsMRSettings>();
         Dictionary<BuildTargetGroup, WindowsMRBuildSettings> BuildSettings = new Dictionary<BuildTargetGroup, WindowsMRBuildSettings>();
 
+        /// <summary>Get the WindowsMRSettings instance associated with the active build target.</summary>
+        /// <returns>WindowsMRSettings for the build target, or null if none found.</returns>
         public WindowsMRSettings GetActiveBuildTargetSettings()
         {
             var buildTarget = EditorUserBuildSettings.activeBuildTarget;
@@ -31,6 +35,9 @@ namespace Unity.XR.WindowsMR.Editor
             return GetSettingsForBuildTargetGroup(group);
         }
 
+        /// <summary>Get the build settings instance for the build target.</summary>
+        /// <param name="buildTargetGroup">The build platform we wish to get settings for.</param>
+        /// <returns>An instance of WindowsMRBuildSettings if found, else null.</returns>
         public WindowsMRBuildSettings GetBuildSettingsForBuildTargetGroup(BuildTargetGroup buildTargetGroup)
         {
             WindowsMRBuildSettings ret = null;
@@ -52,6 +59,9 @@ namespace Unity.XR.WindowsMR.Editor
             return ret;
         }
 
+        /// <summary>Get an instance of WindowsMRSettings for a specific build platform.</summary>
+        /// <param name="buildTargetGroup">The build platform we wish to get settings for.</param>
+        /// <returns>An instance of WindowsMRSettings for the build platform, or null if not found.</returns>
         public WindowsMRSettings GetSettingsForBuildTargetGroup(BuildTargetGroup buildTargetGroup)
         {
             WindowsMRSettings ret = null;
@@ -73,6 +83,7 @@ namespace Unity.XR.WindowsMR.Editor
             return ret;
         }
 
+        /// <summary>Pre-serialization action</summary>
         public void OnBeforeSerialize()
         {
             Keys.Clear();
@@ -91,6 +102,7 @@ namespace Unity.XR.WindowsMR.Editor
             }
         }
 
+        /// <summary>Post-deserialization action</summary>
         public void OnAfterDeserialize()
         {
             Settings = new Dictionary<BuildTargetGroup, WindowsMRSettings>();
