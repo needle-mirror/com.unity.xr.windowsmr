@@ -2,8 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 
 using UnityEngine;
-using UnityEngine.Experimental;
-using UnityEngine.Experimental.XR;
+using UnityEngine.XR;
 
 namespace UnityEngine.XR.WindowsMR
 {

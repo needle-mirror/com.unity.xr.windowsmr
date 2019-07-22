@@ -4,6 +4,31 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2019-07-22
+* Remove errant subsystems from json file.
+
+## [2.0.0] - 2019-07-22
+* Update package version ahead of release.
+* Added reference point support for native pointer access.
+* Added support for getting native mesh data for a meshing subsystem mesh.
+* Added support to get all current native SpatialSourceState instances from the input subsystem.
+* Update display subsystem to handle promotion out of experimental.
+* Add hand tracking for HoloLens devices.
+* Add remoting support for HoloLens v2 devices.
+
+## [1.99.0-preview.2] - 2019-07-03
+* Update to use standalone Session and Reference Point subsystems.
+* Update XR Management dependency to handle Experimental namespace removal in trunk.
+* Update metro package dependency.
+
+## [1.99.0-preview.1] - 2019-06-18
+* Pick up 2019.2 preview changes that are applicable to 2019.3.
+
+## [1.99.0-preview] - 2019-06-13
+* Update package to support 2019.3+ only.
+* Rev version to almost 2. This is to make space for 2019.2 preview versions and in acknowledgement of the breaking changes that will happen soon.
+* Add documentation for gestures.
+
 ## [1.0.0-preview.9] - 2019-06-13
 * Move documentation revision history out of documentation. Replaced with change log tracking of changes.
 * Add XmlDocs to the appropriate APIs.
@@ -12,8 +37,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Remap Touchpad Axes to primary 2d axis and thumbstick axis to secondary to make grouping correct.
 * Move tumbstick pressed from Thumbrest to Secondary 2D Axis clicked.
 * Add package specific external APIs for getting the Holographic Space, The Spatial Coordinate Sysem and the Windows MR tracking state.
-* Update package requirements to XR Management 2.0.0-preview.24.
-* Add documentation for gestures.
 
 ## [1.0.0-preview.8] - 2019-06-11
 * Update package promotion pipeline to latest CI scripts.

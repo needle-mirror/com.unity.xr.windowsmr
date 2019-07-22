@@ -63,9 +63,10 @@ namespace UnityEngine.XR.WindowsMR.Tests
                 }
             }
 
-            [Test]
-            public void NativeDllSceneBuild()
+            [UnityTest]
+            public IEnumerator NativeDllSceneBuild()
             {
+                yield return null;
                 Assert.IsNotNull(m_SceneObjectsLoaded, "Scene Objects was not created");
             }
 

@@ -1,8 +1,7 @@
 #if JENKINS
 using UnityEngine;
-using UnityEngine.Experimental.XR;
-using UnityEngine.TestTools;
 using UnityEngine.XR;
+using UnityEngine.TestTools;
 using UnityEngine.XR.Management;
 using UnityEngine.XR.WindowsMR;
 

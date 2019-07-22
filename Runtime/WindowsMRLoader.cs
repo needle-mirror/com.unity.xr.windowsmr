@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 using UnityEngine;
 using UnityEngine.XR;
-using UnityEngine.Experimental.XR;
+using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 
 using XRGestureSubsystem = UnityEngine.XR.InteractionSubsystems.XRGestureSubsystem;
@@ -24,9 +24,11 @@ namespace UnityEngine.XR.WindowsMR
 
     class WindowsMRLoader : XRLoaderHelper
     {
+        private static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new List<XRSessionSubsystemDescriptor>();
         private static List<XRDisplaySubsystemDescriptor> s_DisplaySubsystemDescriptors = new List<XRDisplaySubsystemDescriptor>();
         private static List<XRInputSubsystemDescriptor> s_InputSubsystemDescriptors = new List<XRInputSubsystemDescriptor>();
-        private static List<XRExperienceSubsystemDescriptor> s_ExperienceSubsystemDescriptors = new List<XRExperienceSubsystemDescriptor>();
+        private static List<XRReferencePointSubsystemDescriptor> s_ReferencePointSubsystemDescriptors = new List<XRReferencePointSubsystemDescriptor>();
+        private static List<XRMeshSubsystemDescriptor> s_MeshSubsystemDescriptors = new List<XRMeshSubsystemDescriptor>();
         private static List<XRGestureSubsystemDescriptor> s_GestureSubsystemDescriptors = new List<XRGestureSubsystemDescriptor>();
 
         public XRDisplaySubsystem displaySubsystem
@@ -45,11 +47,27 @@ namespace UnityEngine.XR.WindowsMR
             }
         }
 
-        public XRExperienceSubsystem experiencePointSubsystem
+        public XRSessionSubsystem sessionSubsystem
         {
             get
             {
-                return GetLoadedSubsystem<XRExperienceSubsystem>();
+                return GetLoadedSubsystem<XRSessionSubsystem>();
+            }
+        }
+
+        public XRReferencePointSubsystem referencePointSubsystem
+        {
+            get
+            {
+                return GetLoadedSubsystem<XRReferencePointSubsystem>();
+            }
+        }
+
+        public XRMeshSubsystem meshSubsystemDescriptor
+        {
+            get
+            {
+                return GetLoadedSubsystem<XRMeshSubsystem>();
             }
         }
 
@@ -66,20 +84,21 @@ namespace UnityEngine.XR.WindowsMR
             WindowsMRSettings settings = GetSettings();
             if (settings != null)
             {
-                Native.UserDefinedSettings uds;
+                UserDefinedSettings uds;
                 uds.depthBufferType = (ushort)settings.DepthBufferFormat;
                 uds.sharedDepthBuffer = (ushort)(settings.UseSharedDepthBuffer ? 1 : 0);
 
-                Native.SetUserDefinedSettings(uds);
+                SetUserDefinedSettings(uds);
             }
 
-            Native.UnitySubsystemErrorCode code = Native.CreateHolographicSession();
-            if (code != Native.UnitySubsystemErrorCode.kUnitySubsystemErrorCodeSuccess)
+            CreateSubsystem<XRSessionSubsystemDescriptor, XRSessionSubsystem>(s_SessionSubsystemDescriptors, "Windows Mixed Reality Session");
+            if (sessionSubsystem == null)
                 return false;
 
             CreateSubsystem<XRDisplaySubsystemDescriptor, XRDisplaySubsystem>(s_DisplaySubsystemDescriptors, "Windows Mixed Reality Display");
             CreateSubsystem<XRInputSubsystemDescriptor, XRInputSubsystem>(s_InputSubsystemDescriptors, "Windows Mixed Reality Input");
-            CreateSubsystem<XRExperienceSubsystemDescriptor, XRExperienceSubsystem>(s_ExperienceSubsystemDescriptors, "Windows Mixed Reality Experience");
+            CreateSubsystem<XRReferencePointSubsystemDescriptor, XRReferencePointSubsystem>(s_ReferencePointSubsystemDescriptors, "Windows Mixed Reality Reference Point");
+            CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshSubsystemDescriptors, "Windows Mixed Reality Meshing");
             CreateSubsystem<XRGestureSubsystemDescriptor, XRGestureSubsystem>(s_GestureSubsystemDescriptors, "Windows Mixed Reality Gesture");
 
             return displaySubsystem != null && inputSubsystem != null;
@@ -87,13 +106,11 @@ namespace UnityEngine.XR.WindowsMR
 
         public override bool Start()
         {
-            Native.UnitySubsystemErrorCode code = Native.StartHolographicSession();
-            if (code != Native.UnitySubsystemErrorCode.kUnitySubsystemErrorCodeSuccess)
-                return false;
-
+            StartSubsystem<XRSessionSubsystem>();
             StartSubsystem<XRDisplaySubsystem>();
             StartSubsystem<XRInputSubsystem>();
-            StartSubsystem<XRExperienceSubsystem>();
+            StartSubsystem<XRReferencePointSubsystem>();
+            StartSubsystem<XRMeshSubsystem>();
             StartSubsystem<XRGestureSubsystem>();
             return true;
         }
@@ -102,24 +119,42 @@ namespace UnityEngine.XR.WindowsMR
         {
             StopSubsystem<XRDisplaySubsystem>();
             StopSubsystem<XRInputSubsystem>();
-            StopSubsystem<XRExperienceSubsystem>();
+            StopSubsystem<XRReferencePointSubsystem>();
+            StopSubsystem<XRMeshSubsystem>();
             StopSubsystem<XRGestureSubsystem>();
-
-            Native.StopHolographicSession();
+            StopSubsystem<XRSessionSubsystem>();
             return true;
         }
 
         public override bool Deinitialize()
         {
-            DestroySubsystem<XRExperienceSubsystem>();
-            DestroySubsystem<XRGestureSubsystem>();
+            DestroySubsystem<XRReferencePointSubsystem>();
             DestroySubsystem<XRInputSubsystem>();
             DestroySubsystem<XRDisplaySubsystem>();
-
-            Native.DestroyHolographicSession();
+            DestroySubsystem<XRMeshSubsystem>();
+            DestroySubsystem<XRGestureSubsystem>();
+            DestroySubsystem<XRSessionSubsystem>();
             return true;
         }
 
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct UserDefinedSettings
+        {
+            public ushort depthBufferType;
+            public ushort sharedDepthBuffer;
+        }
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#else
+#if ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet = CharSet.Auto)]
+#endif
+#endif
+        static extern void SetUserDefinedSettings(UserDefinedSettings settings);
 
         public WindowsMRSettings GetSettings()
         {

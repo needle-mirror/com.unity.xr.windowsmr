@@ -2,8 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 
 using UnityEngine;
-using UnityEngine.Experimental;
-using UnityEngine.Experimental.XR;
+using UnityEngine.XR;
 
 namespace UnityEngine.XR.WindowsMR
 {
@@ -29,7 +28,7 @@ namespace UnityEngine.XR.WindowsMR
                 wmrp[i].ny = planes[i].normal.y;
                 wmrp[i].nz = planes[i].normal.z;
             }
-            SetBoundingVolumeFrustum(wmrp, 6);
+            NativeApi.SetBoundingVolumeFrustum(wmrp, 6);
         }
 
 
@@ -63,7 +62,7 @@ namespace UnityEngine.XR.WindowsMR
             obb.oy = orientation.y;
             obb.oz = orientation.z;
             obb.ow = orientation.w;
-            SetBoundingVolumeOrientedBox(obb);
+            NativeApi.SetBoundingVolumeOrientedBox(obb);
         }
 
         [ StructLayout( LayoutKind.Sequential )]
@@ -73,7 +72,7 @@ namespace UnityEngine.XR.WindowsMR
             public float cy;
             public float cz;
             public float r;
-        };
+        }
 
         public static void SetBoundingVolumeSphere(this XRMeshSubsystem meshing, Vector3 center, float radius)
         {
@@ -82,41 +81,89 @@ namespace UnityEngine.XR.WindowsMR
             sbb.cy = center.y;
             sbb.cz = center.z;
             sbb.r = radius;
-            SetBoundingVolumeSphere(sbb);
+            NativeApi.SetBoundingVolumeSphere(sbb);
         }
 
-#if UNITY_EDITOR
-        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#else
-#if ENABLE_DOTNET
-        [DllImport("WindowsMRXRSDK.dll")]
-#else
-        [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
-#endif
-#endif
-        static extern void SetBoundingVolumeFrustum([In] WMRPlane[] planes, int size);
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MeshingData
+        {
+            public int version;
+            [MarshalAs(UnmanagedType.IUnknown)]
+            public System.Object surfaceInfo;
+            [MarshalAs(UnmanagedType.IUnknown)]
+            public System.Object surfaceMesh;
+        }
 
-#if UNITY_EDITOR
-        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#else
-#if ENABLE_DOTNET
-        [DllImport("WindowsMRXRSDK.dll")]
-#else
-        [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
-#endif
-#endif
-        static extern void SetBoundingVolumeOrientedBox(WMROrientedBox planes);
+        public static void GetMeshingDataForMesh(this XRMeshSubsystem meshing, UnityEngine.XR.MeshId meshId, out MeshingData data)
+        {
+            NativeApi.GetMeshingDataForMesh(meshId, out data);
+        }
 
-#if UNITY_EDITOR
-        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#else
-#if ENABLE_DOTNET
-        [DllImport("WindowsMRXRSDK.dll")]
-#else
-        [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
-#endif
-#endif
-        static extern void SetBoundingVolumeSphere(WMRSphere planes);
+        public static void ReleaseMeshingData(this XRMeshSubsystem meshing, ref MeshingData data)
+        {
+            NativeApi.ReleaseMeshingData(ref data);
+        }
+
+        static class NativeApi
+        {
+        #if UNITY_EDITOR
+            [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+        #else
+        #if ENABLE_DOTNET
+            [DllImport("WindowsMRXRSDK.dll")]
+        #else
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+        #endif
+        #endif
+            public static extern void GetMeshingDataForMesh(UnityEngine.XR.MeshId id, [Out] out MeshingData data);
+
+
+        #if UNITY_EDITOR
+            [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+        #else
+        #if ENABLE_DOTNET
+            [DllImport("WindowsMRXRSDK.dll")]
+        #else
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+        #endif
+        #endif
+            public static extern void ReleaseMeshingData([In,Out] ref MeshingData data);
+
+
+        #if UNITY_EDITOR
+            [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+        #else
+        #if ENABLE_DOTNET
+            [DllImport("WindowsMRXRSDK.dll")]
+        #else
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+        #endif
+        #endif
+            public static extern void SetBoundingVolumeFrustum([In] WMRPlane[] planes, int size);
+
+        #if UNITY_EDITOR
+            [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+        #else
+        #if ENABLE_DOTNET
+            [DllImport("WindowsMRXRSDK.dll")]
+        #else
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+        #endif
+        #endif
+           public static extern void SetBoundingVolumeOrientedBox(WMROrientedBox planes);
+
+        #if UNITY_EDITOR
+            [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+        #else
+        #if ENABLE_DOTNET
+            [DllImport("WindowsMRXRSDK.dll")]
+        #else
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+        #endif
+        #endif
+            public static extern void SetBoundingVolumeSphere(WMRSphere planes);
+
+        }
 
     }
 }

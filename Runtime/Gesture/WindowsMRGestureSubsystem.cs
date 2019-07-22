@@ -49,7 +49,7 @@ namespace UnityEngine.XR.WindowsMR
 
         /// <summary>
         /// Enable the manipulation gesture.
-        /// Enabling this gesture will disable the navigation gesture if it has been enabled.  
+        /// Enabling this gesture will disable the navigation gesture if it has been enabled.
         /// These gestures cannot be enabled simultaneously.
         /// </summary>
         /// <param name="enable">true if manipulation gesture should be enabled, else false.</param>
@@ -61,7 +61,7 @@ namespace UnityEngine.XR.WindowsMR
 
         /// <summary>
         /// Enable the navigation gesture.
-        /// Enabling this gesture will disable the manipulation gesture if it has been enabled.  
+        /// Enabling this gesture will disable the manipulation gesture if it has been enabled.
         /// These gestures cannot be enabled simultaneously.
         /// </summary>
         /// <param name="enable">true if navigation gesture should be enabled, else false.</param>
@@ -123,7 +123,7 @@ namespace UnityEngine.XR.WindowsMR
                     gestureEvents = new NativeArray<T>(gestureEventsLength, Allocator.Persistent);
 
                     var sizeOfGestureEvent = UnsafeUtility.SizeOf<T>();
-                    UnsafeUtility.MemCpy(gestureEvents.GetUnsafePtr(), gestureEventsPtr, elementSize * gestureEventsLength);   
+                    UnsafeUtility.MemCpy(gestureEvents.GetUnsafePtr(), gestureEventsPtr, elementSize * gestureEventsLength);
                 }
             }
 
@@ -154,8 +154,8 @@ namespace UnityEngine.XR.WindowsMR
                     foreach (var gestureEvent in m_TappedGestureEvents)
                     {
                         if (gestureEvent.state == GestureState.Started)
-                            m_ActivateGestureEvents[iActivateGestureEvent++] = 
-                                new ActivateGestureEvent(GetNextGUID(), gestureEvent.state, Vector3.zero, Vector3.one);
+                            m_ActivateGestureEvents[iActivateGestureEvent++] =
+                                new ActivateGestureEvent(GetNextGUID(), gestureEvent.state);
                     }
                 }
             }
@@ -172,7 +172,7 @@ namespace UnityEngine.XR.WindowsMR
                     m_NavigationGestureEvents.Dispose();
                 if (m_TappedGestureEvents.IsCreated)
                     m_TappedGestureEvents.Dispose();
-                
+
                 base.Destroy();
             }
 
@@ -216,7 +216,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern void UnityWindowsMR_GesturesUpdate();
 
@@ -225,7 +225,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern void UnityWindowsMR_GesturesStart();
 
@@ -234,7 +234,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern void UnityWindowsMR_GesturesDestroy();
 
@@ -243,7 +243,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern void UnityWindowsMR_GesturesStop();
 
@@ -252,7 +252,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern unsafe void* UnityWindowsMR_GesturesGetHoldGestureEventsPtr(out int gesturesLength, out int elementSize);
 
@@ -261,7 +261,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern unsafe void* UnityWindowsMR_GesturesGetManipulationGestureEventsPtr(out int gesturesLength, out int elementSize);
 
@@ -270,7 +270,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern unsafe void* UnityWindowsMR_GesturesGetNavigationGestureEventsPtr(out int gesturesLength, out int elementSize);
 
@@ -279,7 +279,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern unsafe void* UnityWindowsMR_GesturesGetTappedGestureEventsPtr(out int gesturesLength, out int elementSize);
 
@@ -288,7 +288,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern unsafe bool UnityWindowsMR_GesturesSetEnableManipulationGesture(bool enable);
 
@@ -297,7 +297,7 @@ namespace UnityEngine.XR.WindowsMR
 #elif ENABLE_DOTNET
             [DllImport("WindowsMRXRSDK.dll")]
 #else
-            [DllImport("WindowsMRXRSDK.dll", CharSet=CharSet.Auto)]
+            [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
             public static extern unsafe bool UnityWindowsMR_GesturesSetEnableNavigationGesture(bool enable);
         }
@@ -310,7 +310,7 @@ namespace UnityEngine.XR.WindowsMR
             {
                 s_NextGUID.subId1 += 1;
                 if (s_NextGUID.subId1 != 0) return s_NextGUID;
-                s_NextGUID.subId1 += 1;                
+                s_NextGUID.subId1 += 1;
             }
 
             return s_NextGUID;
