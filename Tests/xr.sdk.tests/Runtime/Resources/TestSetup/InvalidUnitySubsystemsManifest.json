@@ -1,0 +1,24 @@
+{
+  "name": "Name",
+  "version": "Version",
+  "libraryName": "LibraryName",
+
+  "displays": [
+    {
+      "id": "Display"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "Input"
+    }
+    {
+      "id": "ForgotTheCommaOhNo!"
+    }
+  ],
+  "experience": [
+    {
+      "id": "Experience"
+    }
+  ]
+}

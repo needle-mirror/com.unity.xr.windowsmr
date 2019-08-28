@@ -10,6 +10,17 @@ using UnityEngine.XR.Management;
 using XRGestureSubsystem = UnityEngine.XR.InteractionSubsystems.XRGestureSubsystem;
 using XRGestureSubsystemDescriptor = UnityEngine.XR.InteractionSubsystems.XRGestureSubsystemDescriptor;
 
+#if UNITY_INPUT_SYSTEM 
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Layouts;
+using UnityEngine.InputSystem.XR;
+using UnityEngine.XR.WindowsMR.Input;
+#endif
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace UnityEngine.XR.WindowsMR
 {
 #if UNITY_EDITOR
@@ -19,6 +30,38 @@ namespace UnityEngine.XR.WindowsMR
         /// <summary>Get the active build target settings.</summary>
         /// <returns>WindowsMRSettings</returns>
         WindowsMRSettings GetActiveBuildTargetSettings();
+    }
+#endif
+
+#if UNITY_INPUT_SYSTEM
+#if UNITY_EDITOR
+    [InitializeOnLoad]
+#endif
+    static class InputLayoutLoader
+    {
+        static InputLayoutLoader()
+        {
+            RegisterInputLayouts();
+        }
+
+        public static void RegisterInputLayouts()
+        {
+            UnityEngine.InputSystem.InputSystem.RegisterLayout<WMRHMD>(
+                matches: new InputDeviceMatcher()
+                    .WithInterface(XRUtilities.InterfaceMatchAnyVersion)
+                    .WithProduct("(Windows Mixed Reality HMD)|(Microsoft HoloLens)|(^(WindowsMR Headset))")
+            );
+            UnityEngine.InputSystem.InputSystem.RegisterLayout<WMRSpatialController>(
+                matches: new InputDeviceMatcher()
+                    .WithInterface(XRUtilities.InterfaceMatchAnyVersion)
+                    .WithProduct(@"(^(Spatial Controller))|(^(OpenVR Controller\(WindowsMR))")
+            );
+            UnityEngine.InputSystem.InputSystem.RegisterLayout<HololensHand>(
+                matches: new InputDeviceMatcher()
+                    .WithInterface(XRUtilities.InterfaceMatchAnyVersion)
+                    .WithProduct(@"(^(Hand -))")
+            );
+        }
     }
 #endif
 
@@ -81,6 +124,9 @@ namespace UnityEngine.XR.WindowsMR
 
         public override bool Initialize()
         {
+#if UNITY_INPUT_SYSTEM
+            InputLayoutLoader.RegisterInputLayouts();
+#endif
             WindowsMRSettings settings = GetSettings();
             if (settings != null)
             {

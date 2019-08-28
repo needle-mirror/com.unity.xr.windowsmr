@@ -3,7 +3,8 @@
     "references": [
         "Unity.XR.Management",
         "Unity.XR.InteractionSubsystems",
-        "Unity.XR.ARSubsystems"
+        "Unity.XR.ARSubsystems",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -17,6 +18,12 @@
             "name": "com.unity.xr.windowsmr",
             "expression": "",
             "define": "XR_PLUGIN_WINDOWSMR"
+        },
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "",
+            "define": "UNITY_INPUT_SYSTEM"
         }
-    ]
+    ],
+    "noEngineReferences": false
 }

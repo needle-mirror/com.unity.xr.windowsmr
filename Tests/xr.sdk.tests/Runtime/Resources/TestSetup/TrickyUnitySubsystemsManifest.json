@@ -1,0 +1,42 @@
+{
+  "name": "Name",
+  "version": "Version",
+  "libraryName": "LibraryName",
+
+  "displays": [
+    {
+      "id": "Display0"
+    },
+    {
+      "id": "Display1"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "Input0"
+    },
+    {
+      "id": "Input1"
+    },
+    {
+      "id": "Input2"
+    }
+  ],
+  "experience": [
+    {
+      "id": "Experience0"
+    },
+    {
+      "id": "Experience1"
+    },
+    {
+      "id": "Experience2"
+    },
+    {
+      "id": "Experience3"
+    },
+    {
+      "id": "Experience4"
+    }
+  ]
+}

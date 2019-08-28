@@ -33,7 +33,7 @@ namespace UnityEngine.XR.WindowsMRInternals
             [MarshalAs(UnmanagedType.LPWStr)] string pluginFolderPath_x86_64,
             [MarshalAs(UnmanagedType.LPWStr)] string pluginFolderPath_x64);
 #else
-        static void UnityWindowsMR_EmulationLibs_SetPluginFolderPaths(string pluginFolderPath_x86_64, pluginFolderPath_x64)
+        static void UnityWindowsMR_EmulationLibs_SetPluginFolderPaths(string pluginFolderPath_x86_64, string pluginFolderPath_x64)
         {
         }
 #endif

@@ -4,6 +4,20 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.3-preview.1] - 2019-08-28
+* Input System device layouts for Windows MR devices when Input System package is included.
+* Add Hand tracking support for HoloLens v2. We now expose bones for each hand when an app is using a device capable of hand tracking.
+* WindowsMR HMDs now have a user presence input feature that will inform the developer if the HMD is currently being used.  Use UnityEngine.XR.CommonUsages.UserPresence to retrieve it.
+* Fix input issue where we were using the wrong frame for input data.
+* Fix depth buffer issue where we were not handling Unity rendering depth bufer in reverse Z correctly.
+* Update dependencies to handle changes in Subsystem definition.
+
+## [2.0.2-preview.1] - 2019-08-23
+* Implement recenter functionality. Implementation matches legacy VR functionality.
+* Renamed HMD tracking input features to be suffixed with Rotation or Position where appropriate.
+* Fix testing dll meta files.
+* Update XR Management dependency to 3.0.2-preview.2
+
 ## [2.0.1] - 2019-07-22
 * Remove errant subsystems from json file.
 
