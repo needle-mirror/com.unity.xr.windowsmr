@@ -15,12 +15,8 @@ namespace UnityEngine.XR.WindowsMRInternals
     {
         static WindowsMRInternal()
         {
-            string pluginFolderPathBase = Path.GetFullPath(Path.Combine("Packages", "com.unity.xr.windowsmr.metro"));
-            pluginFolderPathBase = Path.Combine(pluginFolderPathBase, "Plugins");
-
-            string pluginFolderPath_x64 = Path.Combine(pluginFolderPathBase, "x64");
-            string pluginFolderPath_x86_64 = Path.Combine(pluginFolderPathBase, "x86_64");
-            UnityWindowsMR_EmulationLibs_SetPluginFolderPaths(pluginFolderPath_x86_64, pluginFolderPath_x64);
+            string pluginFolderPathBase = Path.GetFullPath("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64");
+            UnityWindowsMR_EmulationLibs_SetPluginFolderPaths(pluginFolderPathBase);
         }
 
         internal static void Init()
@@ -29,11 +25,9 @@ namespace UnityEngine.XR.WindowsMRInternals
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WINRT
         [DllImport("WindowsMRXRSDK")]
-        static extern void UnityWindowsMR_EmulationLibs_SetPluginFolderPaths(
-            [MarshalAs(UnmanagedType.LPWStr)] string pluginFolderPath_x86_64,
-            [MarshalAs(UnmanagedType.LPWStr)] string pluginFolderPath_x64);
+        static extern void UnityWindowsMR_EmulationLibs_SetPluginFolderPaths([MarshalAs(UnmanagedType.LPWStr)] string pluginFolderPath_x86_64);
 #else
-        static void UnityWindowsMR_EmulationLibs_SetPluginFolderPaths(string pluginFolderPath_x86_64, string pluginFolderPath_x64)
+        static void UnityWindowsMR_EmulationLibs_SetPluginFolderPaths(string pluginFolderPath_x86_64)
         {
         }
 #endif

@@ -128,7 +128,7 @@ namespace UnityEngine.XR.WindowsMR
 #endif
 
             // throw exception on failed connection?
-            UnityWindowsMR_Remoting_TryConnect();
+            Debug.Log("Remoting connect returned: " + UnityWindowsMR_Remoting_TryConnect());
         }
 
         public static void Disconnect()

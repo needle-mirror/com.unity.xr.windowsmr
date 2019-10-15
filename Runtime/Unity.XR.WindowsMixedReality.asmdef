@@ -6,7 +6,12 @@
         "Unity.XR.ARSubsystems",
         "Unity.InputSystem"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor",
+        "WSA",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": false,

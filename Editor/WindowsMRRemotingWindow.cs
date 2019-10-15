@@ -26,6 +26,8 @@ namespace UnityEditor.XR.WindowsMR
         static GUIContent s_ConnectionStateConnectingText = EditorGUIUtility.TrTextContent("Connecting");
         static GUIContent s_ConnectionStateConnectedText = EditorGUIUtility.TrTextContent("Connected");
 
+        ConnectionState previousConnectionState = ConnectionState.Disconnected;
+
         static GUIContent[] s_ModeStrings = new GUIContent[]
         {
             EditorGUIUtility.TrTextContent("None"),
@@ -71,6 +73,16 @@ namespace UnityEditor.XR.WindowsMR
                 Debug.Log("Failed to get connection state! Exiting remoting-window drawing.");
                 return;
             }
+
+            if (previousConnectionState == ConnectionState.Connecting && connectionState == ConnectionState.Disconnected)
+            {
+                ConnectionFailureReason failureReason;
+                WindowsMRRemoting.TryGetConnectionFailureReason(out failureReason);
+
+                Debug.Log("Connection Failure Reason: " + failureReason);
+            }
+
+            previousConnectionState = connectionState;
 
             switch (connectionState)
             {

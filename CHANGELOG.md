@@ -4,6 +4,15 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.3] - 2019-10-15
+* Update package version for official release
+
+## [2.0.3-preview.2] - 2019-10-01
+* Fixed depth buffer issue where we assume reverse Z is always on when converting projection matrix.
+* Remove Windows Mixed Reality legacy package dependency.
+* Add AudioPluginMsHRTF spatializer to package.
+* Add Remoting plugins to package.
+
 ## [2.0.3-preview.1] - 2019-08-28
 * Input System device layouts for Windows MR devices when Input System package is included.
 * Add Hand tracking support for HoloLens v2. We now expose bones for each hand when an app is using a device capable of hand tracking.
