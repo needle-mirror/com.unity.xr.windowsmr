@@ -6,7 +6,7 @@ Distribute Windows Mixed Reality XR SDK providers for the Unity XR system.
 Current set of providers in this package include:
 * Display
 * Input
-* Reference Point
+* Anchor
 * Experience
 * Session
 

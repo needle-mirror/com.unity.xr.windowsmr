@@ -12,14 +12,14 @@ namespace UnityEngine.XR.WindowsMR
     [Preserve]
     public sealed class WindowsMRSessionSubsystem : XRSessionSubsystem
     {
-        protected override IProvider CreateProvider()
+        protected override Provider CreateProvider()
         {
-            return new Provider();
+            return new WindowsMRProvider();
         }
 
-        class Provider : IProvider
+        class WindowsMRProvider : Provider
         {
-            public Provider()
+            public WindowsMRProvider()
             {
                 NativeApi.UnityWindowsMR_session_construct();
             }

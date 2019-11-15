@@ -120,18 +120,18 @@ Additionally, the `WindowsMRGestures` component can be used to provide a simpler
 
 Also see the relevant [Microsoft documentation](https://docs.microsoft.com/en-us/windows/mixed-reality/gestures) about Gestures for supported device information.
 
-## Reference Point
+## Anchor
 
-Subsystem implementation provides support for ephemeral (non-stored) reference points, known as Anchors in official _Windows Mixed Reality_ documentation.
+Subsystem implementation provides support for ephemeral (non-stored) anchors.
 
-Successful initialization and start of the subsystem allows the user to Add reference points, Remove reference points and Query for all known reference points. Current subsystem definition does not provide for storage or retrieval of stored reference points.
+Successful initialization and start of the subsystem allows the user to Add anchors, Remove anchors and Query for all known anchors. Current subsystem definition does not provide for storage or retrieval of stored anchors.
 
 See the relevant [Microsoft documentation](https://docs.microsoft.com/en-us/windows/mixed-reality/spatial-anchors) about Anchors for supported device information.
 
-The subsystem provided the ability to get the actual native Windows MR object that backs the reference point. Below is an example of getting that data:
+The subsystem provided the ability to get the actual native Windows MR object that backs the anchor. Below is an example of getting that data:
 
 ```{code: c#}
-TrackableChanges<XRReferencePoint>? currentRps = RPSubsystem?.GetChanges(Allocator.Temp) ?? null;
+TrackableChanges<XRAnchor>? currentRps = RPSubsystem?.GetChanges(Allocator.Temp) ?? null;
 
 if (currentRps != null)
 {
@@ -148,7 +148,7 @@ if (currentRps != null)
     }
 }
 ```
-NOTE: The data returned is only valid in between calls to **XRReferencePoint.GetChanges**!
+NOTE: The data returned is only valid in between calls to **XRAnchor.GetChanges**!
 
 ## Meshing
 
@@ -205,7 +205,7 @@ Meshing subsystem provides only one means for setting a bounding volume for spat
 * __SetBoundingVolumeSphere__ - Set a bounding volume to a sphere at some origin point and with the given radius.
 * __SetBoundingVolumeFrustum__ - Set the bounding volume to the frustum defined by the 6 planes passed in. Each plane is defined as a point offset from the head, with a given orientation. The easiest way to set this is to use the [GeometryUtility.CalculateFrustumPlanes](https://docs.unity3d.com/ScriptReference/GeometryUtility.CalculateFrustumPlanes.html) Unity API and use that to populate the data for this call. The plane ordering passed in matches the plane ordering from this API.
 
-Specific to this package is the ability to get the native WindowsMR [SpatialSurfaceMesh](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.surfaces.spatialsurfacemesh) and [SpatialSurfaceInfo](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.surfaces.spatialsurfaceinfo) the back the generated mesh data. In the future meshing will support the same native pointer access that reference points does but for now you can use this package specific mechanism to get the same data.
+Specific to this package is the ability to get the native WindowsMR [SpatialSurfaceMesh](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.surfaces.spatialsurfacemesh) and [SpatialSurfaceInfo](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.surfaces.spatialsurfaceinfo) the back the generated mesh data. In the future meshing will support the same native pointer access that anchors does but for now you can use this package specific mechanism to get the same data.
 
 * __WindowsMRExtensions.MeshingData__ - Container struct that holds data for the native mesh information. Contains the following data members:
     * int version - The version of this struct. This will let you know what version the provider is returning to you so you know what to expect.
@@ -233,7 +233,7 @@ Debug.Log($"Spatial Surface Mesh Info: Vertex Count:{surfaceMesh.VertexPositions
 meshing.ReleaseMeshingData(ref meshData);
 ```
 
-## Reference Points Subsystem Extensions
+## Anchor Subsystem Extensions
 
 # XR Management support
 

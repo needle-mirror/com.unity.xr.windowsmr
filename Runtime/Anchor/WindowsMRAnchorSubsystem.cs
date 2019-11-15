@@ -11,18 +11,18 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.WindowsMR
 {
     /// <summary>
-    /// The WindowsMR implementation of the <c>XRReferencePointSubsystem</c>. Do not create this directly.
-    /// Use <c>XRReferencePointSubsystemDescriptor.Create()</c> instead.
+    /// The WindowsMR implementation of the <c>XRAnchorSubsystem</c>. Do not create this directly.
+    /// Use <c>XRAnchorSubsystemDescriptor.Create()</c> instead.
     /// </summary>
     [Preserve]
-    public sealed class WindowsMRReferencePointSubsystem : XRReferencePointSubsystem
+    public sealed class WindowsMRAnchorSubsystem : XRAnchorSubsystem
     {
-        protected override IProvider CreateProvider()
+        protected override Provider CreateProvider()
         {
-            return new Provider();
+            return new WindowsMRProvider();
         }
 
-        class Provider : IProvider
+        class WindowsMRProvider : Provider
         {
             public override void Start()
             {
@@ -39,8 +39,8 @@ namespace UnityEngine.XR.WindowsMR
                 NativeApi.UnityWindowsMR_refPoints_onDestroy();
             }
 
-            public override unsafe TrackableChanges<XRReferencePoint> GetChanges(
-                XRReferencePoint defaultReferencePoint,
+            public override unsafe TrackableChanges<XRAnchor> GetChanges(
+                XRAnchor defaultAnchor,
                 Allocator allocator)
             {
                 int addedCount, updatedCount, removedCount, elementSize;
@@ -53,11 +53,11 @@ namespace UnityEngine.XR.WindowsMR
 
                 try
                 {
-                    return new TrackableChanges<XRReferencePoint>(
+                    return new TrackableChanges<XRAnchor>(
                         addedPtr, addedCount,
                         updatedPtr, updatedCount,
                         removedPtr, removedCount,
-                        defaultReferencePoint, elementSize,
+                        defaultAnchor, elementSize,
                         allocator);
                 }
                 finally
@@ -66,16 +66,16 @@ namespace UnityEngine.XR.WindowsMR
                 }
             }
 
-            public override bool TryAddReferencePoint(
+            public override bool TryAddAnchor(
                 Pose pose,
-                out XRReferencePoint referencePoint)
+                out XRAnchor anchor)
             {
-                return NativeApi.UnityWindowsMR_refPoints_tryAdd(pose, out referencePoint);
+                return NativeApi.UnityWindowsMR_refPoints_tryAdd(pose, out anchor);
             }
 
-            public override bool TryRemoveReferencePoint(TrackableId referencePointId)
+            public override bool TryRemoveAnchor(TrackableId anchorId)
             {
-                return NativeApi.UnityWindowsMR_refPoints_tryRemove(referencePointId);
+                return NativeApi.UnityWindowsMR_refPoints_tryRemove(anchorId);
             }
 
             static class NativeApi
@@ -139,7 +139,7 @@ namespace UnityEngine.XR.WindowsMR
 #endif
                 public static extern bool UnityWindowsMR_refPoints_tryAdd(
                     Pose pose,
-                    out XRReferencePoint referencePoint);
+                    out XRAnchor anchor);
 
 #if UNITY_EDITOR
                 [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
@@ -148,17 +148,17 @@ namespace UnityEngine.XR.WindowsMR
 #else
                 [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
 #endif
-                public static extern bool UnityWindowsMR_refPoints_tryRemove(TrackableId referencePointId);
+                public static extern bool UnityWindowsMR_refPoints_tryRemove(TrackableId anchorId);
             }
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()
         {
-            XRReferencePointSubsystemDescriptor.Create(new XRReferencePointSubsystemDescriptor.Cinfo
+            XRAnchorSubsystemDescriptor.Create(new XRAnchorSubsystemDescriptor.Cinfo
             {
-                id = "Windows Mixed Reality Reference Point",
-                subsystemImplementationType = typeof(WindowsMRReferencePointSubsystem),
+                id = "Windows Mixed Reality Anchor",
+                subsystemImplementationType = typeof(WindowsMRAnchorSubsystem),
                 supportsTrackableAttachments = false
             });
         }

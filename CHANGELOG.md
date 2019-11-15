@@ -4,6 +4,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2019-11-15
+* 2020.1 Release pacakge for verification.
+
+## [3.0.0-preview.2] - 2019-11-14
+* Change AR Subsystems version to 3.0.0 and modify the RP API to reflect name changes.
+* Update XR Management dependency to 3.0.4.
+
+## [3.0.0-preview.1] - 2019-08-28
+* Pick up header API changes that lock the package to 2020.1 only.
+
+## [2.0.4-preview.2] - 2019-10-25
+* Update headers to reflect changes from Unity core.
+
+## [2.0.4-preview.1] - 2019-10-18
+* Fix an issue that was preventing builds of the package outside of Unity.
+
 ## [2.0.3] - 2019-10-15
 * Update package version for official release
 
