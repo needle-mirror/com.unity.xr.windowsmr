@@ -41,7 +41,7 @@ To use the new hand model, the user needs to talk to the input system directly b
 
 An example implementation of a hand pose provider is shown below. This example is limited to tracking one of two hands consisting of the first two devices that support hand tracking as reported by the input subsystem. This is specifically for hand tracked devices that do not support handedness as the current Tracked Pose Driver does recognize 
 
-```{code:c#}
+```
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -130,7 +130,7 @@ See the relevant [Microsoft documentation](https://docs.microsoft.com/en-us/wind
 
 The subsystem provided the ability to get the actual native Windows MR object that backs the reference point. Below is an example of getting that data:
 
-```{code: c#}
+```
 TrackableChanges<XRReferencePoint>? currentRps = RPSubsystem?.GetChanges(Allocator.Temp) ?? null;
 
 if (currentRps != null)
@@ -169,7 +169,7 @@ Specific to this package is the ability to get the native WindowsMR [SpatialInte
   
 Here is an example:
 
-``` {code: c#}
+``` 
 List<System.Object> states = new List<System.Object>();
 
 ...
@@ -217,7 +217,7 @@ Specific to this package is the ability to get the native WindowsMR [SpatialSurf
 
 Here is an example:
 
-``` {code: c#}
+``` 
 var meshing = m_XrManagerSettings.activeLoader.GetLoadedSubsystem<XRMeshSubsystem>();
 WindowsMRExtensions.MeshingData meshData = new WindowsMRExtensions.MeshingData();
 ...

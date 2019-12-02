@@ -4,8 +4,26 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [2.0.3] - 2019-10-15
-* Update package version for official release
+## [2.0.4-preview.3] - 2019-12-02
+* Fix license text.
+* Fix camera tracking and camera tracking state reporting through XRInput.
+* Fix camera disconnect to actually call the disconnect API and not re-connect.
+* Add Pointer pose and grasp to HoloLens v2 hand tracking.
+* Fix build processor to only set boot config items if the target has a WindowsMRLoader instance in the list.
+* Fix null deref exception in Gesture provider.
+
+## [2.0.4-preview.2] - 2019-12-02
+* Update headers to reflect changes from Unity core.
+* Fix Occlusion Mesh creating every frame.
+* Update to new preview XR Management 3.0.5 and add build target filtering.
+* Fix generated documentation error.
+* Fix input provider missing feature usage for source loss and pointer position.
+* Add pose validation to display subsystem so that rendering system correctly skips trying to render frames that are invalid.
+* Fix logging to handle wide char strings correctly.
+* Add version define to allow us to use uplevel management features while also allowing us to run on down level management.
+
+## [2.0.4-preview.1] - 2019-10-18
+* Fix an issue that was preventing builds of the package outside of Unity.
 
 ## [2.0.3-preview.2] - 2019-10-01
 * Fixed depth buffer issue where we assume reverse Z is always on when converting projection matrix.

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 using UnityEngine;
 using UnityEngine.XR;
@@ -19,7 +20,10 @@ using UnityEngine.XR.WindowsMR.Input;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.XR.Management;
 #endif
+
+[assembly:InternalsVisibleTo("Unity.XR.WindowsMixedReality.Editor")]
 
 namespace UnityEngine.XR.WindowsMR
 {
@@ -65,6 +69,12 @@ namespace UnityEngine.XR.WindowsMR
     }
 #endif
 
+#if XR_MGMT_SUPPORTS_FILTERING
+#if UNITY_EDITOR
+    [XRSupportedBuildTarget(BuildTargetGroup.Standalone, new BuildTarget[]{ BuildTarget.StandaloneWindows, BuildTarget.StandaloneWindows64})]
+    [XRSupportedBuildTarget(BuildTargetGroup.WSA)]
+#endif
+#endif
     class WindowsMRLoader : XRLoaderHelper
     {
         private static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new List<XRSessionSubsystemDescriptor>();

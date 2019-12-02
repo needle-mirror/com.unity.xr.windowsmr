@@ -88,6 +88,19 @@ namespace UnityEditor.XR.WindowsMR
             if (settings == null)
                 return;
 
+            bool loaderFound = false;
+            for (int i = 0; i < settings.Manager.loaders.Count; ++i)
+            {
+                if (settings.Manager.loaders[i] as WindowsMRLoader != null)
+                {
+                    loaderFound = true;
+                    break;
+                }
+            }
+
+            if (!loaderFound)
+                return;
+
             string bootConfigPath = report.summary.outputPath;
 
             if (report.summary.platformGroup == BuildTargetGroup.WSA)
