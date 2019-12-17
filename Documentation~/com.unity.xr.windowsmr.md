@@ -130,7 +130,7 @@ See the relevant [Microsoft documentation](https://docs.microsoft.com/en-us/wind
 
 The subsystem provided the ability to get the actual native Windows MR object that backs the anchor. Below is an example of getting that data:
 
-```{code: c#}
+```
 TrackableChanges<XRAnchor>? currentRps = RPSubsystem?.GetChanges(Allocator.Temp) ?? null;
 
 if (currentRps != null)
@@ -169,7 +169,7 @@ Specific to this package is the ability to get the native WindowsMR [SpatialInte
   
 Here is an example:
 
-``` {code: c#}
+``` 
 List<System.Object> states = new List<System.Object>();
 
 ...
@@ -217,7 +217,7 @@ Specific to this package is the ability to get the native WindowsMR [SpatialSurf
 
 Here is an example:
 
-``` {code: c#}
+``` 
 var meshing = m_XrManagerSettings.activeLoader.GetLoadedSubsystem<XRMeshSubsystem>();
 WindowsMRExtensions.MeshingData meshData = new WindowsMRExtensions.MeshingData();
 ...

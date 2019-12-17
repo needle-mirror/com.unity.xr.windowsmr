@@ -4,8 +4,28 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.1-preview.3] - 2019-12-17
+* Fix camera tracking and camera tracking state reporting through XRInput.
+* Fix license text.
+* Fix camera disconnect to actually call the disconnect API and not re-connect.
+* Add Pointer pose and grasp to HoloLens v2 hand tracking.
+* Fix documentation to remove markdown that doesn't work with package management renderer.
+* Fix build processor to only set boot config items if the target has a WindowsMRLoader instance in the list.
+* Fix null deref exception in Gesture provider.
+
+## [3.0.1-preview.2] - 2019-12-02
+* Fix input provider missing feature usage for source loss and pointer position.
+* Add pose validation to display subsystem so that rendering system correctly skips trying to render frames that are invalid.
+* Fix logging to handle wide char strings correctly.
+
+## [3.0.1-preview.1] - 2019-11-14
+* Update XR Management dependency to 3.0.5.
+* Add build target filtering.
+* Fix Occlusion Mesh creating each frame.
+* Add version define to allow us to use uplevel management features while also allowing us to run on down level management.
+
 ## [3.0.0] - 2019-11-15
-* 2020.1 Release pacakge for verification.
+* 2020.1 Release package for verification.
 
 ## [3.0.0-preview.2] - 2019-11-14
 * Change AR Subsystems version to 3.0.0 and modify the RP API to reflect name changes.
@@ -13,6 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.0.0-preview.1] - 2019-08-28
 * Pick up header API changes that lock the package to 2020.1 only.
+* Update to new preview XR Management 3.0.5 and add build target filtering.
 
 ## [2.0.4-preview.2] - 2019-10-25
 * Update headers to reflect changes from Unity core.
