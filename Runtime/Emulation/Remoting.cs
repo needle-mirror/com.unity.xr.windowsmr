@@ -155,43 +155,43 @@ namespace UnityEngine.XR.WindowsMR
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WINRT
         [DllImport("WindowsMRXRSDK")]
-        static extern void UnityWindowsMR_Remoting_SetVideoEnabled(bool video);
+        public static extern void UnityWindowsMR_Remoting_SetVideoEnabled(bool video);
 
         [DllImport("WindowsMRXRSDK")]
-        static extern bool UnityWindowsMR_Remoting_IsVideoEnabled();
+        public static extern bool UnityWindowsMR_Remoting_IsVideoEnabled();
 
         [DllImport("WindowsMRXRSDK")]
-        static extern void UnityWindowsMR_Remoting_SetAudioEnabled(bool audio);
+        public static extern void UnityWindowsMR_Remoting_SetAudioEnabled(bool audio);
 
         [DllImport("WindowsMRXRSDK")]
-        static extern bool UnityWindowsMR_Remoting_IsAudioEnabled();
+        public static extern bool UnityWindowsMR_Remoting_IsAudioEnabled();
 
         [DllImport("WindowsMRXRSDK")]
-        static extern void UnityWindowsMR_Remoting_SetMaxBitRateKbps(int kbps);
+        public static extern void UnityWindowsMR_Remoting_SetMaxBitRateKbps(int kbps);
 
         [DllImport("WindowsMRXRSDK")]
-        static extern int UnityWindowsMR_Remoting_GetMaxBitRateKbps();
+        public static extern int UnityWindowsMR_Remoting_GetMaxBitRateKbps();
 
         [DllImport("WindowsMRXRSDK")]
-        static extern void UnityWindowsMR_Remoting_SetRemoteMachineName([MarshalAs(UnmanagedType.LPWStr)] string clientMachineName);
+        public static extern void UnityWindowsMR_Remoting_SetRemoteMachineName([MarshalAs(UnmanagedType.LPWStr)] string clientMachineName);
 
         [DllImport("WindowsMRXRSDK")]
-        static extern void UnityWindowsMR_Remoting_GetRemoteMachineName(System.Text.StringBuilder sb, int capacity);
+        public static extern void UnityWindowsMR_Remoting_GetRemoteMachineName(System.Text.StringBuilder sb, int capacity);
 
         [DllImport("WindowsMRXRSDK")]
-        static extern bool UnityWindowsMR_Remoting_IsConnected();
+        public static extern bool UnityWindowsMR_Remoting_IsConnected();
 
         [DllImport("WindowsMRXRSDK")]
-        static extern bool UnityWindowsMR_Remoting_TryGetConnectionState(ref ConnectionState connectionState);
+        public static extern bool UnityWindowsMR_Remoting_TryGetConnectionState(ref ConnectionState connectionState);
 
         [DllImport("WindowsMRXRSDK")]
-        static extern bool UnityWindowsMR_Remoting_TryGetConnectionFailureReason(ref ConnectionFailureReason connectionFailureReason);
+        public static extern bool UnityWindowsMR_Remoting_TryGetConnectionFailureReason(ref ConnectionFailureReason connectionFailureReason);
 
         [DllImport("WindowsMRXRSDK")]
-        static extern bool UnityWindowsMR_Remoting_TryConnect();
+        public static extern bool UnityWindowsMR_Remoting_TryConnect();
 
         [DllImport("WindowsMRXRSDK")]
-        static extern bool UnityWindowsMR_Remoting_TryDisconnect();
+        public static extern bool UnityWindowsMR_Remoting_TryDisconnect();
 #else
         static void UnityWindowsMR_Remoting_SetVideoEnabled(bool video)
         {

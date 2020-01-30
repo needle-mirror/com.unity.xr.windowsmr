@@ -4,7 +4,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [3.0.1-preview.3] - 2019-12-17
+## [3.0.1-preview.4] - 2020-01-30
+* Add airtap feature usage for HoloLens
+* Update Remoting Plugins with x64 UWP versions.
+* Add build settings toggle to copy remoting plugins to final build.
+
+## [3.0.1-preview.3] - 2020-01-30
 * Fix camera tracking and camera tracking state reporting through XRInput.
 * Fix license text.
 * Fix camera disconnect to actually call the disconnect API and not re-connect.

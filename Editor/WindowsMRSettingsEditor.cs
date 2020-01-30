@@ -15,9 +15,11 @@ namespace UnityEditor.XR.WindowsMR
         const string k_DepthBufferFormat = "DepthBufferFormat";
         const string k_SharedDepthBuffer = "UseSharedDepthBuffer";
         const string k_ForcePrimaryWindowHolographic = "UsePrimaryWindowForDisplay";
+        const string k_HolographicRemoting = "HolographicRemoting";
 
         static GUIContent s_DepthBufferFormatLabel = new GUIContent("Depth Buffer Format");
         static GUIContent s_SharedDepthBufferLabel = new GUIContent("Shared Depth Buffer");
+        static GUIContent s_HolographicRemotingLabel = new GUIContent("Holographic Remoting");
         static GUIContent s_ForcePrimaryWindowHologrpahicLabel = new GUIContent("Use Primary Window");
         static GUIContent s_ShowBuildSettingsLabel = new GUIContent("Build Settings");
         static GUIContent s_ShowRuntimeSettingsLabel = new GUIContent("Runtime Settings");
@@ -47,9 +49,12 @@ namespace UnityEditor.XR.WindowsMR
                         serializedSettingsObject.Update();
 
                         SerializedProperty forcePrimaryWindowHologrpahic = serializedSettingsObject.FindProperty(k_ForcePrimaryWindowHolographic);
+                        SerializedProperty holographicRemoting = serializedSettingsObject.FindProperty(k_HolographicRemoting);
 
                         EditorGUI.indentLevel++;
                         EditorGUILayout.PropertyField(forcePrimaryWindowHologrpahic, s_ForcePrimaryWindowHologrpahicLabel);
+                        EditorGUILayout.Space();
+                        EditorGUILayout.PropertyField(holographicRemoting, s_HolographicRemotingLabel);
                         EditorGUI.indentLevel--;
                         serializedSettingsObject.ApplyModifiedProperties();
                     }

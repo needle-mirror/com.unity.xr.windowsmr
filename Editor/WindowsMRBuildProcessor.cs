@@ -123,5 +123,61 @@ namespace UnityEditor.XR.WindowsMR
                 }
             }
         }
+
+        private readonly string[] nativePluginNames = new string[]
+        {
+            "Microsoft.Holographic.AppRemoting.dll",
+            "PerceptionDevice.dll",
+            "UnityRemotingWMR.dll"
+        };
+
+        public bool ShouldIncludeRemotingPluginsInBuild(string path)
+        {
+            XRGeneralSettings generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            if (generalSettings == null)
+                return false;
+
+            bool loaderFound = false;
+            for (int i = 0; i < generalSettings.Manager.loaders.Count; ++i)
+            {
+                if (generalSettings.Manager.loaders[i] as WindowsMRLoader != null)
+                {
+                    loaderFound = true;
+                    break;
+                }
+            }
+
+            if (!loaderFound)
+                return false;
+
+            WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)) as WindowsMRBuildSettings;
+            if (buildSettings == null)
+                return false;
+
+            return buildSettings.HolographicRemoting;
+        }
+
+        /// <summary>OnPreprocessBuild override to provide XR Plugin specific build actions.</summary>
+        /// <param name="report">The build report.</param>
+        public override void OnPreprocessBuild(BuildReport report)
+        {
+            base.OnPreprocessBuild(report);
+
+            var allPlugins = PluginImporter.GetAllImporters();
+            foreach (var plugin in allPlugins)
+            {
+                if (plugin.isNativePlugin)
+                {
+                    foreach (var pluginName in nativePluginNames)
+                    {
+                        if (plugin.assetPath.Contains(pluginName))
+                        {
+                            plugin.SetIncludeInBuildDelegate(ShouldIncludeRemotingPluginsInBuild);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
