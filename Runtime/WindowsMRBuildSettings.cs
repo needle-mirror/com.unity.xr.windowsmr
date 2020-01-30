@@ -18,5 +18,9 @@ namespace UnityEngine.XR.WindowsMR
         /// Only applicable for XAML based applications.
         /// </summary>
         public bool UsePrimaryWindowForDisplay = true;
+
+        [SerializeField, Tooltip("Enable holographic remoting support in UWP desktop builds.")]
+        /// <summary>True if we want to use holographic remoting in a UWP desktop build, false otherwise.</summary>
+        public bool HolographicRemoting = false;
     }
 }

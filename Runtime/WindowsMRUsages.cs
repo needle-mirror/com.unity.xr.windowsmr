@@ -26,5 +26,10 @@ namespace Unity.XR.WindowsMR
         /// A Vector3 direction that reports the suggested direction the user should move his hand if he is at risk of losing tracking.
         /// </summary>
         public static InputFeatureUsage<Vector3> SourceMitigationDirection = new InputFeatureUsage<Vector3>("SourceMitigationDirection");
+        /// <summary>
+        /// A bool representing if the user's index finger in the down position.
+        /// </summary>
+        /// <remarks>This data is HoloLens-specific and can also be queried using CommonUsages.triggerButton.</remarks>
+        public static InputFeatureUsage<bool> AirTap = new InputFeatureUsage<bool>("AirTap");
     }
 }
