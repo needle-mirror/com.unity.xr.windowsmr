@@ -4,12 +4,38 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.1.3] - 2020-04-03
+* Release for management 3.2.4.
+
+## [3.1.2] - 2020-04-03
+* Release for management 3.2.2.
+
+## [3.1.1] - 2020-03-23
+* Release for management 3.2.1.
+
+## [3.1.0] - 2020-03-13
+* Release for management 3.2.0.
+
+## [3.1.0-preview.2] - 2020-02-26
+* Update management dependency to 3.2.0 series.
+
+## [3.1.0-preview.1] - 2020-02-20
+* Update management dependency to 3.2.0 series.
+* Replace package initialization code with the new package metadata information.
+
+## [3.0.1] - 2019-02-07
+* Update management dependency for verification.
+* Package release for verification.
+
 ## [3.0.1-preview.4] - 2020-01-30
 * Add airtap feature usage for HoloLens
 * Update Remoting Plugins with x64 UWP versions.
 * Add build settings toggle to copy remoting plugins to final build.
+* Fix positional tracking at app launch
+* Fix coordinate system reset after tracking is lost and regained
 
-## [3.0.1-preview.3] - 2020-01-30
+
+## [3.0.1-preview.3] - 2019-12-17
 * Fix camera tracking and camera tracking state reporting through XRInput.
 * Fix license text.
 * Fix camera disconnect to actually call the disconnect API and not re-connect.
