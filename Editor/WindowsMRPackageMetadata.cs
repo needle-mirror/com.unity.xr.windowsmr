@@ -1,3 +1,4 @@
+#if XR_MGMT_GTE_320
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -75,3 +76,5 @@ namespace UnityEditor.XR.WindowsMR
         }
     }
 }
+
+#endif //XR_MGMT_GTE_320

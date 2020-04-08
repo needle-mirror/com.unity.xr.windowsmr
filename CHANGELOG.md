@@ -4,6 +4,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.1.5] - 2020-04-08
+*  Back management dependency down to 3.0.6.
+
+## [3.1.4] - 2020-04-08
+*  Fix package to be usable by downlevel management.
+
 ## [3.1.3] - 2020-04-03
 * Release for management 3.2.4.
 
