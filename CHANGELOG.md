@@ -4,7 +4,32 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [2.0.4-preview.4] - 2020-01-30
+## [2.1.5] - 2020-04-08
+*  Back management dependency down to 3.0.6.
+*  
+## [2.1.4] - 2020-04-08
+*  Fix package to be usable by downlevel management.
+
+## [2.1.3] - 2020-04-03
+* Release for managment 3.2.4
+
+## [2.1.2] - 2020-04-03
+* Release for managment 3.2.3
+
+## [2.1.1] - 2020-03-23
+* Release for managment 3.2.1
+
+## [2.1.0] - 2020-03-13
+* Release for managment 3.2.0
+  
+## [2.1.0-preview.2] - 2020-02-26
+* Update management dependency to 3.2.0 series.
+
+## [2.1.0-preview.1] - 2020-02-24
+* Update management dependency to 3.2.0 series.
+* Replace package initialization code with the new package metadata information.
+
+## [2.0.4-preview.4] - 2019-12-02
 * Add airtap feature usage for HoloLens
 * Fix pointer pose coordinate system
 * Update Remoting Plugins with x64 UWP versions.
@@ -32,6 +57,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.0.4-preview.1] - 2019-10-18
 * Fix an issue that was preventing builds of the package outside of Unity.
+
+## [2.0.3] - 2019-10-15
+* Update package version for official release
 
 ## [2.0.3-preview.2] - 2019-10-01
 * Fixed depth buffer issue where we assume reverse Z is always on when converting projection matrix.
