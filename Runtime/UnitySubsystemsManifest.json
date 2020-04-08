@@ -8,6 +8,7 @@
     "displays":[
         {
             "id":"Windows Mixed Reality Display",
+            "supportedMirrorBlitReservedModes" : ["leftEye","rightEye", "sideBySide"],
             "disablesLegacyVr":true,
             "splashScreenIsWorldLocked":false
         }

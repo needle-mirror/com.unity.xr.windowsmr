@@ -28,6 +28,19 @@ namespace UnityEngine.XR.WindowsMR.Tests
             Assert.IsTrue(WindowsMREnvironment.OriginSpatialCoordinateSystem.ToInt64() != 0);
         }
 
+        [UnityTest]
+        public IEnumerator RenderHolographicFrameAccess()
+        {
+            yield return new WaitForSeconds(1);
+            Assert.IsTrue(WindowsMREnvironment.CurrentHolographicRenderFrame.ToInt64() != 0);
+        }
+    
+        [UnityTest]
+        public IEnumerator SimulationHolographicFrameAccess()
+        {
+            yield return new WaitForSeconds(1);
+            Assert.IsTrue(WindowsMREnvironment.CurrentHolographicSimulationFrame.ToInt64() != 0);
+        }
     }
 
 }

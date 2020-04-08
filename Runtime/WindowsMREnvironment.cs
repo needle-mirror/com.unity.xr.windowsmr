@@ -33,5 +33,21 @@ namespace UnityEngine.XR.WindowsMR
                 return Native.GetOriginSpatialCoordinateSystem();
             }
         }
+
+        public static IntPtr CurrentHolographicRenderFrame
+        {
+            get
+            {
+                return Native.GetCurrentHolographicRenderFrame();
+            }
+        }
+
+        public static IntPtr CurrentHolographicSimulationFrame
+        {
+            get
+            {
+                return Native.GetCurrentHolographicSimulationFrame();
+            }
+        }
     }
 }

@@ -126,5 +126,26 @@ namespace UnityEngine.XR.WindowsMR
 #endif
         internal static extern IntPtr GetOriginSpatialCoordinateSystem();
 
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#else
+#if ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet = CharSet.Auto)]
+#endif
+#endif
+        internal static extern IntPtr GetCurrentHolographicRenderFrame();
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#else
+#if ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet = CharSet.Auto)]
+#endif
+#endif
+        internal static extern IntPtr GetCurrentHolographicSimulationFrame();
     }
 }
