@@ -4,6 +4,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.6-preview.1] - 2020-04-09
+* Add support for QueryViewBlitMode. This should allow a user to set the eye in the Game view and see it correctly.
+* Arm32 support.
+* Apply frame settings to all cameras and not just the first stereo camera.
+* Silence warnings for obsolete APIs that users can't do anything about.
+* Add access to Simulation and Render Holographic Frames.
+
 ## [2.1.5] - 2020-04-08
 *  Back management dependency down to 3.0.6.
 *  

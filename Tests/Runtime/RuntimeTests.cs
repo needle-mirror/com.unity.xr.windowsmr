@@ -403,14 +403,14 @@ namespace UnityEngine.XR.WindowsMR.Tests
                 Debug.Log("Eye Left Inverse Position = " + LeftEyeInverse +
                                       Environment.NewLine + "Eye Right Inverse Position = " + RightEyeInverse);
 
-                if (EyeZPositionCheck(LeftEyeInverse.z, 0f))
+                if (EyeZPositionCheck(LeftEye.z, 0f))
                 {
-                    Debug.Log("Eyes are in front of the head : " + LeftEyeInverse.z);
+                    Debug.Log("Eyes are in front of the head : " + LeftEye.z);
                     m_EyesInFront = true;
                 }
-                else if (!EyeZPositionCheck(LeftEyeInverse.z, 0f))
+                else if (!EyeZPositionCheck(LeftEye.z, 0f))
                 {
-                    Debug.Log("Eyes are in behind of the head : " + LeftEyeInverse.z);
+                    Debug.Log("Eyes are in behind of the head : " + LeftEye.z);
                     m_EyesInFront = false;
                 }
 

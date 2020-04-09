@@ -124,7 +124,9 @@ namespace UnityEngine.XR.WindowsMR
         public static void Connect()
         {
 #if UNITY_2019_3_OR_NEWER
+#pragma warning disable 0618
             RemoteSpeechAccess.EnableRemoteSpeech(UnityEngine.XR.WSA.RemoteDeviceVersion.V2);
+#pragma warning restore 0618
 #endif
 
             // throw exception on failed connection?
@@ -137,7 +139,9 @@ namespace UnityEngine.XR.WindowsMR
             UnityWindowsMR_Remoting_TryDisconnect();
 
 #if UNITY_2019_3_OR_NEWER
+#pragma warning disable 0618
             RemoteSpeechAccess.DisableRemoteSpeech();
+#pragma warning restore 0618
 #endif
         }
 
