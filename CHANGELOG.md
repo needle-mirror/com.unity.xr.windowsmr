@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## [2.1.6-preview.2] - 2020-05-01
+* Stop copying binary files from package when the provider is not assigne to the build target.
+
 ## [2.1.6-preview.1] - 2020-04-09
 * Add support for QueryViewBlitMode. This should allow a user to set the eye in the Game view and see it correctly.
 * Arm32 support.
