@@ -124,7 +124,40 @@ namespace UnityEditor.XR.WindowsMR
             }
         }
 
-        private readonly string[] nativePluginNames = new string[]
+        private readonly string[] runtimePluginNames = new string[]
+        {
+            "WindowsMRXRSDK.dll",
+        };
+
+        public bool ShouldIncludeRuntimePluginsInBuild(string path)
+        {
+            XRGeneralSettings generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            if (generalSettings == null)
+                return false;
+
+            foreach (var loader in generalSettings.Manager.loaders)
+            {
+                if (loader is WindowsMRLoader)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private readonly string spatializerPluginName = "AudioPluginMsHRTF.dll";
+        private readonly string spatializerReadableName = "MS HRTF Spatializer";
+
+        public bool ShouldIncludeSpatializerPluginsInBuild(string path)
+        {
+            string currentSpatializerPluginName = AudioSettings.GetSpatializerPluginName();
+
+            if (string.Compare(spatializerReadableName, currentSpatializerPluginName, true) == 0)
+                return true;
+
+            return false;
+        }
+
+        private readonly string[] remotingPluginNames = new string[]
         {
             "Microsoft.Holographic.AppRemoting.dll",
             "PerceptionDevice.dll",
@@ -168,13 +201,27 @@ namespace UnityEditor.XR.WindowsMR
             {
                 if (plugin.isNativePlugin)
                 {
-                    foreach (var pluginName in nativePluginNames)
+                    foreach (var pluginName in remotingPluginNames)
                     {
                         if (plugin.assetPath.Contains(pluginName))
                         {
                             plugin.SetIncludeInBuildDelegate(ShouldIncludeRemotingPluginsInBuild);
                             break;
                         }
+                    }
+
+                    foreach (var pluginName in runtimePluginNames)
+                    {
+                        if (plugin.assetPath.Contains(pluginName))
+                        {
+                            plugin.SetIncludeInBuildDelegate(ShouldIncludeRuntimePluginsInBuild);
+                            break;
+                        }
+                    }
+
+                    if (plugin.assetPath.Contains(spatializerPluginName))
+                    {
+                        plugin.SetIncludeInBuildDelegate(ShouldIncludeSpatializerPluginsInBuild);
                     }
                 }
             }
