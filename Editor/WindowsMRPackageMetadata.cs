@@ -72,6 +72,7 @@ namespace UnityEditor.XR.WindowsMR
                     settings.UseSharedDepthBuffer = PlayerSettings.VRWindowsMixedReality.depthBufferSharingEnabled;
 #pragma warning restore 0618
                     return true;
+#pragma warning restore 0618
                 }
             }
             return false;
