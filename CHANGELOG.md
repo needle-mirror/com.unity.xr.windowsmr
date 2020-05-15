@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.1.6-preview.3] - 2020-05-15
+* Add Eye gaze support through EyeGazeRotation and EyeGazePosition input feature usages.
+* Fix build processor to not copy settings to unsupported targets.
+
 ## [3.1.6-preview.2] - 2020-05-01
 * Stop copying binary files from package when the provider is not assigne to the build target.
 

@@ -20,8 +20,33 @@ namespace UnityEditor.XR.WindowsMR
     {
         public override string BuildSettingsKey { get { return Constants.k_SettingsKey; } }
 
+        private bool HasLoaderEnabledForTarget(BuildTargetGroup buildTargetGroup)
+        {
+            XRGeneralSettings settings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(buildTargetGroup);
+            if (settings == null)
+                return false;
+
+            bool loaderFound = false;
+            for (int i = 0; i < settings.Manager.loaders.Count; ++i)
+            {
+                if (settings.Manager.loaders[i] as WindowsMRLoader != null)
+                {
+                    loaderFound = true;
+                    break;
+                }
+            }
+
+            return loaderFound;
+        }
+
         private WindowsMRPackageSettings PackageSettingsForBuildTargetGroup(BuildTargetGroup buildTargetGroup)
         {
+            if (buildTargetGroup != BuildTargetGroup.Standalone && buildTargetGroup != BuildTargetGroup.WSA)
+                return null;
+
+            if (!HasLoaderEnabledForTarget(buildTargetGroup))
+                return null;
+
             UnityEngine.Object settingsObj = null;
             EditorBuildSettings.TryGetConfigObject(BuildSettingsKey, out settingsObj);
             WindowsMRPackageSettings settings = settingsObj as WindowsMRPackageSettings;
@@ -84,21 +109,7 @@ namespace UnityEditor.XR.WindowsMR
         {
             base.OnPostprocessBuild(report);
 
-            XRGeneralSettings settings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(report.summary.platformGroup);
-            if (settings == null)
-                return;
-
-            bool loaderFound = false;
-            for (int i = 0; i < settings.Manager.loaders.Count; ++i)
-            {
-                if (settings.Manager.loaders[i] as WindowsMRLoader != null)
-                {
-                    loaderFound = true;
-                    break;
-                }
-            }
-
-            if (!loaderFound)
+            if (!HasLoaderEnabledForTarget(report.summary.platformGroup))
                 return;
 
             string bootConfigPath = report.summary.outputPath;
@@ -131,17 +142,7 @@ namespace UnityEditor.XR.WindowsMR
 
         public bool ShouldIncludeRuntimePluginsInBuild(string path)
         {
-            XRGeneralSettings generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
-            if (generalSettings == null)
-                return false;
-
-            foreach (var loader in generalSettings.Manager.loaders)
-            {
-                if (loader is WindowsMRLoader)
-                    return true;
-            }
-
-            return false;
+            return HasLoaderEnabledForTarget(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
         }
 
         private readonly string spatializerPluginName = "AudioPluginMsHRTF.dll";
@@ -166,24 +167,8 @@ namespace UnityEditor.XR.WindowsMR
 
         public bool ShouldIncludeRemotingPluginsInBuild(string path)
         {
-            XRGeneralSettings generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
-            if (generalSettings == null)
-                return false;
-
-            bool loaderFound = false;
-            for (int i = 0; i < generalSettings.Manager.loaders.Count; ++i)
-            {
-                if (generalSettings.Manager.loaders[i] as WindowsMRLoader != null)
-                {
-                    loaderFound = true;
-                    break;
-                }
-            }
-
-            if (!loaderFound)
-                return false;
-
-            WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)) as WindowsMRBuildSettings;
+            BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
+            WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(buildTargetGroup) as WindowsMRBuildSettings;
             if (buildSettings == null)
                 return false;
 

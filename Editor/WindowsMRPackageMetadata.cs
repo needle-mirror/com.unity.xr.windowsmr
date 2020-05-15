@@ -57,6 +57,7 @@ namespace UnityEditor.XR.WindowsMR
                 var settings = packageSettings.GetSettingsForBuildTargetGroup(BuildTargetGroup.WSA);
                 if (settings != null)
                 {
+#pragma warning disable 0618
                     switch (PlayerSettings.VRWindowsMixedReality.depthBufferFormat)
                     {
                     case PlayerSettings.VRWindowsMixedReality.DepthBufferFormat.DepthBufferFormat16Bit:
@@ -69,6 +70,7 @@ namespace UnityEditor.XR.WindowsMR
 
                     settings.UseSharedDepthBuffer = PlayerSettings.VRWindowsMixedReality.depthBufferSharingEnabled;
                     return true;
+#pragma warning restore 0618
                 }
             }
             return false;
