@@ -7,7 +7,7 @@ using UnityEngine.XR.WindowsMRInternals;
 using UnityEditor;
 #endif
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && !UNITY_2020_2_OR_NEWER
 using UnityEngineInternal.XR.WSA;
 #endif
 
@@ -123,7 +123,7 @@ namespace UnityEngine.XR.WindowsMR
 
         public static void Connect()
         {
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && !UNITY_2020_2_OR_NEWER
 #pragma warning disable 0618
             RemoteSpeechAccess.EnableRemoteSpeech(UnityEngine.XR.WSA.RemoteDeviceVersion.V2);
 #pragma warning restore 0618
@@ -138,7 +138,7 @@ namespace UnityEngine.XR.WindowsMR
             // throw exception on failed disconnection?
             UnityWindowsMR_Remoting_TryDisconnect();
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && !UNITY_2020_2_OR_NEWER
 #pragma warning disable 0618
             RemoteSpeechAccess.DisableRemoteSpeech();
 #pragma warning restore 0618
