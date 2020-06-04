@@ -74,7 +74,7 @@ namespace UnityEngine.XR.WindowsMR
     [XRSupportedBuildTarget(BuildTargetGroup.WSA)]
 #endif
 #endif
-    class WindowsMRLoader : XRLoaderHelper
+    public class WindowsMRLoader : XRLoaderHelper
     {
         private static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new List<XRSessionSubsystemDescriptor>();
         private static List<XRDisplaySubsystemDescriptor> s_DisplaySubsystemDescriptors = new List<XRDisplaySubsystemDescriptor>();

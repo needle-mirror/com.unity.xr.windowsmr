@@ -4,24 +4,34 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.2] - 2020-06-04
+* Update remoting plugins.
+
+## [4.0.1] - 2020-06-03
+* Change Unity version dependency.
+
+## [4.0.0] - 2020-06-03
+* The ARSubsystem implementions have been updated to reflect changes in the ARSubsystems API. See the [ARFoundation Migration Guide](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/migration-guide-3.html) for more details.
+* Make loader public.
+* Blocked APIs on 2020.2 or greater that are deprecated and/or no longer present.
+
 ## [3.1.6-preview.3] - 2020-05-15
 * Add Eye gaze support through EyeGazeRotation and EyeGazePosition input feature usages.
-* Fix build processor to not copy settings to unsupported targets.
 
-## [3.1.6-preview.2] - 2020-05-01
-* Stop copying binary files from package when the provider is not assigne to the build target.
+## [3.1.6-preview.2] - 2020-05-1
+* Fix build processor to not copy settings to unsupported targets.
 
 ## [3.1.6-preview.1] - 2020-04-08
 * Add support for game view eye rendering.
 * Arm32 support
 * Apply frame settings to all cameras and not just the first stereo camera.
 * Add access to Simulation and Render Holographic Frames.
-  
+
 ## [3.1.5] - 2020-04-08
-*  Back management dependency down to 3.0.6.
+* Back management dependency down to 3.0.6.
 
 ## [3.1.4] - 2020-04-08
-*  Fix package to be usable by downlevel management.
+* Fix package to be usable by downlevel management.
 
 ## [3.1.3] - 2020-04-03
 * Release for management 3.2.4.

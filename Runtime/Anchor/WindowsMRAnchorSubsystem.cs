@@ -17,10 +17,12 @@ namespace UnityEngine.XR.WindowsMR
     [Preserve]
     public sealed class WindowsMRAnchorSubsystem : XRAnchorSubsystem
     {
+#if !UNITY_2020_2_OR_NEWER
         protected override Provider CreateProvider()
         {
             return new WindowsMRProvider();
         }
+#endif
 
         class WindowsMRProvider : Provider
         {
@@ -158,7 +160,12 @@ namespace UnityEngine.XR.WindowsMR
             XRAnchorSubsystemDescriptor.Create(new XRAnchorSubsystemDescriptor.Cinfo
             {
                 id = "Windows Mixed Reality Anchor",
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(WindowsMRProvider),
+                subsystemTypeOverride = typeof(WindowsMRAnchorSubsystem),
+#else
                 subsystemImplementationType = typeof(WindowsMRAnchorSubsystem),
+#endif
                 supportsTrackableAttachments = false
             });
         }
