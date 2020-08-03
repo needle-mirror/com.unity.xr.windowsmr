@@ -2,9 +2,7 @@
     "name":"XRSDK Windows Mixed Reality",
     "version":"1.0.0",
     "libraryName":"WindowsMRXRSDK",
-    "properties":{
-        "Windows Mixed Reality Boot":true
-    },
+    "properties":{},
     "displays":[
         {
             "id":"Windows Mixed Reality Display",

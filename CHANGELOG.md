@@ -4,6 +4,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.3.1] - 2020-08-03
+* Adjust line endings in scripts to all be Unix LF.
+
+## [3.3.0] - 2020-07-12
+* Update minor version due to added remoting scripting apis.
+* Add input display name for Windows MR HMD.
+* Allow for secondary UWP windows support.
+* Fix Culling combined frustum FOV
+* Multiple corrections for hologram stability and convergence.
+* Update remoting window with message clarify which platform is used for Player Settings when entering play mode.
+
 ## [3.2.0] - 2020-06-04
 * Update remoting binaries to 2.1.3.
 * Prepare for 3.1.6 release.
@@ -12,8 +23,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Add Eye gaze support through EyeGazeRotation and EyeGazePosition input feature usages.
 * Fix build processor to not copy settings to unsupported targets.
 
-## [3.1.6-preview.2] - 2020-05-01
-* Stop copying binary files from package when the provider is not assigne to the build target.
+## [3.1.6-preview.2] - 2020-04-20
+* Support use of background UWP window for WSA XR applications.
+* Stop copying binary files from package when the provider is not assigned to the build target.
 
 ## [3.1.6-preview.1] - 2020-04-08
 * Add support for game view eye rendering.

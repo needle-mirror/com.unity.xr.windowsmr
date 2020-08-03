@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
@@ -14,14 +15,127 @@ using UnityEngine.XR.WindowsMR;
 
 namespace UnityEditor.XR.WindowsMR
 {
+    /// <summary>
+    /// Small utility class for reading, updating and writing boot config.
+    /// </summary>
+    class BootConfig
+    {
+        struct BootConfigEntry
+        {
+            public string key;
+            public string value;
+        }
+
+        private List<BootConfigEntry> bootConfigEntries;
+
+        private string GetPathToBootConfig(BuildReport report)
+        {
+            string bootConfigPath = report.summary.outputPath;
+
+            // Boot Config data path is highly specific to the platform being built.
+            if (report.summary.platformGroup == BuildTargetGroup.WSA)
+            {
+                bootConfigPath = Path.Combine(bootConfigPath, PlayerSettings.productName);
+                bootConfigPath = Path.Combine(bootConfigPath, "Data");
+                bootConfigPath = Path.Combine(bootConfigPath, "boot.config");
+            }
+            else
+            {
+                bootConfigPath = bootConfigPath.Substring(0, bootConfigPath.Length - ($"{PlayerSettings.productName}.exe".Length + 1));
+                bootConfigPath = Path.Combine(bootConfigPath, $"{PlayerSettings.productName}_Data");
+                bootConfigPath = Path.Combine(bootConfigPath, "boot.config");
+            }
+
+            return bootConfigPath;
+        }
+
+        private BuildReport buildReport;
+        private string bootConfigPath;
+
+        public BootConfig(BuildReport report)
+        {
+            buildReport = report;
+            bootConfigPath = GetPathToBootConfig(report);
+
+        }
+
+        public void ReadBootConfg()
+        {
+            bootConfigEntries = new List<BootConfigEntry>();
+            using (StreamReader sr = File.OpenText(bootConfigPath))
+            {
+                string entry_text;
+                while ((entry_text = sr.ReadLine()) != null)
+                {
+                    if (String.IsNullOrEmpty(entry_text))
+                        continue;
+
+                    var idx = entry_text.IndexOf('=');
+                    if (idx < 0)
+                        continue;
+
+                    var key = entry_text.Substring(0, idx);
+                    var value = entry_text.Substring(idx + 1, entry_text.Length - (idx + 1));
+                    bootConfigEntries.Add(new BootConfigEntry()
+                    {
+                        key = key,
+                        value = value
+                    });
+
+                }
+            }
+
+        }
+
+        public void SetValueForKey(string key, string value, bool replace = false)
+        {
+            if (replace)
+            {
+                bootConfigEntries = bootConfigEntries.Where((bce) => String.Compare(bce.key, key) != 0).ToList();
+            }
+            bootConfigEntries.Add(new BootConfigEntry() { key = key, value = value });
+        }
+
+        public void WriteBootConfig()
+        {
+            using (FileStream fs = File.OpenWrite(bootConfigPath))
+            {
+                fs.SetLength(0);
+
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    foreach (var bce in bootConfigEntries)
+                    {
+                        sw.WriteLine($"{bce.key}={bce.value}");
+                    }
+                }
+            }
+        }
+    }
+
     /// <summary>Build Processor class used to handle XR Plugin specific build actions/</summary>
     /// <typeparam name="WindowsMRSettings">The settings instance type the build processor will use.</typeparam>
     public class WindowsMRBuildProcessor : XRBuildHelper<WindowsMRSettings>
     {
+        private static List<BuildTarget> s_ValidBuildTargets = new List<BuildTarget>(){
+            BuildTarget.StandaloneWindows,
+            BuildTarget.StandaloneWindows64,
+            BuildTarget.WSAPlayer,
+        };
+
         public override string BuildSettingsKey { get { return Constants.k_SettingsKey; } }
+
+        private bool IsCurrentBuildTargetVaild(BuildReport report)
+        {
+            return report.summary.platformGroup == BuildTargetGroup.WSA ||
+                (report.summary.platformGroup == BuildTargetGroup.Standalone && s_ValidBuildTargets.Contains(report.summary.platform));
+        }
 
         private bool HasLoaderEnabledForTarget(BuildTargetGroup buildTargetGroup)
         {
+            if (buildTargetGroup != BuildTargetGroup.Standalone && buildTargetGroup != BuildTargetGroup.WSA)
+                return false;
+
             XRGeneralSettings settings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(buildTargetGroup);
             if (settings == null)
                 return false;
@@ -41,9 +155,6 @@ namespace UnityEditor.XR.WindowsMR
 
         private WindowsMRPackageSettings PackageSettingsForBuildTargetGroup(BuildTargetGroup buildTargetGroup)
         {
-            if (buildTargetGroup != BuildTargetGroup.Standalone && buildTargetGroup != BuildTargetGroup.WSA)
-                return null;
-
             if (!HasLoaderEnabledForTarget(buildTargetGroup))
                 return null;
 
@@ -102,37 +213,43 @@ namespace UnityEditor.XR.WindowsMR
         }
 
         const string k_ForcePrimaryWindowHolographic = "force-primary-window-holographic";
+        const string k_VrEnabled = "vr-enabled";
+        const string k_WmrLibrary = "xrsdk-windowsmr-library";
+        const string k_WmrLibraryName = "WindowsMRXRSDK";
+        const string k_EarlyBootHolographic = "early-boot-windows-holographic";
 
         /// <summary>OnPostprocessBuild override to provide XR Plugin specific build actions.</summary>
         /// <param name="report">The build report.</param>
         public override void OnPostprocessBuild(BuildReport report)
         {
-            base.OnPostprocessBuild(report);
+            if (!IsCurrentBuildTargetVaild(report))
+                return;
 
             if (!HasLoaderEnabledForTarget(report.summary.platformGroup))
                 return;
+            
+            base.OnPostprocessBuild(report);
 
-            string bootConfigPath = report.summary.outputPath;
+            BootConfig bootConfig = new BootConfig(report);
+            bootConfig.ReadBootConfg();
 
+            bootConfig.SetValueForKey(k_VrEnabled, "1", true);
+            bootConfig.SetValueForKey(k_WmrLibrary, k_WmrLibraryName, true);
             if (report.summary.platformGroup == BuildTargetGroup.WSA)
             {
+                bootConfig.SetValueForKey(k_EarlyBootHolographic, "1", true);
+
                 bool usePrimaryWindow = true;
                 WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(report.summary.platformGroup);
                 if (buildSettings != null)
                 {
                     usePrimaryWindow = buildSettings.UsePrimaryWindowForDisplay;
                 }
-
-                // Boot Config data path is highly specific to the platform being built.
-                bootConfigPath = Path.Combine(bootConfigPath, PlayerSettings.productName);
-                bootConfigPath = Path.Combine(bootConfigPath, "Data");
-                bootConfigPath = Path.Combine(bootConfigPath, "boot.config");
-
-                using (StreamWriter sw = File.AppendText(bootConfigPath))
-                {
-                    sw.WriteLine(String.Format("{0}={1}", k_ForcePrimaryWindowHolographic, usePrimaryWindow ? 1 : 0));
-                }
+                
+                bootConfig.SetValueForKey(k_ForcePrimaryWindowHolographic, usePrimaryWindow ? "1" : "0", true);
             }
+
+            bootConfig.WriteBootConfig();
         }
 
         private readonly string[] runtimePluginNames = new string[]
@@ -179,6 +296,12 @@ namespace UnityEditor.XR.WindowsMR
         /// <param name="report">The build report.</param>
         public override void OnPreprocessBuild(BuildReport report)
         {
+            if (!IsCurrentBuildTargetVaild(report))
+                return;
+
+            if (!HasLoaderEnabledForTarget(report.summary.platformGroup))
+                return;
+
             base.OnPreprocessBuild(report);
 
             var allPlugins = PluginImporter.GetAllImporters();
