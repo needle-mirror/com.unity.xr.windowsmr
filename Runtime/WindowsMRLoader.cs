@@ -11,7 +11,7 @@ using UnityEngine.XR.Management;
 using XRGestureSubsystem = UnityEngine.XR.InteractionSubsystems.XRGestureSubsystem;
 using XRGestureSubsystemDescriptor = UnityEngine.XR.InteractionSubsystems.XRGestureSubsystemDescriptor;
 
-#if UNITY_INPUT_SYSTEM 
+#if UNITY_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.XR;
@@ -24,6 +24,7 @@ using UnityEditor.XR.Management;
 #endif
 
 [assembly:InternalsVisibleTo("Unity.XR.WindowsMixedReality.Editor")]
+[assembly:InternalsVisibleTo("Unity.XR.WindowsMR.Tests")]
 
 namespace UnityEngine.XR.WindowsMR
 {
@@ -77,6 +78,7 @@ namespace UnityEngine.XR.WindowsMR
 #endif
     class WindowsMRLoader : XRLoaderHelper
     {
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || UNITY_WINRT
         private static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new List<XRSessionSubsystemDescriptor>();
         private static List<XRDisplaySubsystemDescriptor> s_DisplaySubsystemDescriptors = new List<XRDisplaySubsystemDescriptor>();
         private static List<XRInputSubsystemDescriptor> s_InputSubsystemDescriptors = new List<XRInputSubsystemDescriptor>();
@@ -229,6 +231,7 @@ namespace UnityEngine.XR.WindowsMR
 #endif
             return settings;
         }
+#endif // UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || UNITY_WINRT
     }
 
 }

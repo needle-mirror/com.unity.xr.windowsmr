@@ -4,6 +4,7 @@
         "UnityEngine.SpatialTracking",
         "Unity.XR.WindowsMixedReality",
         "Unity.XR.Management",
+        "Unity.XR.Management.Editor",
         "Unity.XR.InteractionSubsystems"
     ],
     "optionalUnityReferences": [

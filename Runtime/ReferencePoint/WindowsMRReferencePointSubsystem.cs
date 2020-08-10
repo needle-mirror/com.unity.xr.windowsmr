@@ -10,6 +10,97 @@ using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.WindowsMR
 {
+    static class NativeApi
+    {
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#elif ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+#endif
+        public static extern void UnityWindowsMR_refPoints_start();
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#elif ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+#endif
+        public static extern void UnityWindowsMR_refPoints_stop();
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#elif ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+#endif
+        public static extern void UnityWindowsMR_refPoints_onDestroy();
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#elif ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+#endif
+        public static extern unsafe void* UnityWindowsMR_refPoints_acquireChanges(
+            out void* addedPtr, out int addedCount,
+            out void* updatedPtr, out int updatedCount,
+            out void* removedPtr, out int removedCount,
+            out int elementSize);
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#elif ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+#endif
+        public static extern unsafe void UnityWindowsMR_refPoints_releaseChanges(
+            void* changes);
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#elif ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+#endif
+        public static extern bool UnityWindowsMR_refPoints_tryAdd(
+            Pose pose,
+            out XRReferencePoint referencePoint);
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#elif ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+#endif
+        public static extern bool UnityWindowsMR_refPoints_tryRemove(TrackableId referencePointId);
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#elif ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+#endif
+        public static extern void UnityWindowsMR_refPoints_ClearAllFromStorage();
+
+#if UNITY_EDITOR
+        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
+#elif ENABLE_DOTNET
+        [DllImport("WindowsMRXRSDK.dll")]
+#else
+        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
+#endif
+        public static extern void UnityWindowsMR_refPoints_ReloadStorage();
+    }
+
     /// <summary>
     /// The WindowsMR implementation of the <c>XRReferencePointSubsystem</c>. Do not create this directly.
     /// Use <c>XRReferencePointSubsystemDescriptor.Create()</c> instead.
@@ -53,12 +144,26 @@ namespace UnityEngine.XR.WindowsMR
 
                 try
                 {
-                    return new TrackableChanges<XRReferencePoint>(
-                        addedPtr, addedCount,
-                        updatedPtr, updatedCount,
-                        removedPtr, removedCount,
-                        defaultReferencePoint, elementSize,
+                    // Yes, this is an extra copy, but the hit is small compared with the code needed to get rid of it.
+                    // If this becomes a problem we can eliminate the extra copy by doing something similar to
+                    // NativeCopyUtility.PtrToNativeArrayWithDefault only with a pre-allocated array properties
+                    // from using the TrackableChanges(int, int, int allocator) constructor.
+                    var added = NativeCopyUtility.PtrToNativeArrayWithDefault<XRReferencePoint>(defaultReferencePoint, addedPtr, elementSize, addedCount, allocator);
+                    var updated = NativeCopyUtility.PtrToNativeArrayWithDefault<XRReferencePoint>(defaultReferencePoint, updatedPtr, elementSize, updatedCount, allocator);
+                    var removed = NativeCopyUtility.PtrToNativeArrayWithDefault<TrackableId>(default(TrackableId), removedPtr, elementSize, removedCount, allocator);
+
+
+                    var ret = TrackableChanges<XRReferencePoint>.CopyFrom(
+                        added,
+                        updated,
+                        removed,
                         allocator);
+
+                    added.Dispose();
+                    updated.Dispose();
+                    removed.Dispose();
+                    return ret;
+
                 }
                 finally
                 {
@@ -78,78 +183,6 @@ namespace UnityEngine.XR.WindowsMR
                 return NativeApi.UnityWindowsMR_refPoints_tryRemove(referencePointId);
             }
 
-            static class NativeApi
-            {
-#if UNITY_EDITOR
-                [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#elif ENABLE_DOTNET
-                [DllImport("WindowsMRXRSDK.dll")]
-#else
-                [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
-#endif
-                public static extern void UnityWindowsMR_refPoints_start();
-
-#if UNITY_EDITOR
-                [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#elif ENABLE_DOTNET
-                [DllImport("WindowsMRXRSDK.dll")]
-#else
-                [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
-#endif
-                public static extern void UnityWindowsMR_refPoints_stop();
-
-#if UNITY_EDITOR
-                [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#elif ENABLE_DOTNET
-                [DllImport("WindowsMRXRSDK.dll")]
-#else
-                [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
-#endif
-                public static extern void UnityWindowsMR_refPoints_onDestroy();
-
-#if UNITY_EDITOR
-                [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#elif ENABLE_DOTNET
-                [DllImport("WindowsMRXRSDK.dll")]
-#else
-                [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
-#endif
-                public static extern unsafe void* UnityWindowsMR_refPoints_acquireChanges(
-                    out void* addedPtr, out int addedCount,
-                    out void* updatedPtr, out int updatedCount,
-                    out void* removedPtr, out int removedCount,
-                    out int elementSize);
-
-#if UNITY_EDITOR
-                [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#elif ENABLE_DOTNET
-                [DllImport("WindowsMRXRSDK.dll")]
-#else
-                [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
-#endif
-                public static extern unsafe void UnityWindowsMR_refPoints_releaseChanges(
-                    void* changes);
-
-#if UNITY_EDITOR
-                [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#elif ENABLE_DOTNET
-                [DllImport("WindowsMRXRSDK.dll")]
-#else
-                [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
-#endif
-                public static extern bool UnityWindowsMR_refPoints_tryAdd(
-                    Pose pose,
-                    out XRReferencePoint referencePoint);
-
-#if UNITY_EDITOR
-                [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#elif ENABLE_DOTNET
-                [DllImport("WindowsMRXRSDK.dll")]
-#else
-                [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
-#endif
-                public static extern bool UnityWindowsMR_refPoints_tryRemove(TrackableId referencePointId);
-            }
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -161,6 +194,19 @@ namespace UnityEngine.XR.WindowsMR
                 subsystemImplementationType = typeof(WindowsMRReferencePointSubsystem),
                 supportsTrackableAttachments = false
             });
+        }
+    }
+
+    public static class WMRRPExtensions
+    {
+        public static void ClearAllReferencePointsFromStorage(this WindowsMRReferencePointSubsystem wmrrp)
+        {
+            NativeApi.UnityWindowsMR_refPoints_ClearAllFromStorage();
+        }
+
+        public static void ReloadStorage(this WindowsMRReferencePointSubsystem wmrrp)
+        {
+            NativeApi.UnityWindowsMR_refPoints_ReloadStorage();
         }
     }
 }
