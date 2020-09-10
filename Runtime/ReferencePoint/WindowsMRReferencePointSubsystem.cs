@@ -1,12 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine.Scripting;
 using UnityEngine.XR.ARSubsystems;
+
+#if ENABLE_WINMD_SUPPORT
+using Windows.Perception.Spatial;
+using Windows.Storage.Streams;
+#endif
 
 namespace UnityEngine.XR.WindowsMR
 {
@@ -197,16 +204,128 @@ namespace UnityEngine.XR.WindowsMR
         }
     }
 
+    /// <summary>
+    /// Class for holding extension methods on the <see cref="WindowsMRReferencePointSubsystem"/>.
+    /// </summary>
     public static class WMRRPExtensions
     {
+        /// <summary>
+        /// Extension method of the WindowsMRReferencePointSubsystem. Clears all current
+        /// and stored anchors from the Windows Mixed Reality <see cref="SpatialAnchorStore"/>.
+        /// </summary>
+        /// <param name="wmrrp">The instance of <see cref="WindowsMRReferencePointSubsystem"/> to call on.</param>
         public static void ClearAllReferencePointsFromStorage(this WindowsMRReferencePointSubsystem wmrrp)
         {
             NativeApi.UnityWindowsMR_refPoints_ClearAllFromStorage();
         }
 
+        /// <summary>
+        /// Extension method of the WindowsMRReferencePointSubsystem. Reloads stored anchors
+        /// from the Windows Mixed Reality <see cref="SpatialAnchorStore"/>. Useful when you have
+        /// manually imported a file of <see cref="SpatialAnchor"/> into the store from outside
+        /// the application.
+        /// </summary>
+        /// <param name="wmrrp">The instance of <see cref="WindowsMRReferencePointSubsystem"/> to call on.</param>
         public static void ReloadStorage(this WindowsMRReferencePointSubsystem wmrrp)
         {
             NativeApi.UnityWindowsMR_refPoints_ReloadStorage();
         }
+
+#pragma  warning disable CS0618
+#pragma  warning disable CS1998
+        /// <summary>
+        /// Extension method of the WindowsMRReferencePointSubsystem. Used to import a
+        /// stream containing instances of <see cref="SpatialAnchor"/> into the <see cref="SpatialAnchorStore"/>.
+        /// </summary>
+        /// <param name="wmrrp">The instance of <see cref="WindowsMRReferencePointSubsystem"/> to call on.</param>
+        /// <param name="wmrrp">An instance of a <see cref="Stream"/> to read from.</param>
+        public static async Task<bool> ImportReferencePoints(this WindowsMRReferencePointSubsystem wmrrp, Stream input)
+        {
+            bool ret = false;
+#if ENABLE_WINMD_SUPPORT
+
+            try
+            {
+                var access = await SpatialAnchorTransferManager.RequestAccessAsync();
+                if (access != SpatialPerceptionAccessStatus.Allowed)
+                    return ret;
+
+                var spatialAnchorStore = await SpatialAnchorManager.RequestStoreAsync();
+                if (spatialAnchorStore == null)
+                    return ret;
+
+                var anchors = await SpatialAnchorTransferManager.TryImportAnchorsAsync(input.AsInputStream());
+                foreach (var kvp in anchors)
+                {
+                    spatialAnchorStore.TrySave(kvp.Key, kvp.Value);
+                }
+
+                ret = true;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                ret = false;
+            }
+#else
+            Debug.LogError("This API is only available for use in UWP based applications.");
+#endif //ENABLE_WINMD_SUPPORT
+            return ret;
+        }
+
+        /// <summary>
+        /// Extension method of the WindowsMRReferencePointSubsystem. Used to import a
+        /// stream containing instances of <see cref="SpatialAnchor"/> into the <see cref="SpatialAnchorStore"/>.
+        /// </summary>
+        /// <param name="wmrrp">The instance of <see cref="WindowsMRReferencePointSubsystem"/> to call on.</param>
+        /// <param name="wmrrp">An instance of <see cref="Stream"/> to write to.</param>
+        public static async Task<bool> ExportReferencePoints(this WindowsMRReferencePointSubsystem wmrrp, Stream output)
+        {
+            bool ret = false;
+
+#if ENABLE_WINMD_SUPPORT
+            try
+            {
+                Debug.Log($"Getting Spatial Anchor Transfer Manager Access");
+                var access = await SpatialAnchorTransferManager.RequestAccessAsync();
+                if (access != SpatialPerceptionAccessStatus.Allowed)
+                {
+                    Debug.Log($"Access check failed with {access}");
+                    return ret;
+                }
+
+                Debug.Log($"Getting Spatial Anchor Store");
+                var spatialAnchorStore = await SpatialAnchorManager.RequestStoreAsync();
+                if (spatialAnchorStore == null)
+                    return ret;
+
+                Debug.Log($"Setting up stream");
+                var stream = output.AsOutputStream();
+
+                Debug.Log($"Getting saved anchors");
+                var anchors = spatialAnchorStore.GetAllSavedAnchors();
+                if (anchors == null || anchors.Count == 0)
+                {
+                    Debug.Log("No anchors to exort!!!");
+                }
+                else
+                {
+                    Debug.Log("Exporting anchors...");
+                    ret = await SpatialAnchorTransferManager.TryExportAnchorsAsync(anchors, stream);
+                    Debug.Log(ret ? "SUCCESS" : "FAILURE");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                ret = false;
+            }
+#else
+            Debug.LogError("This API is only available for use in UWP based applications.");
+#endif //ENABLE_WINMD_SUPPORT
+            return ret;
+        }
+#pragma  warning restore CS1998
+#pragma  warning restore CS0618
     }
 }

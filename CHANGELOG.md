@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.4.1-preview.1] - 2020-09-10
+* Minor bump due to new APIs.
+* Add API for importing and exporting anchors.
+  
 ## [2.3.1-preview.1] - 2020-08-10
 * Fix reference point subsystem to default allow for persisted anchor points. Provide an extension API to the reference point subsystem to allow for manual clearing of the persisted anchor points.
 * Fix binaries copying into builds when Windows Mixed Reality was not enabled in XR Management.
@@ -16,8 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Fix anchor issue where we were not correctly setting tracking state on each anchor.
 * Implement support for Mirror View OcclusionMeshSideBySide.
 * Fix culling clipping issue where clipping was overly aggressive on HMDs.
-* Add ability to force reload Microsoft Anchor Store using extension API on WindowsMRReferncePointSubsystem.
-* 
+* Add ability to force reload Microsoft Anchor Store using extension API on WindowsMRReferencePointSubsystem.
+  
 ## [2.3.0] - 2020-07-12
 * Add input display name for Windows MR HMD.
 * Fix Culling combined frustum FOV
