@@ -11,6 +11,7 @@ namespace UnityEngine.XR.WindowsMR.Input
     /// A Windows Mixed Reality XR headset.
     /// </summary>
     [Preserve]
+    [InputControlLayout(displayName = "Windows MR HMD")]
     public class WMRHMD : XRHMD
     {
         [Preserve]

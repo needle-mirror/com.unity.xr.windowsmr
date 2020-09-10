@@ -148,7 +148,6 @@ namespace UnityEngine.XR.WindowsMR.Tests
 
         internal class XrNodes : TestBaseSetup
         {
-            private XRNodeState m_XrNodeState;
             private List<XRNodeState> m_NodeList;
 
             private bool m_TrackingNodes;
@@ -162,7 +161,6 @@ namespace UnityEngine.XR.WindowsMR.Tests
             [SetUp]
             public void Setup()
             {
-                m_XrNodeState = new XRNodeState();
                 m_NodeList = new List<XRNodeState>();
 
                 InputTracking.trackingAcquired += InputTracking_trackingAcquired;
@@ -394,8 +392,23 @@ namespace UnityEngine.XR.WindowsMR.Tests
 
             public void EyePositionCheck()
             {
-                Vector3 LeftEye = InputTracking.GetLocalPosition(XRNode.LeftEye);
-                Vector3 RightEye = InputTracking.GetLocalPosition(XRNode.RightEye);
+                List<InputDevice> devices = new List<InputDevice>();
+                InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, devices);
+
+                if(devices.Count == 0)
+                    throw new Exception("Head Mounted Input Device not connected.");
+
+                InputDevice device = devices[0];
+
+                Vector3 LeftEye = Vector3.zero;
+
+                if(!device.TryGetFeatureValue(CommonUsages.leftEyePosition, out LeftEye))
+                    throw new Exception("Left Eye Position not found.");
+
+                Vector3 RightEye = Vector3.zero;
+
+                if(!device.TryGetFeatureValue(CommonUsages.rightEyePosition, out RightEye))
+                    throw new Exception("Right Eye Position not found.");
 
                 Vector3 LeftEyeInverse = m_Camera.transform.InverseTransformVector(LeftEye);
                 Vector3 RightEyeInverse = m_Camera.transform.InverseTransformVector(RightEye);

@@ -26,6 +26,8 @@ namespace UnityEditor.XR.WindowsMR
         static GUIContent s_ConnectionStateConnectingText = EditorGUIUtility.TrTextContent("Connecting");
         static GUIContent s_ConnectionStateConnectedText = EditorGUIUtility.TrTextContent("Connected");
 
+        static GUIContent s_RemotingSettingsReminder = EditorGUIUtility.TrTextContent("The Editor uses player settings from the 'Standalone' platform for play mode and a remoting connection can be established without 'Windows Mixed Reality' enabled.");
+
         ConnectionState previousConnectionState = ConnectionState.Disconnected;
 
         static GUIContent[] s_ModeStrings = new GUIContent[]
@@ -57,6 +59,7 @@ namespace UnityEditor.XR.WindowsMR
         string m_RemoteMachineName = "";
         void DrawRemotingOnGUI()
         {
+            EditorGUILayout.HelpBox(s_RemotingSettingsReminder);
             EditorGUI.BeginDisabledGroup(WindowsMRRemoting.isConnected);
             m_RemoteMachineName = EditorGUILayout.TextField(s_RemoteMachineText, m_RemoteMachineName);
             WindowsMRRemoting.remoteMachineName = m_RemoteMachineName;
