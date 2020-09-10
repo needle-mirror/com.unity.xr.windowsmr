@@ -4,7 +4,7 @@
         {
              "ValidationTest": "API Validation",
              "ExceptionError": "",
-             "PackageVersion": "4.2.0"
+             "PackageVersion": "5.0.0"
        }
     ]
 }

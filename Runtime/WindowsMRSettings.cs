@@ -9,9 +9,12 @@ namespace UnityEngine.XR.WindowsMR
     /// <summary>Runtime settings for this XR Plugin.</summary>
     public class WindowsMRSettings : ScriptableObject
     {
+        /// <summary>Options for Depth Buffer Format</summary>
         public enum DepthBufferOption
         {
+            /// <summary>16 bit depth buffer format</summary>
             DepthBuffer16Bit,
+            /// <summary>24 bit depth buffer format</summary>
             DepthBuffer24Bit
         }
 
@@ -26,6 +29,7 @@ namespace UnityEngine.XR.WindowsMR
 #if !UNITY_EDITOR
         internal static WindowsMRSettings s_Settings;
 
+        /// <summary>Unity Awake callback for initialization of the object.</summary>
         public void Awake()
         {
             s_Settings = this;

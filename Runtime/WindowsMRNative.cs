@@ -3,16 +3,21 @@ using System.Runtime.InteropServices;
 
 namespace UnityEngine.XR.WindowsMR
 {
-
+    /// <summary>Windows Mixed Reality Types</summary>
     public static class NativeTypes
     {
-        /// <summary>Custom enum to map native Windows.Perception.Spatial.SpatialLocatability to something we can actuall reference.</summary>
+        /// <summary>Custom enum to map native Windows.Perception.Spatial.SpatialLocatability to something we can actually reference.</summary>
         public enum SpatialLocatability
         {
+            /// <summary>No Spatial Locatability data is available</summary>
             Unavailable = 0,
+            /// <summary>Orientation data only</summary>
             OrientationOnly = 1,
+            /// <summary>In the process of activating Positional data</summary>
             PositionalTrackingActivating = 2,
+            /// <summary>Positional data available</summary>
             PositionalTrackingActive = 3,
+            /// <summary>Positional data active, but inhibited</summary>
             PositionalTrackingInhibited = 4,
         }
 

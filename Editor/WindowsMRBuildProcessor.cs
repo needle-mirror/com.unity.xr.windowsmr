@@ -113,8 +113,8 @@ namespace UnityEditor.XR.WindowsMR
         }
     }
 
-    /// <summary>Build Processor class used to handle XR Plugin specific build actions/</summary>
-    /// <typeparam name="WindowsMRSettings">The settings instance type the build processor will use.</typeparam>
+    /// <summary>Build Processor class used to handle XR Plugin specific build actions.</summary>
+    /// The settings instance type the build processor will use.
     public class WindowsMRBuildProcessor : XRBuildHelper<WindowsMRSettings>
     {
         private static List<BuildTarget> s_ValidBuildTargets = new List<BuildTarget>(){
@@ -123,6 +123,7 @@ namespace UnityEditor.XR.WindowsMR
             BuildTarget.WSAPlayer,
         };
 
+        /// <summary> The key used to get the build settings object.</summary>
         public override string BuildSettingsKey { get { return Constants.k_SettingsKey; } }
 
         private bool IsCurrentBuildTargetVaild(BuildReport report)
@@ -259,16 +260,16 @@ namespace UnityEditor.XR.WindowsMR
         {
             "WindowsMRXRSDK.dll",
         };
-
-        public bool ShouldIncludeRuntimePluginsInBuild(string path)
+        
+        internal bool ShouldIncludeRuntimePluginsInBuild(string path)
         {
             return HasLoaderEnabledForTarget(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
         }
 
         private readonly string spatializerPluginName = "AudioPluginMsHRTF.dll";
         private readonly string spatializerReadableName = "MS HRTF Spatializer";
-
-        public bool ShouldIncludeSpatializerPluginsInBuild(string path)
+        
+        internal bool ShouldIncludeSpatializerPluginsInBuild(string path)
         {
             string currentSpatializerPluginName = AudioSettings.GetSpatializerPluginName();
 
@@ -284,8 +285,8 @@ namespace UnityEditor.XR.WindowsMR
             "PerceptionDevice.dll",
             "UnityRemotingWMR.dll"
         };
-
-        public bool ShouldIncludeRemotingPluginsInBuild(string path)
+        
+        internal bool ShouldIncludeRemotingPluginsInBuild(string path)
         {
             BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
             WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(buildTargetGroup) as WindowsMRBuildSettings;

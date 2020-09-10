@@ -291,6 +291,7 @@ namespace UnityEngine.XR.WindowsMR.Tests
                 Assert.IsTrue(m_AngleCheck, "Eyes are not parallel with the head");
             }
 
+            [Ignore("9/16/2020: Test is unstable and causing noise in test results. We need to find a better way to test this if we want to re-enable this test")]
             [UnityTest]
             public IEnumerator EyePositionCheckWithHead()
             {

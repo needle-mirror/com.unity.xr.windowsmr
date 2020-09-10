@@ -34,6 +34,9 @@ namespace UnityEngine.XR.WindowsMR
             }
         }
 
+        /// <summary>
+        /// Get the reference to the current Render Frame.
+        /// </summary>
         public static IntPtr CurrentHolographicRenderFrame
         {
             get
@@ -42,6 +45,9 @@ namespace UnityEngine.XR.WindowsMR
             }
         }
 
+        /// <summary>
+        /// Get the reference to the current Simulation Frame.
+        /// </summary>
         public static IntPtr CurrentHolographicSimulationFrame
         {
             get

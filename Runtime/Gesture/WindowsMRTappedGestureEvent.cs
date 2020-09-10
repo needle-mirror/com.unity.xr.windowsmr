@@ -61,12 +61,21 @@ namespace UnityEngine.XR.WindowsMR
                 id, state, tappedCount);
         }
 
+        /// <summary>
+        /// Determine if the <see cref="WindowsMRTappedGestureEvent"/> object param is the same as this object
+        /// </summary>
+        /// <param name="obj">The <see cref="WindowsMRTappedGestureEvent"/> object to check against</param>
+        /// <returns>True if the objects are the same</returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             return obj is WindowsMRTappedGestureEvent && Equals((WindowsMRTappedGestureEvent)obj);
         }
 
+        /// <summary>
+        /// Get the hash code for this <see cref="WindowsMRTappedGestureEvent"/>
+        /// </summary>
+        /// <returns>The integer representation of the hash code</returns>
         public override int GetHashCode()
         {
             unchecked
@@ -79,16 +88,33 @@ namespace UnityEngine.XR.WindowsMR
             }
         }
 
+        /// <summary>
+        /// Operator Equals for <see cref="WindowsMRTappedGestureEvent"/>
+        /// </summary>
+        /// <param name="lhs">Left hand <see cref="WindowsMRTappedGestureEvent"/></param>
+        /// <param name="rhs">Right hand <see cref="WindowsMRTappedGestureEvent"/></param>
+        /// <returns>True if the <see cref="WindowsMRTappedGestureEvent"/> objects are the same</returns>
         public static bool operator ==(WindowsMRTappedGestureEvent lhs, WindowsMRTappedGestureEvent rhs)
         {
             return lhs.Equals(rhs);
         }
 
+        /// <summary>
+        /// Operator Inequal for <see cref="WindowsMRTappedGestureEvent"/>
+        /// </summary>
+        /// <param name="lhs">Left hand <see cref="WindowsMRTappedGestureEvent"/></param>
+        /// <param name="rhs">Right hand <see cref="WindowsMRTappedGestureEvent"/></param>
+        /// <returns>True if the <see cref="WindowsMRTappedGestureEvent"/> objects are not the same</returns>
         public static bool operator !=(WindowsMRTappedGestureEvent lhs, WindowsMRTappedGestureEvent rhs)
         {
             return !lhs.Equals(rhs);
         }
 
+        /// <summary>
+        /// Check if a <see cref="WindowsMRTappedGestureEvent"/> object is the same as this
+        /// </summary>
+        /// <param name="other">The <see cref="WindowsMRTappedGestureEvent"/> object to test against</param>
+        /// <returns>True if the <see cref="WindowsMRTappedGestureEvent"/> objects are the same</returns>
         public bool Equals(WindowsMRTappedGestureEvent other)
         {
             return

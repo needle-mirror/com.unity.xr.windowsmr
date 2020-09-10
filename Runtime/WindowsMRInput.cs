@@ -10,19 +10,32 @@ namespace UnityEngine.XR.WindowsMR
     /// <summary>Extension methods for XRInputSubsystem specific to WindowsMR</summary>
     public static class WindowsMRInput
     {
+        /// <summary>
+        /// Get the Spatial Locatability type for Windows MR Input
+        /// </summary>
+        /// <param name="input">InputSubsystem reference</param>
+        /// <returns>SpatialLocatability type</returns>
         public static NativeTypes.SpatialLocatability GetSpatialLocatability(this XRInputSubsystem input)
         {
             return Native.GetSpatialLocatability();
         }
 
-
+        /// <summary>Struct containing State information for Input objects.</summary>
         public struct SourceState
         {
+            /// <summary>Version information for the Input source.</summary>
             public int version;
+
             [MarshalAs(UnmanagedType.IUnknown)]
+            /// <summary>State object</summary>
             public System.Object nativeState;
         }
 
+        /// <summary>
+        /// Get the state of all input sources.
+        /// </summary>
+        /// <param name="input">InputSubsystem reference</param>
+        /// <param name="states">List of states for the input sources.</param>
         public static void GetCurrentSourceStates(this XRInputSubsystem input, List<System.Object> states)
         {
             if (states == null)

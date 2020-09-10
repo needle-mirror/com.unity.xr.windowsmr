@@ -4,8 +4,14 @@ using UnityEngine.XR.WindowsMR;
 
 namespace UnityEditor.XR.WindowsMR
 {
+    /// <summary>
+    /// Remoting Window Class, GUI content and callbacks to WMRRemoting apis.
+    /// </summary>
     public class WindowsMRRemotingWindow : EditorWindow
     {
+        /// <summary>
+        /// Initializes the Remoting Window class
+        /// </summary>
         [MenuItem("Window/XR/Windows XR Plugin Remoting")]
         public static void Init()
         {

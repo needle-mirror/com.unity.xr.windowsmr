@@ -4,10 +4,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [4.2.1] - 2020-09-29
-* Update management dependency version.
-  
-## [4.2.0] - 2020-09-24
+
+## [5.0.0] - 2020-09-10
+* Update management dependency to 3.2.15
+* Update documentation to call out the fact that we only support SPI and there is no UI to change it as per design.
+* Fix issue with GameView rendering when running Mixed Reality Portal with a simulated headset.
+* Fix scaled viewport rendering in Game View.
+* Set correct lower bounds on viewport scaling based on running device.
+* Correctly clean up subsystems on failure in initialization.
+
+## [4.1.1] - 2020-08-14
 * Fix invalid memory copying of missing meshing data.
 * Fix null deref issue when accessing source state properties
 * Fix rotation gimble lock at 120 degrees due to using LERP instead of SLERP for rotation interpolation.
@@ -18,15 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Fix anchor issue where we were not taking into account any currently stored anchors the WMR may have.
 * Fix anchor issue were we were not correctly determining the proper location for an anchor returned from the WMR anchor store on subsequent app starts.
 * Fix anchor issue where we were not correctly setting tracking state on each anchor.
-* Fix game view rendering when running MRP in simulator mode.
-* Update management dependency to 3.2.15
-* Update documentation to call out the fact that we only support SPI and there is no UI to change it as per design.
-* Correctly clean up subsystems on failure in initialization.
-
-## [4.1.1] - 2020-09-10
-* Resolve line ending issues
-* Fix Changelog date
-
+  
 ## [4.1.0] - 2020-07-12
 * Add input display name for Windows MR HMD.
 * Allow for secondary UWP windows support.
@@ -48,9 +46,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [3.1.6-preview.3] - 2020-05-15
 * Add Eye gaze support through EyeGazeRotation and EyeGazePosition input feature usages.
 
+## [3.1.6-preview.2] - 2020-05-1
+* Fix build processor to not copy settings to unsupported targets.
+
 ## [3.1.6-preview.2] - 2020-04-20
 * Support use of background UWP window for WSA XR applications.
-* Fix build processor to not copy settings to unsupported targets.
 
 ## [3.1.6-preview.1] - 2020-04-08
 * Add support for game view eye rendering.
