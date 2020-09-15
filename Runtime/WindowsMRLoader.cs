@@ -24,6 +24,8 @@ using UnityEditor.XR.Management;
 #endif
 
 [assembly:InternalsVisibleTo("Unity.XR.WindowsMixedReality.Editor")]
+[assembly:InternalsVisibleTo("Unity.XR.WindowsMR.Tests")]
+
 namespace UnityEngine.XR.WindowsMR
 {
 #if UNITY_EDITOR
@@ -76,6 +78,7 @@ namespace UnityEngine.XR.WindowsMR
 #endif
     class WindowsMRLoader : XRLoaderHelper
     {
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || UNITY_WINRT
         private static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new List<XRSessionSubsystemDescriptor>();
         private static List<XRDisplaySubsystemDescriptor> s_DisplaySubsystemDescriptors = new List<XRDisplaySubsystemDescriptor>();
         private static List<XRInputSubsystemDescriptor> s_InputSubsystemDescriptors = new List<XRInputSubsystemDescriptor>();
@@ -152,11 +155,20 @@ namespace UnityEngine.XR.WindowsMR
 
             CreateSubsystem<XRDisplaySubsystemDescriptor, XRDisplaySubsystem>(s_DisplaySubsystemDescriptors, "Windows Mixed Reality Display");
             CreateSubsystem<XRInputSubsystemDescriptor, XRInputSubsystem>(s_InputSubsystemDescriptors, "Windows Mixed Reality Input");
+
+            if (displaySubsystem == null || inputSubsystem == null)
+            {
+                if (displaySubsystem != null) DestroySubsystem<XRDisplaySubsystem>();
+                if (inputSubsystem != null) DestroySubsystem<XRInputSubsystem>();
+                DestroySubsystem<XRSessionSubsystem>();
+                return false;
+            }
+
             CreateSubsystem<XRAnchorSubsystemDescriptor, XRAnchorSubsystem>(s_AnchorSubsystemDescriptors, "Windows Mixed Reality Anchor");
             CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshSubsystemDescriptors, "Windows Mixed Reality Meshing");
             CreateSubsystem<XRGestureSubsystemDescriptor, XRGestureSubsystem>(s_GestureSubsystemDescriptors, "Windows Mixed Reality Gesture");
 
-            return displaySubsystem != null && inputSubsystem != null;
+            return base.Initialize();
         }
 
         public override bool Start()
@@ -167,7 +179,7 @@ namespace UnityEngine.XR.WindowsMR
             StartSubsystem<XRAnchorSubsystem>();
             StartSubsystem<XRMeshSubsystem>();
             StartSubsystem<XRGestureSubsystem>();
-            return true;
+            return base.Start();
         }
 
         public override bool Stop()
@@ -178,7 +190,7 @@ namespace UnityEngine.XR.WindowsMR
             StopSubsystem<XRMeshSubsystem>();
             StopSubsystem<XRGestureSubsystem>();
             StopSubsystem<XRSessionSubsystem>();
-            return true;
+            return base.Stop();
         }
 
         public override bool Deinitialize()
@@ -189,7 +201,7 @@ namespace UnityEngine.XR.WindowsMR
             DestroySubsystem<XRMeshSubsystem>();
             DestroySubsystem<XRGestureSubsystem>();
             DestroySubsystem<XRSessionSubsystem>();
-            return true;
+            return base.Deinitialize();
         }
 
 
@@ -228,6 +240,7 @@ namespace UnityEngine.XR.WindowsMR
 #endif
             return settings;
         }
+#endif // UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || UNITY_WINRT
     }
 
 }

@@ -4,6 +4,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.4.0] - 2020-09-15
+* Fix binaries copying into builds when Windows Mixed Reality was not enabled in XR Management.
+* Fix loader to only run on Windows Editor or Player.
+* Fix invalid memory copying of missing meshing data.
+* Fix null deref issue when accessing source state properties
+* Fix rotation gimble lock at 120 degrees due to using LERP instead of SLERP for rotation interpolation.
+* Implement support for Mirror View OcclusionMeshSideBySide.
+* Fix culling clipping issue where clipping was overly aggressive on HMDs.
+* Fix anchor issue where we were not taking into account any currently stored anchors the WMR may have.
+* Fix anchor issue were we were not correctly determining the proper location for an anchor returned from the WMR anchor store on subsequent app starts.
+* Fix anchor issue where we were not correctly setting tracking state on each anchor.
+* Fix game view rendering when running MRP in simulator mode.
+* Update management dependency to 3.2.15
+* Update documentation to call out the fact that we only support SPI and there is no UI to change it as per design.
+* Correctly clean up subsystems on failure in initialization.
+
 ## [3.3.1] - 2020-08-03
 * Adjust line endings in scripts to all be Unix LF.
 
