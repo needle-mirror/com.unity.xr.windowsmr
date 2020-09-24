@@ -155,11 +155,20 @@ namespace UnityEngine.XR.WindowsMR
 
             CreateSubsystem<XRDisplaySubsystemDescriptor, XRDisplaySubsystem>(s_DisplaySubsystemDescriptors, "Windows Mixed Reality Display");
             CreateSubsystem<XRInputSubsystemDescriptor, XRInputSubsystem>(s_InputSubsystemDescriptors, "Windows Mixed Reality Input");
+
+            if (displaySubsystem == null || inputSubsystem == null)
+            {
+                if (displaySubsystem != null) DestroySubsystem<XRDisplaySubsystem>();
+                if (inputSubsystem != null) DestroySubsystem<XRInputSubsystem>();
+                DestroySubsystem<XRSessionSubsystem>();
+                return false;
+            }
+
             CreateSubsystem<XRReferencePointSubsystemDescriptor, XRReferencePointSubsystem>(s_ReferencePointSubsystemDescriptors, "Windows Mixed Reality Reference Point");
             CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshSubsystemDescriptors, "Windows Mixed Reality Meshing");
             CreateSubsystem<XRGestureSubsystemDescriptor, XRGestureSubsystem>(s_GestureSubsystemDescriptors, "Windows Mixed Reality Gesture");
 
-            return displaySubsystem != null && inputSubsystem != null;
+            return base.Initialize();
         }
 
         public override bool Start()
@@ -170,7 +179,7 @@ namespace UnityEngine.XR.WindowsMR
             StartSubsystem<XRReferencePointSubsystem>();
             StartSubsystem<XRMeshSubsystem>();
             StartSubsystem<XRGestureSubsystem>();
-            return true;
+            return base.Start();
         }
 
         public override bool Stop()
@@ -181,7 +190,7 @@ namespace UnityEngine.XR.WindowsMR
             StopSubsystem<XRMeshSubsystem>();
             StopSubsystem<XRGestureSubsystem>();
             StopSubsystem<XRSessionSubsystem>();
-            return true;
+            return base.Stop();
         }
 
         public override bool Deinitialize()
@@ -192,7 +201,7 @@ namespace UnityEngine.XR.WindowsMR
             DestroySubsystem<XRMeshSubsystem>();
             DestroySubsystem<XRGestureSubsystem>();
             DestroySubsystem<XRSessionSubsystem>();
-            return true;
+            return base.Deinitialize();
         }
 
 

@@ -204,28 +204,14 @@ namespace UnityEngine.XR.WindowsMR
         }
     }
 
-    /// <summary>
-    /// Class for holding extension methods on the <see cref="WindowsMRReferencePointSubsystem"/>.
-    /// </summary>
+#if ENABLED_FOR_MSFT // Disabled at request from Mirosoft, but leaving the code in so we can re-enable or change if necessary.
     public static class WMRRPExtensions
     {
-        /// <summary>
-        /// Extension method of the WindowsMRReferencePointSubsystem. Clears all current
-        /// and stored anchors from the Windows Mixed Reality <see cref="SpatialAnchorStore"/>.
-        /// </summary>
-        /// <param name="wmrrp">The instance of <see cref="WindowsMRReferencePointSubsystem"/> to call on.</param>
         public static void ClearAllReferencePointsFromStorage(this WindowsMRReferencePointSubsystem wmrrp)
         {
             NativeApi.UnityWindowsMR_refPoints_ClearAllFromStorage();
         }
 
-        /// <summary>
-        /// Extension method of the WindowsMRReferencePointSubsystem. Reloads stored anchors
-        /// from the Windows Mixed Reality <see cref="SpatialAnchorStore"/>. Useful when you have
-        /// manually imported a file of <see cref="SpatialAnchor"/> into the store from outside
-        /// the application.
-        /// </summary>
-        /// <param name="wmrrp">The instance of <see cref="WindowsMRReferencePointSubsystem"/> to call on.</param>
         public static void ReloadStorage(this WindowsMRReferencePointSubsystem wmrrp)
         {
             NativeApi.UnityWindowsMR_refPoints_ReloadStorage();
@@ -233,12 +219,6 @@ namespace UnityEngine.XR.WindowsMR
 
 #pragma  warning disable CS0618
 #pragma  warning disable CS1998
-        /// <summary>
-        /// Extension method of the WindowsMRReferencePointSubsystem. Used to import a
-        /// stream containing instances of <see cref="SpatialAnchor"/> into the <see cref="SpatialAnchorStore"/>.
-        /// </summary>
-        /// <param name="wmrrp">The instance of <see cref="WindowsMRReferencePointSubsystem"/> to call on.</param>
-        /// <param name="wmrrp">An instance of a <see cref="Stream"/> to read from.</param>
         public static async Task<bool> ImportReferencePoints(this WindowsMRReferencePointSubsystem wmrrp, Stream input)
         {
             bool ret = false;
@@ -273,12 +253,6 @@ namespace UnityEngine.XR.WindowsMR
             return ret;
         }
 
-        /// <summary>
-        /// Extension method of the WindowsMRReferencePointSubsystem. Used to import a
-        /// stream containing instances of <see cref="SpatialAnchor"/> into the <see cref="SpatialAnchorStore"/>.
-        /// </summary>
-        /// <param name="wmrrp">The instance of <see cref="WindowsMRReferencePointSubsystem"/> to call on.</param>
-        /// <param name="wmrrp">An instance of <see cref="Stream"/> to write to.</param>
         public static async Task<bool> ExportReferencePoints(this WindowsMRReferencePointSubsystem wmrrp, Stream output)
         {
             bool ret = false;
@@ -328,4 +302,5 @@ namespace UnityEngine.XR.WindowsMR
 #pragma  warning restore CS1998
 #pragma  warning restore CS0618
     }
+#endif //ENABLED_FOR_MSFT
 }
