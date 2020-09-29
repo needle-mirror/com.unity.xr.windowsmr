@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.windowsmr",
   "displayName": "Windows XR Plugin",
-  "version": "4.1.1",
+  "version": "4.2.1",
   "unity": "2020.2",
   "unityVersion": "0a18",
   "description": "Provides implementation and support for Unity XR SDK, allowing integration and use of Windows Mixed Reality devices.",
@@ -16,16 +16,16 @@
     "hololens"
   ],
   "dependencies": {
-    "com.unity.xr.management": "3.0.6",
+    "com.unity.xr.management": "3.2.16",
     "com.unity.xr.interactionsubsystems": "1.0.1",
     "com.unity.xr.arsubsystems": "4.0.1"
   },
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/xr.sdk.windowsmr.git",
     "type": "git",
-    "revision": "942f711367f38a190d387260c9cf0e7bed1869ae"
+    "revision": "3ab2957fdbaa52a580923416d2d68a3895cb5566"
   },
   "upmCi": {
-    "footprint": "f1847b812195361e6097611be7761479b5b01201"
+    "footprint": "f75d4a341a1b2b2c3314470ecf6d99bba05da144"
   }
 }

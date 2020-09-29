@@ -2,9 +2,12 @@
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using UnityEngine.XR.Management;
+using UnityEngine.XR.WindowsMR;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.XR.Management;
+using UnityEditor.XR.Management.Metadata;
 #endif
 
 public enum TestStageConfig
@@ -28,10 +31,27 @@ public class TestSetupHelpers : TestBaseSetup
 {
     private int m_CubeCount = 0;
 
+    internal void SetupXR()
+    {
+#if UNITY_EDITOR
+        XRPackageMetadataStore.AssignLoader(XRGeneralSettings.Instance.Manager, typeof(WindowsMRLoader).Name, BuildTargetGroup.Standalone);
+#endif
+        XRGeneralSettings.Instance.Manager.InitializeLoaderSync();
+        XRGeneralSettings.Instance.Manager.StartSubsystems();
+    }
+
+    internal void TeardownXR()
+    {
+        XRGeneralSettings.Instance.Manager.StopSubsystems();
+        XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+#if UNITY_EDITOR
+        XRPackageMetadataStore.RemoveLoader(XRGeneralSettings.Instance.Manager, typeof(WindowsMRLoader).Name, BuildTargetGroup.Standalone);
+#endif
+    }
+
     public void CreateXRGameObjects()
     {
         m_TrackingRig = GameObject.Instantiate(Resources.Load("TestSetup/TrackingRig")) as GameObject;
-        XRGeneralSettings.Instance.Manager.StartSubsystems();
     }
 
     public void CameraLightSetup()
@@ -184,7 +204,6 @@ public class TestSetupHelpers : TestBaseSetup
     public void CleanUpXRGameObjects()
     {
         DestroyGameObject(ref m_TrackingRig);
-        XRGeneralSettings.Instance.Manager.StopSubsystems();
     }
 
 #if UNITY_EDITOR
@@ -198,6 +217,7 @@ public class TestSetupHelpers : TestBaseSetup
         switch (TestConfiguration)
         {
             case TestStageConfig.BaseStageSetup:
+                    SetupXR();
                     CreateXRGameObjects();
                     CameraLightSetup();
                     break;
@@ -209,7 +229,9 @@ public class TestSetupHelpers : TestBaseSetup
 #if UNITY_EDITOR
                     EnsureInstancingRendering();
 #endif
+                    TeardownXR();
                 break;
+
 #if UNITY_EDITOR
             case TestStageConfig.Instancing:
                     EnsureInstancingRendering();

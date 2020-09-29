@@ -4,6 +4,7 @@ using UnityEngine.SpatialTracking;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.XR.Management;
 #endif
 
 public enum TestStageConfig

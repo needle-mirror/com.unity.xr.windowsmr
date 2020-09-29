@@ -201,7 +201,7 @@ namespace UnityEngine.XR.WindowsMR.Tests
             public IEnumerator XrNodesHeadTracking()
             {
                 InputTracking.GetNodeStates(m_NodeList);
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(5f);
 
                 foreach (XRNodeState nodeState in m_NodeList)
                 {
@@ -318,7 +318,8 @@ namespace UnityEngine.XR.WindowsMR.Tests
 
             static bool EyeZPositionCheck(float a, float b)
             {
-                var check = (a > b);
+                var delta = Math.Abs(a - b);
+                var check = delta <= Single.Epsilon;
                 return (check);
             }
 
@@ -410,20 +411,24 @@ namespace UnityEngine.XR.WindowsMR.Tests
                 if(!device.TryGetFeatureValue(CommonUsages.rightEyePosition, out RightEye))
                     throw new Exception("Right Eye Position not found.");
 
+                Vector3 CenterEye  = Vector3.zero;
+                if(!device.TryGetFeatureValue(CommonUsages.centerEyePosition, out CenterEye))
+                    throw new Exception("Right Eye Position not found.");
+
                 Vector3 LeftEyeInverse = m_Camera.transform.InverseTransformVector(LeftEye);
                 Vector3 RightEyeInverse = m_Camera.transform.InverseTransformVector(RightEye);
 
                 Debug.Log("Eye Left Inverse Position = " + LeftEyeInverse +
                                       Environment.NewLine + "Eye Right Inverse Position = " + RightEyeInverse);
 
-                if (EyeZPositionCheck(LeftEye.z, 0f))
+                if (EyeZPositionCheck(LeftEye.z, CenterEye.z))
                 {
                     Debug.Log("Eyes are in front of the head : " + LeftEye.z);
                     m_EyesInFront = true;
                 }
-                else if (!EyeZPositionCheck(LeftEye.z, 0f))
+                else if (!EyeZPositionCheck(LeftEye.z, CenterEye.z))
                 {
-                    Debug.Log("Eyes are in behind of the head : " + LeftEye.z);
+                    Debug.Log("Eyes are behind the head : " + LeftEye.z);
                     m_EyesInFront = false;
                 }
 

@@ -2,6 +2,10 @@
 
 This package provides an XR SDK implementation of _Windows Mixed Reality_ support for Unity.
 
+# Supported rendering modes
+
+Windows Mixed Reality supports only one rendering mode for XR SDK: Single Pass Instancing (SPI). This is a limitation of the current underlying Windows API. Supporting any other rendering mode requires generating intermediate textures and blit-ing those textures to the current SPI buffers, introducing very expensive intermediate copy operations. For this reason, there is no means for changing rendering mode for the XR SDK Windows MR plug-in.
+
 # Supported XR SDK Subsystems
 
 Please see the [XR SDK documentation](https://github.cds.internal.unity3d.com/unity/xr.sdk) for information on all subsystems implemented here.
@@ -122,7 +126,7 @@ Also see the relevant [Microsoft documentation](https://docs.microsoft.com/en-us
 
 ## Anchor
 
-Subsystem implementation provides support for ephemeral (non-stored) anchors.
+Subsystem implementation provides support for anchors within the Microsoft anchor system.
 
 Successful initialization and start of the subsystem allows the user to Add anchors, Remove anchors and Query for all known anchors. Current subsystem definition does not provide for storage or retrieval of stored anchors.
 

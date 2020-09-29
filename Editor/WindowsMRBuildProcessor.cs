@@ -299,13 +299,8 @@ namespace UnityEditor.XR.WindowsMR
         /// <param name="report">The build report.</param>
         public override void OnPreprocessBuild(BuildReport report)
         {
-            if (!IsCurrentBuildTargetVaild(report))
-                return;
-
-            if (!HasLoaderEnabledForTarget(report.summary.platformGroup))
-                return;
-
-            base.OnPreprocessBuild(report);
+            if (IsCurrentBuildTargetVaild(report) && HasLoaderEnabledForTarget(report.summary.platformGroup))
+                base.OnPreprocessBuild(report);
 
             var allPlugins = PluginImporter.GetAllImporters();
             foreach (var plugin in allPlugins)
