@@ -86,24 +86,6 @@ namespace UnityEngine.XR.WindowsMR
         [DllImport("WindowsMRXRSDK", CharSet = CharSet.Auto)]
 #endif
         public static extern bool UnityWindowsMR_refPoints_tryRemove(TrackableId anchorId);
-
-#if UNITY_EDITOR
-        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#elif ENABLE_DOTNET
-        [DllImport("WindowsMRXRSDK.dll")]
-#else
-        [DllImport("WindowsMRXRSDK", CharSet = CharSet.Auto)]
-#endif
-        public static extern void UnityWindowsMR_refPoints_ClearAllFromStorage();
-
-#if UNITY_EDITOR
-        [DllImport("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64/WindowsMRXRSDK.dll", CharSet = CharSet.Auto)]
-#elif ENABLE_DOTNET
-        [DllImport("WindowsMRXRSDK.dll")]
-#else
-        [DllImport("WindowsMRXRSDK", CharSet=CharSet.Auto)]
-#endif
-        public static extern void UnityWindowsMR_refPoints_ReloadStorage();
     }
 
     /// <summary>

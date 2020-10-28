@@ -4,6 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0-exp.1] - 2020-10-28
+* Add official API for accessing the Microsoft SpatialAnchorStore through the new XRAnchorStore class.
+* Update manufacturer reported by controllers to be blank when unavailable rather than hardware identifiers that were not human-readable.
+* Change the way we process settings for startup of Unity.
+* Fix deadlock contention in Anchor store API.
+* HP Reverb G2 controller no longer reports touchpad (Primary2DAxis) presence with empty data.
+* Fix for `XRInputSubsystem.GetSupportedTrackingOriginModes` incorrectly including `Floor` when running on HoloLens devices.
+* Fixed the build processor to handle scripted build targets correctly.
 
 ## [5.0.0] - 2020-09-10
 * Update management dependency to 3.2.15
@@ -39,14 +47,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Change Unity version dependency.
 
 ## [4.0.0] - 2020-06-03
-* The ARSubsystem implementions have been updated to reflect changes in the ARSubsystems API. See the [ARFoundation Migration Guide](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/migration-guide-3.html) for more details.
+* The ARSubsystem implementations have been updated to reflect changes in the ARSubsystems API. See the [ARFoundation Migration Guide](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/migration-guide-3.html) for more details.
 * Make loader public.
 * Blocked APIs on 2020.2 or greater that are deprecated and/or no longer present.
 
 ## [3.1.6-preview.3] - 2020-05-15
 * Add Eye gaze support through EyeGazeRotation and EyeGazePosition input feature usages.
 
-## [3.1.6-preview.2] - 2020-05-1
+## [3.1.6-preview.2] - 2020-05-01
 * Fix build processor to not copy settings to unsupported targets.
 
 ## [3.1.6-preview.2] - 2020-04-20
@@ -62,7 +70,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Back management dependency down to 3.0.6.
 
 ## [3.1.4] - 2020-04-08
-* Fix package to be usable by downlevel management.
+* Fix package to be usable by down level management.
 
 ## [3.1.3] - 2020-04-03
 * Release for management 3.2.4.
@@ -88,7 +96,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Package release for verification.
 
 ## [3.0.1-preview.4] - 2020-01-30
-* Add airtap feature usage for HoloLens
+* Add air tap feature usage for HoloLens
 * Update Remoting Plugins with x64 UWP versions.
 * Add build settings toggle to copy remoting plugins to final build.
 * Fix positional tracking at app launch
@@ -113,7 +121,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Update XR Management dependency to 3.0.5.
 * Add build target filtering.
 * Fix Occlusion Mesh creating each frame.
-* Add version define to allow us to use uplevel management features while also allowing us to run on down level management.
+* Add version define to allow us to use up level management features while also allowing us to run on down level management.
 
 ## [3.0.0] - 2019-11-15
 * 2020.1 Release package for verification.
@@ -186,8 +194,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Strip out session subsystem.
 * Add IsTracked property to HMD tracked device (though currently defaults to true all the time).
 * Remap Touchpad Axes to primary 2d axis and thumbstick axis to secondary to make grouping correct.
-* Move tumbstick pressed from Thumbrest to Secondary 2D Axis clicked.
-* Add package specific external APIs for getting the Holographic Space, The Spatial Coordinate Sysem and the Windows MR tracking state.
+* Move thumb stick pressed from thumb rest to Secondary 2D Axis clicked.
+* Add package specific external APIs for getting the Holographic Space, The Spatial Coordinate System and the Windows MR tracking state.
 
 ## [1.0.0-preview.8] - 2019-06-11
 * Update package promotion pipeline to latest CI scripts.
@@ -195,7 +203,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.0-preview.7] - 2019-05-29
 * Fix build issue when the user has decided to not create an instance of settings for WindowsMR.
 * Integrate latest standalone gesture manager subsystem.
-* Update XR Managmeent to 2.0.0-preview.19
+* Update XR Management to 2.0.0-preview.19
 
 ## [1.0.0-preview.6] - 2019-05-28
 * Update package naming.
@@ -216,7 +224,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Take dependency on new version of Metro package to handle a build break due to ugui.
 
 ## [1.0.0-preview.3] - 2019-03-26
-* Update package to point to latest management release verison.
+* Update package to point to latest management release version.
 
 ## [1.0.0-preview.2] - 2019-03-26
 * Updated min Unity version.
@@ -251,7 +259,7 @@ Known Issues:
 
 * Controllers will not work in Editor. Working with Microsoft on that currently.
 * Stability of integration shim is not great.
-* Integration has bugs that are beng tracked and dealt with.
+* Integration has bugs that are being tracked and dealt with.
 
 ## [0.2.0-preview.9] - 2018-10-31
 * Update XR Management dependency
@@ -261,7 +269,7 @@ Known Issues:
 
 ## [0.2.0-preview.7] - 2018-10-29
 * Test CI/CD for GitLab -> GitHub  move
-* Test pickup of XR Managmenet 0.2.0-preview.6 post GitLab -> GitHub move
+* Test pickup of XR Management 0.2.0-preview.6 post GitLab -> GitHub move
 * Add copy of settings from VR Device for Windows MR to XR SDK Windows MR.
 
 
@@ -289,10 +297,10 @@ Known Issues:
 ## [0.1.0-preview.12] - 2018-08-20
 * Update the package description and name.
 * Fixed a crash issue revealed when compositor layers were enabled
-* Several changes to attempt to get compisitor layers rendering
+* Several changes to attempt to get compositor layers rendering
 
 ## [0.1.0-preview.11] - 2018-08-20
-* Implemented XR Management API. We now have an XRLoader instance, a build processeor, configuration and data passing to native land.
+* Implemented XR Management API. We now have an XRLoader instance, a build processor, configuration and data passing to native land.
 
 ## [0.1.0-preview.10] - 2018-08-16
 * Rebuilt dll (hadn't been rebuilt since .7)
