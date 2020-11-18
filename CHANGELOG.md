@@ -4,6 +4,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0] - 2020-11-18
+* Update package version for release.
+
+## [5.1.0-exp.2] - 2020-11-16
+* Update management dependency version.
+
 ## [5.1.0-exp.1] - 2020-10-28
 * Add official API for accessing the Microsoft SpatialAnchorStore through the new XRAnchorStore class.
 * Update manufacturer reported by controllers to be blank when unavailable rather than hardware identifiers that were not human-readable.
