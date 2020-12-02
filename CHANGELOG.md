@@ -4,11 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.2.0] - 2020-12-02
+* Fixed issues in native code to address bugs that appeared when remoting to HoloLens devices.
+* Reported HMD position no longer teleports to origin during tracking loss. The last valid position will continue to be reported while rotation updates when tracking loss occurs.
+* Add docs for remaining public apis.
+* Add support for XRStats DroppedFrameCount and FramePresentCount.
+
 ## [5.1.0] - 2020-11-18
 * Update package version for release.
-
-## [5.1.0-exp.2] - 2020-11-16
-* Update management dependency version.
 
 ## [5.1.0-exp.1] - 2020-10-28
 * Add official API for accessing the Microsoft SpatialAnchorStore through the new XRAnchorStore class.

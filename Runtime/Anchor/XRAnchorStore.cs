@@ -124,6 +124,7 @@ namespace UnityEngine.XR.WindowsMR
             this.storePtr = storePtr;
         }
 
+        /// <inheritdoc/>
         ~XRAnchorStore()
         {
             Dispose();
@@ -191,7 +192,8 @@ namespace UnityEngine.XR.WindowsMR
         /// Take a persisted anchor from the [SpatialAnchorStore](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.spatialanchorstore?view=winrt-19041)
         /// with the given name and addes it to the current set of tracked <see cref="XREferencePoint"/> in the runnign instance of <see cref="XRAnchorSubsystem"/>.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="name">The name of the anchor to load.</param>
+        /// <returns>The Id of the anchor.</returns>
         public TrackableId LoadAnchor(string name)
         {
             TrackableId ret = defaultId;

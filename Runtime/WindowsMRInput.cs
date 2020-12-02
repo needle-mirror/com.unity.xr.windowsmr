@@ -26,8 +26,8 @@ namespace UnityEngine.XR.WindowsMR
             /// <summary>Version information for the Input source.</summary>
             public int version;
 
-            [MarshalAs(UnmanagedType.IUnknown)]
             /// <summary>State object</summary>
+            [MarshalAs(UnmanagedType.IUnknown)]
             public System.Object nativeState;
         }
 
