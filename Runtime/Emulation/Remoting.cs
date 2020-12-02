@@ -74,7 +74,6 @@ namespace UnityEngine.XR.WindowsMR
         /// <summary>Manual disconnect requested</summary>
         DisconnectRequest = 19,
 
-
         /// <summary>Obsolete and should not be used.</summary>
         [Obsolete("This enumeration value is obsolete.", false)]
         Unreachable = 2,

@@ -18,12 +18,12 @@ namespace UnityEngine.XR.WindowsMR
             DepthBuffer24Bit
         }
 
-        [SerializeField, Tooltip("Set the size of the depth buffer")]
         /// <summary>If using a shared depth buffer, this is the type of the depth buffer we should use.</summary>
+        [SerializeField, Tooltip("Set the size of the depth buffer")]
         public DepthBufferOption DepthBufferFormat;
 
-        [SerializeField, Tooltip("Enable depth buffer sharing")]
         /// <summary>True if we want to use a shared depth buffer, false otherwise.</summary>
+        [SerializeField, Tooltip("Enable depth buffer sharing")]
         public bool UseSharedDepthBuffer;
 
 #if !UNITY_EDITOR

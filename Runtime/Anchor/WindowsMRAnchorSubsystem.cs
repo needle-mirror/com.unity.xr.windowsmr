@@ -96,6 +96,7 @@ namespace UnityEngine.XR.WindowsMR
     public sealed class WindowsMRAnchorSubsystem : XRAnchorSubsystem
     {
 #if !UNITY_2020_2_OR_NEWER
+        /// <inheritdoc/>
         protected override Provider CreateProvider()
         {
             return new WindowsMRProvider();

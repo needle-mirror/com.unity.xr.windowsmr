@@ -211,10 +211,15 @@ namespace UnityEditor.XR.WindowsMR
             "WindowsMRXRSDK.dll",
         };
 
-        [Obsolete("This API is obsolete and will be removed in a future package version.", false)]
+        /// <summary>
+        /// Used to determine whether or not plugins used for WMR runtime should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
         public bool ShouldIncludeRuntimePluginsInBuild(string path)
         {
-            throw new NotImplementedException("This API is obsolete and should not be called.");
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
         }
 
         internal bool ShouldIncludeRuntimePluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
@@ -225,10 +230,15 @@ namespace UnityEditor.XR.WindowsMR
         private readonly string spatializerPluginName = "AudioPluginMsHRTF.dll";
         private readonly string spatializerReadableName = "MS HRTF Spatializer";
 
-        [Obsolete("This API is obsolete and will be removed in a future package version.", false)]
+        /// <summary>
+        /// Used to determine whether or not the MicrosoftHRTFAudioSpatializer plugin should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
         public bool ShouldIncludeSpatializerPluginsInBuild(string path)
         {
-            throw new NotImplementedException("This API is obsolete and should not be called.");
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
         }
 
         internal bool Internal_ShouldIncludeSpatializerPluginsInBuild(string path)
@@ -248,10 +258,15 @@ namespace UnityEditor.XR.WindowsMR
             "UnityRemotingWMR.dll"
         };
 
-        [Obsolete("This API is obsolete and will be removed in a future package version.", false)]
+        /// <summary>
+        /// Used to determine whether or not the WMR remoting plugin should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
         public bool ShouldIncludeRemotingPluginsInBuild(string path)
         {
-            throw new NotImplementedException("This API is obsolete and should not be called.");
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
         }
 
         internal bool ShouldIncludeRemotingPluginsInBuild(string path, BuildTargetGroup buildTargetGroup)

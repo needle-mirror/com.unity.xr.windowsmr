@@ -10,10 +10,9 @@ using UnityEngine.XR.WindowsMR;
 
 namespace UnityEditor.XR.WindowsMR
 {
+    /// <summary>XR Plugin settings, both build and runtime, for each build target that is supported. <see cref="IWindowsMRPackageSettings"/></summary>
     [System.Serializable]
     [XRConfigurationData("Windows Mixed Reality", Constants.k_SettingsKey)]
-    /// <summary>XR Plugin settings, both build and runtime, for each build target that is supported.</summary>
-    /// <seealso cref='IWindowsMRPackageSettings'/>
     public class WindowsMRPackageSettings : ScriptableObject, ISerializationCallbackReceiver, IWindowsMRPackageSettings
     {
         [SerializeField]
