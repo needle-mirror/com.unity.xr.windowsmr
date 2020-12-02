@@ -300,3 +300,24 @@ If __Session__ successfully initializes, then it is still possible for starting 
 
 All other subsystems depend on session but, unlike session, failure to initialize or start will not cause the whole provider to fail.
 
+## Editor Remoting
+
+![Emulation Window for Editor Remoting](images/EmulationWindow.png)
+
+Remoting allows you to use a HoloLens 2 device with the Editor or a Standalone UWP application. You must connect to the HoloLens 2 using the Holographic Remoting Player application on device. For Play in Editor support, you must make sure you connect to the remote device using the Remoting UI before entering play mode. For application support, you must make sure to connect to the device using the scripting API before you start the Windows Mixed Reality XR Plug-in.
+
+* __Emulation Mode__ - Toggle what mode of emulation you are targeting.
+
+* __Remote Machine__ - The IP address of the HoloLens 2 device you are connecting with.
+
+* __Enable Video__ - Allow video to be sent to device.
+
+* __Enable Audio__ - Allow audio to be sent to device.
+
+* __Max Bitrate__ - The birate at which to send data to the HoloLens 2 device.
+
+* __Connection Status__ - Tells the user what state the connection to device is currently in.
+
+* __Connect__ - Attempt to connect to the device.
+
+* __Disconnect__ - Disconnect from the device. Shows once a connection is esablished.

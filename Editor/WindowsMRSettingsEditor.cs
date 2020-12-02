@@ -8,8 +8,8 @@ using UnityEditor.XR.Management;
 
 namespace UnityEditor.XR.WindowsMR
 {
-    [CustomEditor(typeof(WindowsMRPackageSettings))]
     /// <summary>Custom editor settings support for this XR Plugin.</summary>
+    [CustomEditor(typeof(WindowsMRPackageSettings))]
     public class SettingsEditor : UnityEditor.Editor
     {
         const string k_DepthBufferFormat = "DepthBufferFormat";
@@ -27,6 +27,9 @@ namespace UnityEditor.XR.WindowsMR
         bool m_ShowBuildSettings = true;
         bool m_ShowRuntimeSettings = true;
 
+        /// <summary>
+        /// GUI for WindowsMRSettingsEditor class.
+        /// </summary>
         public override void OnInspectorGUI()
         {
             if (serializedObject == null || serializedObject.targetObject == null)

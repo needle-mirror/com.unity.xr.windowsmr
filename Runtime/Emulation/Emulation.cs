@@ -9,14 +9,19 @@ using System.Runtime.InteropServices;
 
 namespace UnityEngine.XR.WindowsMR
 {
+    /// <summary>Modes available for Emulation. Primarily used by the Emulation Window.</summary>
     public enum WindowsMREmulationMode
     {
+        /// <summary>No Emulation</summary>
         None,
+        /// <summary>Remoting enabled</summary>
         Remoting
     }
 
+    /// <summary>Windows Mixed Reality Emulation class. Used to Get/Set the emulation state of the application.</summary>
     public static class WindowsMREmulation
     {
+        /// <summary>Value used to Get/Set the WindowsMREmulationMode</summary>
         public static WindowsMREmulationMode mode
         {
             get

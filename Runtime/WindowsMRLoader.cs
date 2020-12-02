@@ -76,6 +76,10 @@ namespace UnityEngine.XR.WindowsMR
     [XRSupportedBuildTarget(BuildTargetGroup.WSA)]
 #endif
 #endif
+
+    /// <summary>
+    /// Loader Class for Windows Mixed Reality. Helper for Starting/Stopping all WMR subsystems.
+    /// </summary>
     class WindowsMRLoader : XRLoaderHelper
     {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || UNITY_WINRT

@@ -87,8 +87,8 @@ namespace UnityEditor.XR.WindowsMR
         }
     }
 
-    /// <summary>Build Processor class used to handle XR Plugin specific build actions/</summary>
-    /// <typeparam name="WindowsMRSettings">The settings instance type the build processor will use.</typeparam>
+    /// <summary>Build Processor class used to handle XR Plugin specific build actions.</summary>
+    /// The settings instance type the build processor will use.
     public class WindowsMRBuildProcessor : XRBuildHelper<WindowsMRSettings>
     {
         private static List<BuildTarget> s_ValidBuildTargets = new List<BuildTarget>(){
@@ -97,6 +97,7 @@ namespace UnityEditor.XR.WindowsMR
             BuildTarget.WSAPlayer,
         };
 
+        /// <summary> The key used to get the build settings object.</summary>
         public override string BuildSettingsKey { get { return Constants.k_SettingsKey; } }
 
         private bool IsCurrentBuildTargetVaild(BuildReport report)
@@ -210,13 +211,30 @@ namespace UnityEditor.XR.WindowsMR
             "WindowsMRXRSDK.dll",
         };
 
+        /// <summary>
+        /// Used to determine whether or not plugins used for WMR runtime should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
         [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
         public bool ShouldIncludeRuntimePluginsInBuild(string path)
         {
             throw new NotImplementedException("This API is no longer supported and should not be used.");
         }
 
+        /// <summary>
+        /// Used to determine whether or not plugins used for WMR runtime should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <param name="buildTargetGroup">The BuildTargetGroup being built.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
         public bool ShouldIncludeRuntimePluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
+        {
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
+        }
+
+        internal bool Internal_ShouldIncludeRuntimePluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
         {
             return HasLoaderEnabledForTarget(buildTargetGroup);
         }
@@ -224,7 +242,18 @@ namespace UnityEditor.XR.WindowsMR
         private readonly string spatializerPluginName = "AudioPluginMsHRTF.dll";
         private readonly string spatializerReadableName = "MS HRTF Spatializer";
 
+        /// <summary>
+        /// Used to determine whether or not the MicrosoftHRTFAudioSpatializer plugin should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
         public bool ShouldIncludeSpatializerPluginsInBuild(string path)
+        {
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
+        }
+
+        internal bool Internal_ShouldIncludeSpatializerPluginsInBuild(string path)
         {
             string currentSpatializerPluginName = AudioSettings.GetSpatializerPluginName();
 
@@ -241,13 +270,30 @@ namespace UnityEditor.XR.WindowsMR
             "UnityRemotingWMR.dll"
         };
 
+        /// <summary>
+        /// Used to determine whether or not the WMR remoting plugins should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
         [Obsolete("This API is obsolete and will be removed in a future version of the package", false)]
         public bool ShouldIncludeRemotingPluginsInBuild(string path)
         {
             throw new NotImplementedException("This API is no longer supported and should not be used.");
         }
 
+        /// <summary>
+        /// Used to determine whether or not the WMR remoting plugins should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <param name="buildTargetGroup">The BuildTargetGroup being built.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package", false)]
         public bool ShouldIncludeRemotingPluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
+        {
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
+        }
+
+        internal bool Internal_ShouldIncludeRemotingPluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
         {
             WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(buildTargetGroup) as WindowsMRBuildSettings;
             if (buildSettings == null)
@@ -298,7 +344,7 @@ namespace UnityEditor.XR.WindowsMR
                     {
                         if (plugin.assetPath.Contains(pluginName))
                         {
-                            plugin.SetIncludeInBuildDelegate((path) => { return ShouldIncludeRemotingPluginsInBuild(path, report.summary.platformGroup); });
+                            plugin.SetIncludeInBuildDelegate((path) => { return Internal_ShouldIncludeRemotingPluginsInBuild(path, report.summary.platformGroup); });
                             break;
                         }
                     }
@@ -307,14 +353,14 @@ namespace UnityEditor.XR.WindowsMR
                     {
                         if (plugin.assetPath.Contains(pluginName))
                         {
-                            plugin.SetIncludeInBuildDelegate((path) => { return ShouldIncludeRuntimePluginsInBuild(path, report.summary.platformGroup); });
+                            plugin.SetIncludeInBuildDelegate((path) => { return Internal_ShouldIncludeRuntimePluginsInBuild(path, report.summary.platformGroup); });
                             break;
                         }
                     }
 
                     if (plugin.assetPath.Contains(spatializerPluginName))
                     {
-                        plugin.SetIncludeInBuildDelegate(ShouldIncludeSpatializerPluginsInBuild);
+                        plugin.SetIncludeInBuildDelegate(Internal_ShouldIncludeSpatializerPluginsInBuild);
                     }
                 }
             }

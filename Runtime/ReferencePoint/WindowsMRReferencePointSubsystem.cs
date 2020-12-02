@@ -97,6 +97,10 @@ namespace UnityEngine.XR.WindowsMR
     [Preserve]
     public sealed class WindowsMRReferencePointSubsystem : XRReferencePointSubsystem
     {
+        /// <summary>
+        /// Create the WindowsMRReferencePointSubsystem provider object.
+        /// </summary>
+        /// <returns>The instance of the provider.</returns>
         protected override IProvider CreateProvider()
         {
             return new Provider();
@@ -104,21 +108,36 @@ namespace UnityEngine.XR.WindowsMR
 
         class Provider : IProvider
         {
+            /// <summary>
+            /// Start the instance of the Provider for the WindowsMRReferencePointSubsystem.
+            /// </summary>
             public override void Start()
             {
                 NativeApi.UnityWindowsMR_refPoints_start();
             }
 
+            /// <summary>
+            /// Stop the instance of the Provider for the WindowsMRReferencePointSubsystem.
+            /// </summary>
             public override void Stop()
             {
                 NativeApi.UnityWindowsMR_refPoints_stop();
             }
 
+            /// <summary>
+            /// Destroy the instance of the Provider for the WindowsMRReferencePointSubsystem.
+            /// </summary>
             public override void Destroy()
             {
                 NativeApi.UnityWindowsMR_refPoints_onDestroy();
             }
 
+            /// <summary>
+            /// Get changes to the passed XRReferencePoint
+            /// </summary>
+            /// <param name="defaultReferencePoint">The XRReferencePoint to get changes for.</param>
+            /// <param name="allocator">Reference to the allocator for the XRReferencePoint.</param>
+            /// <returns></returns>
             public override unsafe TrackableChanges<XRReferencePoint> GetChanges(
                 XRReferencePoint defaultReferencePoint,
                 Allocator allocator)
@@ -160,6 +179,12 @@ namespace UnityEngine.XR.WindowsMR
                 }
             }
 
+            /// <summary>
+            /// Try to add a new XRReferencePoint.
+            /// </summary>
+            /// <param name="pose">The position for the XRReferencePoint.</param>
+            /// <param name="referencePoint">The XRReferencePoint reference returned.</param>
+            /// <returns>True if the XRReferencePoint was created.</returns>
             public override bool TryAddReferencePoint(
                 Pose pose,
                 out XRReferencePoint referencePoint)
@@ -167,6 +192,11 @@ namespace UnityEngine.XR.WindowsMR
                 return NativeApi.UnityWindowsMR_refPoints_tryAdd(pose, out referencePoint);
             }
 
+            /// <summary>
+            /// Try to remove a created XRReferencePoint.
+            /// </summary>
+            /// <param name="referencePointId">The Id of the XRReferencePoint to remove.</param>
+            /// <returns>True if the XRReferencePoint was removed.</returns>
             public override bool TryRemoveReferencePoint(TrackableId referencePointId)
             {
                 return NativeApi.UnityWindowsMR_refPoints_tryRemove(referencePointId);
