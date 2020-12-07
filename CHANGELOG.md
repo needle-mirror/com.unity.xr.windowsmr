@@ -4,6 +4,23 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.5.2] - 2020-12-07
+* Update to resolve package validation issues.
+
+## [2.5.1] - 2020-11-16
+* Update management dependency version.
+
+## [2.5.0] - 2020-10-02
+* Add official API for accessing the Microsoft SpatialAnchorStore through the new XRAnchorStore class.
+* Fix scaled viewport rendering in Game View.
+* Set correct lower bounds on viewport scaling based on running device.
+* Fix deadlock contention in Anchor store API.
+* Update manufacturer reported by controllers to be blank when unavailable rather than hardware identifiers that were not human-readable.
+* Change the way we process settings for startup of Unity.
+* HP Reverb G2 controller no longer reports touchpad (Primary2DAxis) presence with empty data.
+* Fixed the build processor to handle scripted build targets correctly.
+* Fix for `XRInputSubsystem.GetSupportedTrackingOriginModes` incorrectly including `Floor` when running on HoloLens devices.
+
 ## [2.4.1] - 2020-09-24
 * Update for release.
   

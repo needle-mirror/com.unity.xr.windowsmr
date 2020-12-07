@@ -6,6 +6,18 @@ This package provides an XR SDK implementation of _Windows Mixed Reality_ suppor
 
 Windows Mixed Reality supports only one rendering mode for XR SDK: Single Pass Instancing (SPI). This is a limitation of the current underlying Windows API. Supporting any other rendering mode requires generating intermediate textures and blit-ing those textures to the current SPI buffers, introducing very expensive intermediate copy operations. For this reason, there is no means for changing rendering mode for the XR SDK Windows MR plug-in.
 
+# Viewport scaling limitations
+
+Unity's XR system provides the ability to change the render viewport scaling factor between 0.0 exclusive and 1.0 inclusive. This is done through the [XRSettings.renderViewportScale](https://docs.unity3d.com/ScriptReference/XR.XRSettings-renderViewportScale.html) API. Windows Mixed Reality supports viewport scaling, but within the following limitations:
+
+**Windows Mixed Reality - Immersive** : Lower limit of 0.58f.
+**Windows Mixed Reality - HoloLens** : Lower limit of 0.5f.
+**Windows Mixed Reality - HoloLens V2** : Lower limit of 0.44f.
+
+The [XRSettings.renderViewportScale](https://docs.unity3d.com/ScriptReference/XR.XRSettings-renderViewportScale.html) API won't stop you from setting values lower than these, but internally the implementation and the OS will put lower bounds on the viewport scale as outlined above.
+
+For more info see https://docs.microsoft.com/en-us/windows/mixed-reality/develop/platform-capabilities-and-apis/rendering#supported-resolutions-on-hololens-2.
+
 # Supported XR SDK Subsystems
 
 Please see the [XR SDK documentation](https://github.cds.internal.unity3d.com/unity/xr.sdk) for information on all subsystems implemented here.
@@ -257,7 +269,7 @@ To install the _Windows Mixed Reality_ XR Plugin, do the following:
 Note that the XR settings tab now has a dropdown for "Windows Mixed Reality". Navigate to the **XR Plugin Management** -> **Windows Mixed Reality** settings window in Project Settings to create a Windows MR XR Plugin specific settings asset. This asset is editable from the **Windows Mixed Reality** window and can toggle settings such as Shared Depth buffer support.
 
 
-# Windows Standlone Settings
+# Windows Standalone Settings
 
 ![Project Settings for Windows Standlone support](images/StandaloneSettings.png)
 
