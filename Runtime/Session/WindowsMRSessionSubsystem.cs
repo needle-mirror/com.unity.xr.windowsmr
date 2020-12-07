@@ -15,6 +15,10 @@ namespace UnityEngine.XR.WindowsMR
     public sealed class WindowsMRSessionSubsystem : XRSessionSubsystem
     {
 #if !UNITY_2020_2_OR_NEWER
+        /// <summary>
+        /// Create the WindowsMRSessionSubsystem provider object
+        /// </summary>
+        /// <returns>The instance of the object created</returns>
         protected override Provider CreateProvider()
         {
             return new WindowsMRProvider();

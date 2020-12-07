@@ -19,6 +19,11 @@ namespace UnityEngine.XR.WindowsMR
         }
 
         static WMRPlane[] wmrp = new WMRPlane[6];
+        /// <summary>
+        /// Set the Frustum's Bounding Volume
+        /// </summary>
+        /// <param name="meshing">MeshSubystem reference</param>
+        /// <param name="planes">Array of planes for each face of the bounding Frustum</param>
         public static void SetBoundingVolumeFrustum(this XRMeshSubsystem meshing, Plane[] planes)
         {
             for (int i = 0; i < 6; i++)
@@ -47,6 +52,13 @@ namespace UnityEngine.XR.WindowsMR
             public float ow;
         }
 
+        /// <summary>
+        /// Set the OB Bounding Volume
+        /// </summary>
+        /// <param name="meshing">MeshSubystem reference</param>
+        /// <param name="center">Center position of the box</param>
+        /// <param name="extents">Extents of the box</param>
+        /// <param name="orientation">Orientation/Rotation of the box</param>
         public static void SetBoundingVolumeOrientedBox(this XRMeshSubsystem meshing, Vector3 center, Vector3 extents, Quaternion orientation)
         {
             WMROrientedBox obb;
@@ -74,6 +86,12 @@ namespace UnityEngine.XR.WindowsMR
             public float r;
         }
 
+        /// <summary>
+        /// Set the Sphere Bounding Volume
+        /// </summary>
+        /// <param name="meshing">MeshSubsystem reference</param>
+        /// <param name="center">Center point for the sphere</param>
+        /// <param name="radius">Radius of the sphere</param>
         public static void SetBoundingVolumeSphere(this XRMeshSubsystem meshing, Vector3 center, float radius)
         {
             WMRSphere sbb;
@@ -84,21 +102,38 @@ namespace UnityEngine.XR.WindowsMR
             NativeApi.SetBoundingVolumeSphere(sbb);
         }
 
+        /// <summary>Mesh data for a surface</summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct MeshingData
         {
+            /// <summary>Mesh data version</summary>
             public int version;
+
+            /// <summary>Surface info object</summary>
             [MarshalAs(UnmanagedType.IUnknown)]
             public System.Object surfaceInfo;
+
+            /// <summary>Mesh object</summary>
             [MarshalAs(UnmanagedType.IUnknown)]
             public System.Object surfaceMesh;
         }
 
+        /// <summary>
+        /// Get mesh data
+        /// </summary>
+        /// <param name="meshing">MeshSubsystem reference</param>
+        /// <param name="meshId">Id of the mesh to aquire data for</param>
+        /// <param name="data">Mesh data out</param>
         public static void GetMeshingDataForMesh(this XRMeshSubsystem meshing, UnityEngine.XR.MeshId meshId, out MeshingData data)
         {
             NativeApi.GetMeshingDataForMesh(meshId, out data);
         }
 
+        /// <summary>
+        /// Release mesh data
+        /// </summary>
+        /// <param name="meshing">MeshSubsystem reference</param>
+        /// <param name="data">Data to release</param>
         public static void ReleaseMeshingData(this XRMeshSubsystem meshing, ref MeshingData data)
         {
             NativeApi.ReleaseMeshingData(ref data);

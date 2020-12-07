@@ -27,6 +27,9 @@ namespace UnityEditor.XR.WindowsMR
         bool m_ShowBuildSettings = true;
         bool m_ShowRuntimeSettings = true;
 
+        /// <summary>
+        /// GUI for WindowsMRSettingsEditor class.
+        /// </summary>
         public override void OnInspectorGUI()
         {
             if (serializedObject == null || serializedObject.targetObject == null)

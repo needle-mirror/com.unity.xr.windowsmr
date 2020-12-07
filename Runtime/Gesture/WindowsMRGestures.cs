@@ -46,7 +46,14 @@ namespace UnityEngine.XR.WindowsMR
         /// </summary>
         public event Action<ActivateGestureEvent> onActivate;
 
+        /// <summary>
+        /// Value used to enable/disable the Navigation Gesture
+        /// </summary>
         public bool enableNavigationGesture = false;
+
+        /// <summary>
+        /// Value used to enable/disable the Manipulation Gesture
+        /// </summary>
         public bool enableManipulationGesture = false;
 
         WindowsMRGestureSubsystem GetGestureSubsystemIfNeeded()

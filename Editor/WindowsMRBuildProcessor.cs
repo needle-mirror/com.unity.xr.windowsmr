@@ -20,34 +20,8 @@ namespace UnityEditor.XR.WindowsMR
     /// </summary>
     class BootConfig
     {
-        struct BootConfigEntry
-        {
-            public string key;
-            public string value;
-        }
-
-        private List<BootConfigEntry> bootConfigEntries;
-
-        private string GetPathToBootConfig(BuildReport report)
-        {
-            string bootConfigPath = report.summary.outputPath;
-
-            // Boot Config data path is highly specific to the platform being built.
-            if (report.summary.platformGroup == BuildTargetGroup.WSA)
-            {
-                bootConfigPath = Path.Combine(bootConfigPath, PlayerSettings.productName);
-                bootConfigPath = Path.Combine(bootConfigPath, "Data");
-                bootConfigPath = Path.Combine(bootConfigPath, "boot.config");
-            }
-            else
-            {
-                bootConfigPath = bootConfigPath.Substring(0, bootConfigPath.Length - ($"{PlayerSettings.productName}.exe".Length + 1));
-                bootConfigPath = Path.Combine(bootConfigPath, $"{PlayerSettings.productName}_Data");
-                bootConfigPath = Path.Combine(bootConfigPath, "boot.config");
-            }
-
-            return bootConfigPath;
-        }
+        static readonly string kXrBootSettingsKey = "xr-boot-settings";
+        Dictionary<string, string> bootConfigSettings;
 
         private BuildReport buildReport;
         private string bootConfigPath;
@@ -55,33 +29,26 @@ namespace UnityEditor.XR.WindowsMR
         public BootConfig(BuildReport report)
         {
             buildReport = report;
-            bootConfigPath = GetPathToBootConfig(report);
-
         }
 
         public void ReadBootConfg()
         {
-            bootConfigEntries = new List<BootConfigEntry>();
-            using (StreamReader sr = File.OpenText(bootConfigPath))
+            bootConfigSettings = new Dictionary<string, string>();
+
+            string buildTargetName = BuildPipeline.GetBuildTargetName(buildReport.summary.platform);
+            string xrBootSettings = UnityEditor.EditorUserBuildSettings.GetPlatformSettings(buildTargetName, kXrBootSettingsKey);
+            if (!String.IsNullOrEmpty(xrBootSettings))
             {
-                string entry_text;
-                while ((entry_text = sr.ReadLine()) != null)
+                // boot settings string format
+                // <boot setting>:<value>[;<boot setting>:<value>]*
+                var bootSettings = xrBootSettings.Split(';');
+                foreach (var bootSetting in bootSettings)
                 {
-                    if (String.IsNullOrEmpty(entry_text))
-                        continue;
-
-                    var idx = entry_text.IndexOf('=');
-                    if (idx < 0)
-                        continue;
-
-                    var key = entry_text.Substring(0, idx);
-                    var value = entry_text.Substring(idx + 1, entry_text.Length - (idx + 1));
-                    bootConfigEntries.Add(new BootConfigEntry()
+                    var setting = bootSetting.Split(':');
+                    if (setting.Length == 2 && !String.IsNullOrEmpty(setting[0]) && !String.IsNullOrEmpty(setting[1]))
                     {
-                        key = key,
-                        value = value
-                    });
-
+                        bootConfigSettings.Add(setting[0], setting[1]);
+                    }
                 }
             }
 
@@ -89,32 +56,39 @@ namespace UnityEditor.XR.WindowsMR
 
         public void SetValueForKey(string key, string value, bool replace = false)
         {
-            if (replace)
+            if (bootConfigSettings.ContainsKey(key))
             {
-                bootConfigEntries = bootConfigEntries.Where((bce) => String.Compare(bce.key, key) != 0).ToList();
+                bootConfigSettings[key] = value;
             }
-            bootConfigEntries.Add(new BootConfigEntry() { key = key, value = value });
+            else
+            {
+                bootConfigSettings.Add(key, value);
+            }
         }
 
         public void WriteBootConfig()
         {
-            using (FileStream fs = File.OpenWrite(bootConfigPath))
+            // boot settings string format
+            // <boot setting>:<value>[;<boot setting>:<value>]*
+            bool firstEntry = true;
+            var sb = new System.Text.StringBuilder();
+            foreach (var kvp in bootConfigSettings)
             {
-                fs.SetLength(0);
-
-                using (StreamWriter sw = new StreamWriter(fs))
+                if (!firstEntry)
                 {
-                    foreach (var bce in bootConfigEntries)
-                    {
-                        sw.WriteLine($"{bce.key}={bce.value}");
-                    }
+                    sb.Append(";");
                 }
+                sb.Append($"{kvp.Key}:{kvp.Value}");
+                firstEntry = false;
             }
+
+            string buildTargetName = BuildPipeline.GetBuildTargetName(buildReport.summary.platform);
+            EditorUserBuildSettings.SetPlatformSettings(buildTargetName, kXrBootSettingsKey, sb.ToString());
         }
     }
 
-    /// <summary>Build Processor class used to handle XR Plugin specific build actions/</summary>
-    /// <typeparam name="WindowsMRSettings">The settings instance type the build processor will use.</typeparam>
+    /// <summary>Build Processor class used to handle XR Plugin specific build actions.</summary>
+    /// The settings instance type the build processor will use.
     public class WindowsMRBuildProcessor : XRBuildHelper<WindowsMRSettings>
     {
         private static List<BuildTarget> s_ValidBuildTargets = new List<BuildTarget>(){
@@ -123,6 +97,7 @@ namespace UnityEditor.XR.WindowsMR
             BuildTarget.WSAPlayer,
         };
 
+        /// <summary> The key used to get the build settings object.</summary>
         public override string BuildSettingsKey { get { return Constants.k_SettingsKey; } }
 
         private bool IsCurrentBuildTargetVaild(BuildReport report)
@@ -229,30 +204,6 @@ namespace UnityEditor.XR.WindowsMR
                 return;
 
             base.OnPostprocessBuild(report);
-
-            BootConfig bootConfig = new BootConfig(report);
-            bootConfig.ReadBootConfg();
-
-            bootConfig.SetValueForKey(k_VrEnabled, "1", true);
-            bootConfig.SetValueForKey(k_WmrLibrary, k_WmrLibraryName, true);
-            if (report.summary.platformGroup == BuildTargetGroup.WSA)
-            {
-                var generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(report.summary.platformGroup);
-                var shouldInitOnStart = generalSettings?.InitManagerOnStart ?? true;
-                bootConfig.SetValueForKey(k_EarlyBootHolographic, shouldInitOnStart ? "1" : "0" , true);
-
-                bool usePrimaryWindow = true;
-                WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(report.summary.platformGroup);
-                if (buildSettings != null)
-                {
-                    usePrimaryWindow = buildSettings.UsePrimaryWindowForDisplay;
-                }
-
-                bootConfig.SetValueForKey(k_ForcePrimaryWindowHolographic, usePrimaryWindow ? "1" : "0", true);
-            }
-
-
-            bootConfig.WriteBootConfig();
         }
 
         private readonly string[] runtimePluginNames = new string[]
@@ -260,15 +211,27 @@ namespace UnityEditor.XR.WindowsMR
             "WindowsMRXRSDK.dll",
         };
 
+        [Obsolete("This API is obsolete and will be removed in a future package version.", false)]
         public bool ShouldIncludeRuntimePluginsInBuild(string path)
         {
-            return HasLoaderEnabledForTarget(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            throw new NotImplementedException("This API is obsolete and should not be called.");
+        }
+
+        internal bool ShouldIncludeRuntimePluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
+        {
+            return HasLoaderEnabledForTarget(buildTargetGroup);
         }
 
         private readonly string spatializerPluginName = "AudioPluginMsHRTF.dll";
         private readonly string spatializerReadableName = "MS HRTF Spatializer";
 
+        [Obsolete("This API is obsolete and will be removed in a future package version.", false)]
         public bool ShouldIncludeSpatializerPluginsInBuild(string path)
+        {
+            throw new NotImplementedException("This API is obsolete and should not be called.");
+        }
+
+        internal bool Internal_ShouldIncludeSpatializerPluginsInBuild(string path)
         {
             string currentSpatializerPluginName = AudioSettings.GetSpatializerPluginName();
 
@@ -285,9 +248,14 @@ namespace UnityEditor.XR.WindowsMR
             "UnityRemotingWMR.dll"
         };
 
+        [Obsolete("This API is obsolete and will be removed in a future package version.", false)]
         public bool ShouldIncludeRemotingPluginsInBuild(string path)
         {
-            BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
+            throw new NotImplementedException("This API is obsolete and should not be called.");
+        }
+
+        internal bool ShouldIncludeRemotingPluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
+        {
             WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(buildTargetGroup) as WindowsMRBuildSettings;
             if (buildSettings == null)
                 return false;
@@ -300,7 +268,33 @@ namespace UnityEditor.XR.WindowsMR
         public override void OnPreprocessBuild(BuildReport report)
         {
             if (IsCurrentBuildTargetVaild(report) && HasLoaderEnabledForTarget(report.summary.platformGroup))
+            {
                 base.OnPreprocessBuild(report);
+
+                BootConfig bootConfig = new BootConfig(report);
+                bootConfig.ReadBootConfg();
+
+                bootConfig.SetValueForKey(k_VrEnabled, "1", true);
+                bootConfig.SetValueForKey(k_WmrLibrary, k_WmrLibraryName, true);
+                if (report.summary.platformGroup == BuildTargetGroup.WSA)
+                {
+                    bootConfig.SetValueForKey(k_EarlyBootHolographic, "1", true);
+
+                    bool usePrimaryWindow = true;
+                    WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(report.summary.platformGroup);
+                    if (buildSettings != null)
+                    {
+                        usePrimaryWindow = buildSettings.UsePrimaryWindowForDisplay;
+                    }
+
+                    bootConfig.SetValueForKey(k_ForcePrimaryWindowHolographic, usePrimaryWindow ? "1" : "0", true);
+                }
+
+
+                bootConfig.WriteBootConfig();
+
+            }
+
 
             var allPlugins = PluginImporter.GetAllImporters();
             foreach (var plugin in allPlugins)
@@ -311,7 +305,7 @@ namespace UnityEditor.XR.WindowsMR
                     {
                         if (plugin.assetPath.Contains(pluginName))
                         {
-                            plugin.SetIncludeInBuildDelegate(ShouldIncludeRemotingPluginsInBuild);
+                            plugin.SetIncludeInBuildDelegate((path) => { return ShouldIncludeRemotingPluginsInBuild(path, report.summary.platformGroup); });
                             break;
                         }
                     }
@@ -320,14 +314,14 @@ namespace UnityEditor.XR.WindowsMR
                     {
                         if (plugin.assetPath.Contains(pluginName))
                         {
-                            plugin.SetIncludeInBuildDelegate(ShouldIncludeRuntimePluginsInBuild);
+                            plugin.SetIncludeInBuildDelegate((path) => { return ShouldIncludeRuntimePluginsInBuild(path, report.summary.platformGroup); });
                             break;
                         }
                     }
 
                     if (plugin.assetPath.Contains(spatializerPluginName))
                     {
-                        plugin.SetIncludeInBuildDelegate(ShouldIncludeSpatializerPluginsInBuild);
+                        plugin.SetIncludeInBuildDelegate(Internal_ShouldIncludeSpatializerPluginsInBuild);
                     }
                 }
             }
