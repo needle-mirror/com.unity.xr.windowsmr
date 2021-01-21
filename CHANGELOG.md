@@ -4,6 +4,9 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.2.1] - 2021-01-21
+* Update XR Management dependency to version 4.0.1.
+
 ## [5.2.0] - 2020-12-02
 * Fixed issues in native code to address bugs that appeared when remoting to HoloLens devices.
 * Reported HMD position no longer teleports to origin during tracking loss. The last valid position will continue to be reported while rotation updates when tracking loss occurs.

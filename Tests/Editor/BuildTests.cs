@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,7 +25,8 @@ namespace UnityEditor.XR.WindowsMR.Tests
 
     class BuildTests : TestBaseSetup
     {
-        private bool SetEnableLoderForTarget(BuildTargetGroup buildTargetGroup, bool enable)
+
+        bool SetEnableLoderForTarget(BuildTargetGroup buildTargetGroup, bool enable)
         {
             if (buildTargetGroup != BuildTargetGroup.Standalone && buildTargetGroup != BuildTargetGroup.WSA)
                 return false;
@@ -50,8 +52,13 @@ namespace UnityEditor.XR.WindowsMR.Tests
         [Test]
         public void CheckBinariesFilteredIfNotEnabledInBuildTarget()
         {
-            bool ret = SetEnableLoderForTarget(BuildTargetGroup.Standalone, false);
-            Assert.IsTrue(ret);
+            string loaderTypeName = typeof(WindowsMRLoader).Name;
+            bool hasEnabledLoader = IsLoaderEnabledForTarget(BuildTargetGroup.Standalone, loaderTypeName);
+            if (hasEnabledLoader)
+            {
+                bool ret = SetEnableLoderForTarget(BuildTargetGroup.Standalone, false);
+                Assert.IsTrue(ret);
+            }
 
             PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.IL2CPP);
 
@@ -77,6 +84,13 @@ namespace UnityEditor.XR.WindowsMR.Tests
 
             string wmrDllFile = Path.Combine(tempPath, $"{PlayerSettings.productName}_Data", "Plugins", "x86_64", "WindowsMRXRSDK.dll");
             Assert.IsFalse(File.Exists(wmrDllFile));
+
+            if (hasEnabledLoader)
+            {
+                bool ret = SetEnableLoderForTarget(BuildTargetGroup.Standalone, true);
+                Assert.IsTrue(ret);
+            }
+
         }
 
     }

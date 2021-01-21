@@ -116,9 +116,10 @@ namespace UnityEditor.XR.WindowsMR
                 return false;
 
             bool loaderFound = false;
-            for (int i = 0; i < settings.Manager.loaders.Count; ++i)
+            var loaders = settings.Manager.activeLoaders;
+            for (int i = 0; i < loaders.Count; ++i)
             {
-                if (settings.Manager.loaders[i] as WindowsMRLoader != null)
+                if (loaders[i] as WindowsMRLoader != null)
                 {
                     loaderFound = true;
                     break;
