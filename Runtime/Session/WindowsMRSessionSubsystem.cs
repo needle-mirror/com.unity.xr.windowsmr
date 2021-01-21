@@ -1,7 +1,5 @@
-using System;
 using System.Runtime.InteropServices;
 
-using Unity.Collections;
 using UnityEngine.Scripting;
 using UnityEngine.XR.ARSubsystems;
 
@@ -14,20 +12,18 @@ namespace UnityEngine.XR.WindowsMR
     [Preserve]
     public sealed class WindowsMRSessionSubsystem : XRSessionSubsystem
     {
-#if !UNITY_2020_2_OR_NEWER
         /// <summary>
-        /// Create the WindowsMRSessionSubsystem provider object
+        /// Create the WindowsMRSessionSubsystem provider object.
         /// </summary>
-        /// <returns>The instance of the object created</returns>
-        protected override Provider CreateProvider()
+        /// <returns>The instance of the provider.</returns>
+        protected override IProvider CreateProvider()
         {
-            return new WindowsMRProvider();
+            return new Provider();
         }
-#endif
 
-        class WindowsMRProvider : Provider
+        class Provider : IProvider
         {
-            public WindowsMRProvider()
+            public Provider()
             {
                 NativeApi.UnityWindowsMR_session_construct();
             }
@@ -59,21 +55,12 @@ namespace UnityEngine.XR.WindowsMR
             {
                 NativeApi.UnityWindowsMR_session_destroy();
             }
-
-#if UNITY_2020_2_OR_NEWER
-            public override void Stop()
-#else
             public override void Pause()
-#endif
             {
                 NativeApi.UnityWindowsMR_session_pause();
             }
 
-#if UNITY_2020_2_OR_NEWER
-            public override void Start()
-#else
             public override void Resume()
-#endif
             {
                 NativeApi.UnityWindowsMR_session_resume();
             }
@@ -83,66 +70,6 @@ namespace UnityEngine.XR.WindowsMR
                 NativeApi.UnityWindowsMR_session_reset();
             }
 
-            /// <summary>
-            /// Should return the features requested by the enabling of other <c>Subsystem</c>s.
-            /// </summary>
-            public override Feature requestedFeatures => FeatureApi.RequestedFeatures;
-
-            /// <summary>
-            /// Get or set the requested tracking mode, e.g., the <see cref="Feature.AnyTrackingMode"/> bits.
-            /// </summary>
-            public override Feature requestedTrackingMode
-            {
-                get => FeatureApi.RequestedFeatures;
-                set
-                {
-                    FeatureApi.SetFeatureRequested(Feature.AnyTrackingMode, false);
-                    FeatureApi.SetFeatureRequested(value, true);
-                }
-            }
-
-            /// <summary>
-            /// Get the current tracking mode, e.g., the <see cref="Feature.AnyTrackingMode"/> bits.
-            /// </summary>
-            public override Feature currentTrackingMode
-            {
-                get
-                {
-                    if (trackingState == TrackingState.Tracking)
-                    {
-                        // See HolographicSpaceManager::OnLocatabilityChanged for
-                        // the reasoning behind this mapping
-                        switch (notTrackingReason)
-                        {
-                            case NotTrackingReason.Initializing:
-                                return Feature.RotationOnly;
-                            case NotTrackingReason.None:
-                                return Feature.PositionAndRotation;
-                        }
-                    }
-
-                    return Feature.None;
-                }
-            }
-
-            /// <summary>
-            /// This getter should allocate a new <c>NativeArray</c> using <paramref name="allocator"/>
-            /// and populate it with the supported <see cref="ConfigurationDescriptor"/>s.
-            /// </summary>
-            /// <param name="allocator">The <c>[Allocator](https://docs.unity3d.com/ScriptReference/Unity.Collections.Allocator.html)</c>
-            /// to use to create the returned <c>NativeArray</c>.</param>
-            /// <returns>A newly allocated <c>NativeArray</c> of <see cref="ConfigurationDescriptor"/>s describing the capabilities
-            /// of all the supported configurations.</returns>
-            public override NativeArray<ConfigurationDescriptor> GetConfigurationDescriptors(Allocator allocator)
-            {
-                var descriptors = new NativeArray<ConfigurationDescriptor>(1, allocator);
-                descriptors[0] = new ConfigurationDescriptor(
-                    new IntPtr(1),
-                    Feature.Meshing | Feature.PositionAndRotation,
-                    0);
-
-                return descriptors;
-            }
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -151,12 +78,7 @@ namespace UnityEngine.XR.WindowsMR
             XRSessionSubsystemDescriptor.RegisterDescriptor(new XRSessionSubsystemDescriptor.Cinfo
             {
                 id = "Windows Mixed Reality Session",
-#if UNITY_2020_2_OR_NEWER
-                providerType = typeof(WindowsMRProvider),
-                subsystemTypeOverride = typeof(WindowsMRSessionSubsystem),
-#else
                 subsystemImplementationType = typeof(WindowsMRSessionSubsystem),
-#endif
                 supportsInstall = false
             });
         }

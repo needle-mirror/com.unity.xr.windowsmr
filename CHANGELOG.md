@@ -4,157 +4,131 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [4.4.1] - 2021-01-21
+## [2.6.1] - 2021-01-21
 * Update XR Management dependency to version 4.0.1.
 
-## [4.4.0] - 2020-12-02
+## [2.6.0] - 2020-12-02
 * Fixed issues in native code to address bugs that appeared when remoting to HoloLens devices.
 * Reported HMD position no longer teleports to origin during tracking loss. The last valid position will continue to be reported while rotation updates when tracking loss occurs.
-* Fix api validation errors.
+* Update package to resolve additional validation errors.
 * Add docs for remaining public apis.
-* Add support for XRStats DroppedFrameCount and FramePresentCount.
+* Enable XRStats DroppedFrameCount and FramePresentCount.
 
-## [4.3.2] - 2020-12-07
-* Update package to resolve validation errors.
+## [2.5.2] - 2020-12-07
+* Update to resolve package validation issues.
 
-## [4.3.1] - 2020-11-16
+## [2.5.1] - 2020-11-16
 * Update management dependency version.
 
-## [4.3.0] - 2020-10-26
+## [2.5.0] - 2020-10-02
 * Add official API for accessing the Microsoft SpatialAnchorStore through the new XRAnchorStore class.
 * Fix scaled viewport rendering in Game View.
 * Set correct lower bounds on viewport scaling based on running device.
+* Fix deadlock contention in Anchor store API.
 * Update manufacturer reported by controllers to be blank when unavailable rather than hardware identifiers that were not human-readable.
 * Change the way we process settings for startup of Unity.
-* Fix deadlock contention in Anchor store API.
 * HP Reverb G2 controller no longer reports touchpad (Primary2DAxis) presence with empty data.
 * Fixed the build processor to handle scripted build targets correctly.
 * Fix for `XRInputSubsystem.GetSupportedTrackingOriginModes` incorrectly including `Floor` when running on HoloLens devices.
 
-## [4.2.1] - 2020-09-29
-* Update management dependency version.
+## [2.4.1] - 2020-09-24
+* Update for release.
   
-## [4.2.0] - 2020-09-24
-* Fix invalid memory copying of missing meshing data.
-* Fix null deref issue when accessing source state properties
-* Fix rotation gimble lock at 120 degrees due to using LERP instead of SLERP for rotation interpolation.
-* Fix binaries copying into builds when Windows Mixed Reality was not enabled in XR Management.
-* Lock Windows loader to only run on Windows Editor or Standalone.
-* Implement support for Mirror View OcclusionMeshSideBySide.
-* Fix culling clipping issue where clipping was overly aggressive on HMDs.
-* Fix anchor issue where we were not taking into account any currently stored anchors the WMR may have.
-* Fix anchor issue were we were not correctly determining the proper location for an anchor returned from the WMR anchor store on subsequent app starts.
-* Fix anchor issue where we were not correctly setting tracking state on each anchor.
-* Fix game view rendering when running MRP in simulator mode.
+## [2.4.1-preview.1] - 2020-09-10
+* Minor bump due to new APIs.
 * Update management dependency to 3.2.15
 * Update documentation to call out the fact that we only support SPI and there is no UI to change it as per design.
 * Correctly clean up subsystems on failure in initialization.
+  
+## [2.3.1] - 2020-08-10
+* Fix reference point subsystem to default allow for persisted anchor points. Provide an extension API to the reference point subsystem to allow for manual clearing of the persisted anchor points.
+* Fix binaries copying into builds when Windows Mixed Reality was not enabled in XR Management.
+* Fix loader to only run on Windows Editor or Player.
+* Fix invalid memory copying of missing meshing data.
+* Fix null deref issue when accessing source state properties
+* Fix rotation gimble lock at 120 degrees due to using LERP instead of SLERP for rotation interpolation.
+* Fix anchor issue where we were not taking into account any currently stored anchors the WMR may have.
+* Fix anchor issue were we were not correctly determining the proper location for an anchor returned from the WMR anchor store on subsequent app starts.
+* Fix anchor issue where we were not correctly setting tracking state on each anchor.
+* Implement support for Mirror View OcclusionMeshSideBySide.
+* Fix culling clipping issue where clipping was overly aggressive on HMDs.
+* Add ability to force reload Microsoft Anchor Store using extension API on WindowsMRReferencePointSubsystem.
+* Fix rendering game view when running MRP in simulator mode.
 
-## [4.1.1] - 2020-09-10
-* Resolve line ending issues
-* Fix Changelog date
-
-## [4.1.0] - 2020-07-12
+## [2.3.0] - 2020-07-12
 * Add input display name for Windows MR HMD.
-* Allow for secondary UWP windows support.
 * Fix Culling combined frustum FOV
 * Multiple corrections for hologram stability and convergence.
 * Update remoting window with message clarify which platform is used for Player Settings when entering play mode.
 
-## [4.0.2] - 2020-06-04
-* Update remoting plugins.
-
-## [4.0.1] - 2020-06-03
-* Change Unity version dependency.
-
-## [4.0.0] - 2020-06-03
-* The ARSubsystem implementions have been updated to reflect changes in the ARSubsystems API. See the [ARFoundation Migration Guide](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/migration-guide-3.html) for more details.
-* Make loader public.
-* Blocked APIs on 2020.2 or greater that are deprecated and/or no longer present.
-
-## [3.1.6-preview.3] - 2020-05-15
+## [2.2.0] - 2020-06-04
+* Update remoting binaries to 2.1.3.
+* Prepare for release.
+  
+## [2.1.6-preview.3] - 2020-05-15
 * Add Eye gaze support through EyeGazeRotation and EyeGazePosition input feature usages.
-
-## [3.1.6-preview.2] - 2020-04-20
-* Support use of background UWP window for WSA XR applications.
 * Fix build processor to not copy settings to unsupported targets.
 
-## [3.1.6-preview.1] - 2020-04-08
-* Add support for game view eye rendering.
-* Arm32 support
+## [2.1.6-preview.2] - 2020-05-01
+* Stop copying binary files from package when the provider is not assigne to the build target.
+
+## [2.1.6-preview.1] - 2020-04-09
+* Add support for QueryViewBlitMode. This should allow a user to set the eye in the Game view and see it correctly.
+* Arm32 support.
 * Apply frame settings to all cameras and not just the first stereo camera.
+* Silence warnings for obsolete APIs that users can't do anything about.
 * Add access to Simulation and Render Holographic Frames.
 
-## [3.1.5] - 2020-04-08
-* Back management dependency down to 3.0.6.
+## [2.1.5] - 2020-04-08
+*  Back management dependency down to 3.0.6.
+*  
+## [2.1.4] - 2020-04-08
+*  Fix package to be usable by downlevel management.
 
-## [3.1.4] - 2020-04-08
-* Fix package to be usable by downlevel management.
+## [2.1.3] - 2020-04-03
+* Release for managment 3.2.4
 
-## [3.1.3] - 2020-04-03
-* Release for management 3.2.4.
+## [2.1.2] - 2020-04-03
+* Release for managment 3.2.3
 
-## [3.1.2] - 2020-04-03
-* Release for management 3.2.2.
+## [2.1.1] - 2020-03-23
+* Release for managment 3.2.1
 
-## [3.1.1] - 2020-03-23
-* Release for management 3.2.1.
-
-## [3.1.0] - 2020-03-13
-* Release for management 3.2.0.
-
-## [3.1.0-preview.2] - 2020-02-26
+## [2.1.0] - 2020-03-13
+* Release for managment 3.2.0
+  
+## [2.1.0-preview.2] - 2020-02-26
 * Update management dependency to 3.2.0 series.
 
-## [3.1.0-preview.1] - 2020-02-20
+## [2.1.0-preview.1] - 2020-02-24
 * Update management dependency to 3.2.0 series.
 * Replace package initialization code with the new package metadata information.
 
-## [3.0.1] - 2019-02-07
-* Update management dependency for verification.
-* Package release for verification.
-
-## [3.0.1-preview.4] - 2020-01-30
+## [2.0.4-preview.4] - 2019-12-02
 * Add airtap feature usage for HoloLens
+* Fix pointer pose coordinate system
 * Update Remoting Plugins with x64 UWP versions.
 * Add build settings toggle to copy remoting plugins to final build.
 * Fix positional tracking at app launch
 * Fix coordinate system reset after tracking is lost and regained
 
-
-## [3.0.1-preview.3] - 2019-12-17
-* Fix camera tracking and camera tracking state reporting through XRInput.
+## [2.0.4-preview.3] - 2020-01-30
 * Fix license text.
+* Fix camera tracking and camera tracking state reporting through XRInput.
 * Fix camera disconnect to actually call the disconnect API and not re-connect.
 * Add Pointer pose and grasp to HoloLens v2 hand tracking.
-* Fix documentation to remove markdown that doesn't work with package management renderer.
 * Fix build processor to only set boot config items if the target has a WindowsMRLoader instance in the list.
 * Fix null deref exception in Gesture provider.
 
-## [3.0.1-preview.2] - 2019-12-02
+## [2.0.4-preview.2] - 2019-12-02
+* Update headers to reflect changes from Unity core.
+* Fix Occlusion Mesh creating every frame.
+* Update to new preview XR Management 3.0.5 and add build target filtering.
+* Fix generated documentation error.
 * Fix input provider missing feature usage for source loss and pointer position.
 * Add pose validation to display subsystem so that rendering system correctly skips trying to render frames that are invalid.
 * Fix logging to handle wide char strings correctly.
-
-## [3.0.1-preview.1] - 2019-11-14
-* Update XR Management dependency to 3.0.5.
-* Add build target filtering.
-* Fix Occlusion Mesh creating each frame.
 * Add version define to allow us to use uplevel management features while also allowing us to run on down level management.
-
-## [3.0.0] - 2019-11-15
-* 2020.1 Release package for verification.
-
-## [3.0.0-preview.2] - 2019-11-14
-* Change AR Subsystems version to 3.0.0 and modify the RP API to reflect name changes.
-* Update XR Management dependency to 3.0.4.
-
-## [3.0.0-preview.1] - 2019-08-28
-* Pick up header API changes that lock the package to 2020.1 only.
-* Update to new preview XR Management 3.0.5 and add build target filtering.
-
-## [2.0.4-preview.2] - 2019-10-25
-* Update headers to reflect changes from Unity core.
 
 ## [2.0.4-preview.1] - 2019-10-18
 * Fix an issue that was preventing builds of the package outside of Unity.

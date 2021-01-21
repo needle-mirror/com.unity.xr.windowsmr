@@ -11,7 +11,7 @@ namespace UnityEngine.XR.WindowsMR
     /// <summary>
     /// Provides access to the underlying Microsoft [SpatialAnchorStore](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.spatialanchorstore?view=winrt-19041)
     /// allowing a user to persist, reload, track and unpersist anchors between the [SpatialAnchorStore](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.spatialanchorstore?view=winrt-19041)
-    /// and the a curerntly running instance of <see cref="XRAnchorSubsystem"/>.
+    /// and the a curerntly running instance of <see cref="XRReferencePointSubsystem"/>.
     ///
     /// The [SpatialAnchorStore](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.spatialanchorstore?view=winrt-19041) contains a snapshot of the data at the time
     /// of it's creation. If you update the store outside of the running application then you will need to
@@ -38,10 +38,60 @@ namespace UnityEngine.XR.WindowsMR
 
 
         [ StructLayout( LayoutKind.Sequential )]
-        public struct Buffer
+        internal struct Buffer
         {
             public int size;
             public IntPtr buffer;
+        }
+
+        internal class PersistedNames : IDisposable
+        {
+            private bool disposed = false;
+            private Buffer buffer;
+
+            /// <inheritdoc/>
+            public void Dispose()
+            {
+                if (disposed)
+                {
+                    return;
+                }
+
+                NativeApi.UnityWindowsMR_refPoints_DestroyPersistedNames(buffer);
+                buffer.buffer = IntPtr.Zero;
+                disposed = true;
+            }
+
+            ~PersistedNames()
+            {
+                Dispose();
+            }
+
+            internal void GetPersisitedNames(IntPtr storePtr, List<string> persistedNames)
+            {
+                buffer = new Buffer();
+                NativeApi.UnityWindowsMR_refPoints_GetPersistedNames(storePtr, out buffer);
+                if (buffer.size == 0)
+                    return;
+
+                byte[] byteBuffer = new byte[buffer.size];
+                Marshal.Copy(buffer.buffer, byteBuffer, 0, buffer.size);
+                using (MemoryStream stream = new MemoryStream(byteBuffer))
+                {
+                    using(BinaryReader reader = new BinaryReader(stream))
+                    {
+                        System.Text.UnicodeEncoding encoding = new System.Text.UnicodeEncoding();
+                        int countStrings = reader.ReadInt32();
+                        for (int i = 0; i < countStrings; i++)
+                        {
+                            int strByteLen = reader.ReadInt32() * 2;
+                            byte[] bytes = reader.ReadBytes(strByteLen);
+                            string name = encoding.GetString(bytes, 0, strByteLen);
+                            persistedNames.Add(name);
+                        }
+                    }
+                }
+            }
         }
 
 #if UNITY_EDITOR
@@ -149,7 +199,7 @@ namespace UnityEngine.XR.WindowsMR
         /// <see cref="XRAnchorStore"/>.
         ///
         /// Has no impact on the set of currently tracked anchors in
-        /// the running instance of <see cref="XRAnchorSubsystem"/>.
+        /// the running instance of <see cref="XRReferencePointSubsystem"/>.
         /// </summary>
         /// <value>Read only list of anchor names previously persisted to the store.</value>
         public IReadOnlyList<string> PersistedAnchorNames
@@ -159,28 +209,9 @@ namespace UnityEngine.XR.WindowsMR
                 if (persistedNames == null)
                 {
                     persistedNames = new List<string>();
-                    NativeApi.Buffer buffer = new NativeApi.Buffer();
-                    NativeApi.UnityWindowsMR_refPoints_GetPersistedNames(storePtr, out buffer);
-                    if (buffer.size > 0)
+                    using( var pn = new NativeApi.PersistedNames())
                     {
-                        byte[] byteBuffer = new byte[buffer.size];
-                        Marshal.Copy(buffer.buffer, byteBuffer, 0, buffer.size);
-                        NativeApi.UnityWindowsMR_refPoints_DestroyPersistedNames(buffer);
-                        using (MemoryStream stream = new MemoryStream(byteBuffer))
-                        {
-                            using(BinaryReader reader = new BinaryReader(stream))
-                            {
-                                System.Text.UnicodeEncoding encoding = new System.Text.UnicodeEncoding();
-                                int countStrings = reader.ReadInt32();
-                                for (int i = 0; i < countStrings; i++)
-                                {
-                                    int strByteLen = reader.ReadInt32() * 2;
-                                    byte[] bytes = reader.ReadBytes(strByteLen);
-                                    string name = encoding.GetString(bytes, 0, strByteLen);
-                                    persistedNames.Add(name);
-                                }
-                            }
-                        }
+                        pn.GetPersisitedNames(storePtr, persistedNames);
                     }
                 }
 
@@ -190,7 +221,7 @@ namespace UnityEngine.XR.WindowsMR
 
         /// <summary>
         /// Take a persisted anchor from the [SpatialAnchorStore](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.spatialanchorstore?view=winrt-19041)
-        /// with the given name and addes it to the current set of tracked <see cref="XREferencePoint"/> in the runnign instance of <see cref="XRAnchorSubsystem"/>.
+        /// with the given name and addes it to the current set of tracked <see cref="XREferencePoint"/> in the runnign instance of <see cref="XRReferencePointSubsystem"/>.
         /// </summary>
         /// <param name="name">The name of the anchor to load.</param>
         /// <returns>The Id of the anchor.</returns>
@@ -206,11 +237,11 @@ namespace UnityEngine.XR.WindowsMR
         /// SpatialAnchorStore with the given name.
         ///
         /// Has no impact on the set of currently tracked anchors in
-        /// the running instance of <see cref="XRAnchorSubsystem"/>.
+        /// the running instance of <see cref="XRReferencePointSubsystem"/>.
         /// </summary>
-        /// <param name="id">The trackable id of a <see cref="XRAnchor"/> from the running instance of <see cref="XRAnchorSubsystem"/>.</param>
+        /// <param name="id">The trackable id of a <see cref="XRReferencePoint"/> from the running instance of <see cref="XRReferencePointSubsystem"/>.</param>
         /// <param name="name">The name you wish to assign to the anchor persisted in the [SpatialAnchorStore](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.spatialanchorstore?view=winrt-19041).</param>
-        /// <returns>False if there is no running instance of <see cref="XRAnchorSubsystem"/>, the
+        /// <returns>False if there is no running instance of <see cref="XRReferencePointSubsystem"/>, the
         /// id or name is unknown, or if the underlying anchor store has any issues. True otherwise.</returns>
         public bool TryPersistAnchor(TrackableId id, string name)
         {
@@ -224,7 +255,7 @@ namespace UnityEngine.XR.WindowsMR
         /// SpatialAnchorStore.
         ///
         /// Has no impact on the set of currently tracked anchors in
-        /// the running instance of <see cref="XRAnchorSubsystem"/>.
+        /// the running instance of <see cref="XRReferencePointSubsystem"/>.
         /// </summary>
         /// <param name="name">The name of a currently persisted anchor to remove from the [SpatialAnchorStore](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.spatialanchorstore?view=winrt-19041).</param>
         public void UnpersistAnchor(string name)
@@ -237,7 +268,7 @@ namespace UnityEngine.XR.WindowsMR
         /// Clear all anchors from the store.
         ///
         /// Has no impact on the set of currently tracked anchors in
-        /// the running instance of <see cref="XRAnchorSubsystem"/>.
+        /// the running instance of <see cref="XRReferencePointSubsystem"/>.
         /// </summary>
         public void Clear()
         {

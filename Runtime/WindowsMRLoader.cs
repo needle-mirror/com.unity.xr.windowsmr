@@ -24,6 +24,8 @@ using UnityEditor.XR.Management;
 #endif
 
 [assembly:InternalsVisibleTo("Unity.XR.WindowsMixedReality.Editor")]
+[assembly:InternalsVisibleTo("Unity.XR.WindowsMR.Tests")]
+
 namespace UnityEngine.XR.WindowsMR
 {
 #if UNITY_EDITOR
@@ -74,16 +76,17 @@ namespace UnityEngine.XR.WindowsMR
     [XRSupportedBuildTarget(BuildTargetGroup.WSA)]
 #endif
 #endif
+
     /// <summary>
     /// Loader Class for Windows Mixed Reality. Helper for Starting/Stopping all WMR subsystems.
     /// </summary>
-    public class WindowsMRLoader : XRLoaderHelper
+    class WindowsMRLoader : XRLoaderHelper
     {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || UNITY_WINRT
         private static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new List<XRSessionSubsystemDescriptor>();
         private static List<XRDisplaySubsystemDescriptor> s_DisplaySubsystemDescriptors = new List<XRDisplaySubsystemDescriptor>();
         private static List<XRInputSubsystemDescriptor> s_InputSubsystemDescriptors = new List<XRInputSubsystemDescriptor>();
-        private static List<XRAnchorSubsystemDescriptor> s_AnchorSubsystemDescriptors = new List<XRAnchorSubsystemDescriptor>();
+        private static List<XRReferencePointSubsystemDescriptor> s_ReferencePointSubsystemDescriptors = new List<XRReferencePointSubsystemDescriptor>();
         private static List<XRMeshSubsystemDescriptor> s_MeshSubsystemDescriptors = new List<XRMeshSubsystemDescriptor>();
         private static List<XRGestureSubsystemDescriptor> s_GestureSubsystemDescriptors = new List<XRGestureSubsystemDescriptor>();
 
@@ -111,11 +114,11 @@ namespace UnityEngine.XR.WindowsMR
             }
         }
 
-        public XRAnchorSubsystem anchorSubsystem
+        public XRReferencePointSubsystem referencePointSubsystem
         {
             get
             {
-                return GetLoadedSubsystem<XRAnchorSubsystem>();
+                return GetLoadedSubsystem<XRReferencePointSubsystem>();
             }
         }
 
@@ -165,7 +168,7 @@ namespace UnityEngine.XR.WindowsMR
                 return false;
             }
 
-            CreateSubsystem<XRAnchorSubsystemDescriptor, XRAnchorSubsystem>(s_AnchorSubsystemDescriptors, "Windows Mixed Reality Anchor");
+            CreateSubsystem<XRReferencePointSubsystemDescriptor, XRReferencePointSubsystem>(s_ReferencePointSubsystemDescriptors, "Windows Mixed Reality Reference Point");
             CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshSubsystemDescriptors, "Windows Mixed Reality Meshing");
             CreateSubsystem<XRGestureSubsystemDescriptor, XRGestureSubsystem>(s_GestureSubsystemDescriptors, "Windows Mixed Reality Gesture");
 
@@ -177,7 +180,7 @@ namespace UnityEngine.XR.WindowsMR
             StartSubsystem<XRSessionSubsystem>();
             StartSubsystem<XRDisplaySubsystem>();
             StartSubsystem<XRInputSubsystem>();
-            StartSubsystem<XRAnchorSubsystem>();
+            StartSubsystem<XRReferencePointSubsystem>();
             StartSubsystem<XRMeshSubsystem>();
             StartSubsystem<XRGestureSubsystem>();
             return base.Start();
@@ -187,7 +190,7 @@ namespace UnityEngine.XR.WindowsMR
         {
             StopSubsystem<XRDisplaySubsystem>();
             StopSubsystem<XRInputSubsystem>();
-            StopSubsystem<XRAnchorSubsystem>();
+            StopSubsystem<XRReferencePointSubsystem>();
             StopSubsystem<XRMeshSubsystem>();
             StopSubsystem<XRGestureSubsystem>();
             StopSubsystem<XRSessionSubsystem>();
@@ -196,7 +199,7 @@ namespace UnityEngine.XR.WindowsMR
 
         public override bool Deinitialize()
         {
-            DestroySubsystem<XRAnchorSubsystem>();
+            DestroySubsystem<XRReferencePointSubsystem>();
             DestroySubsystem<XRInputSubsystem>();
             DestroySubsystem<XRDisplaySubsystem>();
             DestroySubsystem<XRMeshSubsystem>();

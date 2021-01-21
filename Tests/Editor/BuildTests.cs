@@ -1,4 +1,5 @@
 #if JENKINS
+#if UNITY_2020_2_OR_NEWER
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -96,4 +97,5 @@ namespace UnityEditor.XR.WindowsMR.Tests
     }
 }
 #endif //UNITY_EDITOR
+#endif //UNITY_2020_2_OR_NEWER
 #endif //JENKINS

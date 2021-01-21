@@ -35,17 +35,17 @@ namespace UnityEngine.XR.WindowsMR.Tests
 
         IEnumerator AddAndCheckAnchor(Action<TrackableId> callback)
         {
-            XRAnchorSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRAnchorSubsystem>();
+            XRReferencePointSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRReferencePointSubsystem>();
             Assert.NotNull(rpsub);
 
-            XRAnchor rp;
-            bool ret = rpsub.TryAddAnchor(defaultPose, out rp);
+            XRReferencePoint rp;
+            bool ret = rpsub.TryAddReferencePoint(defaultPose, out rp);
             Assert.IsTrue(ret);
             Assert.AreNotEqual(defaultId, rp.trackableId);
 
             yield return null;
 
-            TrackableChanges<XRAnchor>? currentRps = rpsub.GetChanges(Allocator.Temp);
+            TrackableChanges<XRReferencePoint>? currentRps = rpsub.GetChanges(Allocator.Temp);
             Assert.IsNotNull(currentRps);
             Assert.AreNotEqual(0, currentRps?.added.Length ?? 0);
 
@@ -55,14 +55,14 @@ namespace UnityEngine.XR.WindowsMR.Tests
 
         IEnumerator RemoveAndCheckAnchor( TrackableId id, Action<TrackableId> callback)
         {
-            XRAnchorSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRAnchorSubsystem>();
+            XRReferencePointSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRReferencePointSubsystem>();
             Assert.NotNull(rpsub);
 
-            rpsub.TryRemoveAnchor(id);
+            rpsub.TryRemoveReferencePoint(id);
 
             yield return null;
 
-            TrackableChanges<XRAnchor>? currentRps = rpsub.GetChanges(Allocator.Temp);
+            TrackableChanges<XRReferencePoint>? currentRps = rpsub.GetChanges(Allocator.Temp);
             Assert.IsNotNull(currentRps);
             Assert.AreNotEqual(0, currentRps?.removed.Length ?? 0);
 
@@ -74,7 +74,7 @@ namespace UnityEngine.XR.WindowsMR.Tests
 
         XRAnchorStore GetAnchorStore()
         {
-            XRAnchorSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRAnchorSubsystem>();
+            XRReferencePointSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRReferencePointSubsystem>();
             Assert.NotNull(rpsub);
 
             var store = rpsub.TryGetAnchorStoreAsync().Result;
@@ -136,13 +136,13 @@ namespace UnityEngine.XR.WindowsMR.Tests
 
         bool CheckAnchorUpdateState(TrackableId id, UpdateState updateState)
         {
-            XRAnchorSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRAnchorSubsystem>();
+            XRReferencePointSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRReferencePointSubsystem>();
             Assert.NotNull(rpsub);
 
-            TrackableChanges<XRAnchor>? currentRps = rpsub.GetChanges(Allocator.Temp);
+            TrackableChanges<XRReferencePoint>? currentRps = rpsub.GetChanges(Allocator.Temp);
             Assert.IsNotNull(currentRps);
 
-            XRAnchor? rp = null;
+            XRReferencePoint? rp = null;
             TrackableId idToCheck = defaultId;
 
             switch (updateState)

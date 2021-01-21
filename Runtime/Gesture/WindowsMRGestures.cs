@@ -56,26 +56,17 @@ namespace UnityEngine.XR.WindowsMR
         /// </summary>
         public bool enableManipulationGesture = false;
 
-        WindowsMRGestureSubsystem GetGestureSubsystemIfNeeded()
-        {
-            if (gestureSubsystem == null)
-            {
-                List<XRGestureSubsystem> gestureSubsystems = new List<XRGestureSubsystem>();
-                SubsystemManager.GetInstances<XRGestureSubsystem>(gestureSubsystems);
-                foreach (var subsystem in gestureSubsystems)
-                {
-                    if (subsystem != null && subsystem is WindowsMRGestureSubsystem)
-                        gestureSubsystem = subsystem as WindowsMRGestureSubsystem;
-                }
-
-                OnValidate();
-            }
-
-            return gestureSubsystem;
-        }
-
         void Start()
         {
+            List<XRGestureSubsystem> gestureSubsystems = new List<XRGestureSubsystem>();
+            SubsystemManager.GetInstances<XRGestureSubsystem>(gestureSubsystems);
+            foreach (var subsystem in gestureSubsystems)
+            {
+                if (subsystem != null && subsystem is WindowsMRGestureSubsystem)
+                    gestureSubsystem = subsystem as WindowsMRGestureSubsystem;
+            }
+
+            OnValidate();
         }
 
         void OnValidate()
@@ -92,40 +83,38 @@ namespace UnityEngine.XR.WindowsMR
 
         void Update()
         {
-            var gesturesSub = GetGestureSubsystemIfNeeded();
-
-            if (gesturesSub == null || !gesturesSub.running)
+            if (gestureSubsystem == null || !gestureSubsystem.running)
                 return;
 
-            gesturesSub.Update();
+            gestureSubsystem.Update();
 
             if (onHoldChanged != null)
             {
-                foreach (var holdGestureEvent in gesturesSub.holdGestureEvents)
+                foreach (var holdGestureEvent in gestureSubsystem.holdGestureEvents)
                     onHoldChanged(holdGestureEvent);
             }
 
             if (onManipulationChanged != null)
             {
-                foreach (var manipulationGestureEvent in gesturesSub.manipulationGestureEvents)
+                foreach (var manipulationGestureEvent in gestureSubsystem.manipulationGestureEvents)
                     onManipulationChanged(manipulationGestureEvent);
             }
 
             if (onNavigationChanged != null)
             {
-                foreach (var navigationGestureEvent in gesturesSub.navigationGestureEvents)
+                foreach (var navigationGestureEvent in gestureSubsystem.navigationGestureEvents)
                     onNavigationChanged(navigationGestureEvent);
             }
 
             if (onTappedChanged != null)
             {
-                foreach (var tappedGestureEvent in gesturesSub.tappedGestureEvents)
+                foreach (var tappedGestureEvent in gestureSubsystem.tappedGestureEvents)
                     onTappedChanged(tappedGestureEvent);
             }
 
             if (onActivate != null)
             {
-                foreach (var activateGestureEvent in gesturesSub.activateGestureEvents)
+                foreach (var activateGestureEvent in gestureSubsystem.activateGestureEvents)
                     onActivate(activateGestureEvent);
             }
         }

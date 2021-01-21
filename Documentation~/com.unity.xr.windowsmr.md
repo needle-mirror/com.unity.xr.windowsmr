@@ -57,7 +57,7 @@ To use the new hand model, the user needs to talk to the input system directly b
 
 An example implementation of a hand pose provider is shown below. This example is limited to tracking one of two hands consisting of the first two devices that support hand tracking as reported by the input subsystem. This is specifically for hand tracked devices that do not support handedness as the current Tracked Pose Driver does recognize 
 
-```{code:c#}
+```
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -136,18 +136,18 @@ Additionally, the `WindowsMRGestures` component can be used to provide a simpler
 
 Also see the relevant [Microsoft documentation](https://docs.microsoft.com/en-us/windows/mixed-reality/gestures) about Gestures for supported device information.
 
-## Anchor
+## Reference Point
 
-Subsystem implementation provides support for anchors within the Microsoft anchor system.
+Subsystem implementation provides support for reference points, known as Anchors in official _Windows Mixed Reality_ documentation.
 
-Successful initialization and start of the subsystem allows the user to Add anchors, Remove anchors and Query for all known anchors. Current subsystem definition does not provide for storage or retrieval of stored anchors.
+Successful initialization and start of the subsystem allows the user to Add reference points, Remove reference points and Query for all known reference points. Current subsystem definition does not provide for storage or retrieval of stored reference points.
 
 See the relevant [Microsoft documentation](https://docs.microsoft.com/en-us/windows/mixed-reality/spatial-anchors) about Anchors for supported device information.
 
-The subsystem provided the ability to get the actual native Windows MR object that backs the anchor. Below is an example of getting that data:
+The subsystem provided the ability to get the actual native Windows MR object that backs the reference point. Below is an example of getting that data:
 
 ```
-TrackableChanges<XRAnchor>? currentRps = RPSubsystem?.GetChanges(Allocator.Temp) ?? null;
+TrackableChanges<XRReferencePoint>? currentRps = RPSubsystem?.GetChanges(Allocator.Temp) ?? null;
 
 if (currentRps != null)
 {
@@ -164,7 +164,7 @@ if (currentRps != null)
     }
 }
 ```
-NOTE: The data returned is only valid in between calls to **XRAnchor.GetChanges**!
+NOTE: The data returned is only valid in between calls to **XRReferencePoint.GetChanges**!
 
 ## Meshing
 
@@ -221,7 +221,7 @@ Meshing subsystem provides only one means for setting a bounding volume for spat
 * __SetBoundingVolumeSphere__ - Set a bounding volume to a sphere at some origin point and with the given radius.
 * __SetBoundingVolumeFrustum__ - Set the bounding volume to the frustum defined by the 6 planes passed in. Each plane is defined as a point offset from the head, with a given orientation. The easiest way to set this is to use the [GeometryUtility.CalculateFrustumPlanes](https://docs.unity3d.com/ScriptReference/GeometryUtility.CalculateFrustumPlanes.html) Unity API and use that to populate the data for this call. The plane ordering passed in matches the plane ordering from this API.
 
-Specific to this package is the ability to get the native WindowsMR [SpatialSurfaceMesh](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.surfaces.spatialsurfacemesh) and [SpatialSurfaceInfo](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.surfaces.spatialsurfaceinfo) the back the generated mesh data. In the future meshing will support the same native pointer access that anchors does but for now you can use this package specific mechanism to get the same data.
+Specific to this package is the ability to get the native WindowsMR [SpatialSurfaceMesh](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.surfaces.spatialsurfacemesh) and [SpatialSurfaceInfo](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.surfaces.spatialsurfaceinfo) the back the generated mesh data. In the future meshing will support the same native pointer access that reference points does but for now you can use this package specific mechanism to get the same data.
 
 * __WindowsMRExtensions.MeshingData__ - Container struct that holds data for the native mesh information. Contains the following data members:
     * int version - The version of this struct. This will let you know what version the provider is returning to you so you know what to expect.
@@ -249,7 +249,7 @@ Debug.Log($"Spatial Surface Mesh Info: Vertex Count:{surfaceMesh.VertexPositions
 meshing.ReleaseMeshingData(ref meshData);
 ```
 
-## Anchor Subsystem Extensions
+## Reference Points Subsystem Extensions
 
 # XR Management support
 

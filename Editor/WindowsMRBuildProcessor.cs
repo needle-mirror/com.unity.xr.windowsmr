@@ -223,7 +223,19 @@ namespace UnityEditor.XR.WindowsMR
             throw new NotImplementedException("This API is no longer supported and should not be used.");
         }
 
-        internal bool ShouldIncludeRuntimePluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
+        /// <summary>
+        /// Used to determine whether or not plugins used for WMR runtime should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <param name="buildTargetGroup">The BuildTargetGroup being built.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
+        public bool ShouldIncludeRuntimePluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
+        {
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
+        }
+
+        internal bool Internal_ShouldIncludeRuntimePluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
         {
             return HasLoaderEnabledForTarget(buildTargetGroup);
         }
@@ -260,17 +272,29 @@ namespace UnityEditor.XR.WindowsMR
         };
 
         /// <summary>
-        /// Used to determine whether or not the WMR remoting plugin should be included in the final build.
+        /// Used to determine whether or not the WMR remoting plugins should be included in the final build.
         /// </summary>
         /// <param name="path">The path to the plugin.</param>
         /// <returns>True if the plugin should be included, false otherwise.</returns>
-        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
+        [Obsolete("This API is obsolete and will be removed in a future version of the package", false)]
         public bool ShouldIncludeRemotingPluginsInBuild(string path)
         {
             throw new NotImplementedException("This API is no longer supported and should not be used.");
         }
 
-        internal bool ShouldIncludeRemotingPluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
+        /// <summary>
+        /// Used to determine whether or not the WMR remoting plugins should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <param name="buildTargetGroup">The BuildTargetGroup being built.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package", false)]
+        public bool ShouldIncludeRemotingPluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
+        {
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
+        }
+
+        internal bool Internal_ShouldIncludeRemotingPluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
         {
             WindowsMRBuildSettings buildSettings = BuildSettingsForBuildTargetGroup(buildTargetGroup) as WindowsMRBuildSettings;
             if (buildSettings == null)
@@ -321,7 +345,7 @@ namespace UnityEditor.XR.WindowsMR
                     {
                         if (plugin.assetPath.Contains(pluginName))
                         {
-                            plugin.SetIncludeInBuildDelegate((path) => { return ShouldIncludeRemotingPluginsInBuild(path, report.summary.platformGroup); });
+                            plugin.SetIncludeInBuildDelegate((path) => { return Internal_ShouldIncludeRemotingPluginsInBuild(path, report.summary.platformGroup); });
                             break;
                         }
                     }
@@ -330,7 +354,7 @@ namespace UnityEditor.XR.WindowsMR
                     {
                         if (plugin.assetPath.Contains(pluginName))
                         {
-                            plugin.SetIncludeInBuildDelegate((path) => { return ShouldIncludeRuntimePluginsInBuild(path, report.summary.platformGroup); });
+                            plugin.SetIncludeInBuildDelegate((path) => { return Internal_ShouldIncludeRuntimePluginsInBuild(path, report.summary.platformGroup); });
                             break;
                         }
                     }

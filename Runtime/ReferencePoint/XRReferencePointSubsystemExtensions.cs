@@ -7,10 +7,10 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.WindowsMR
 {
     /// <summary>
-    /// Extensions to <see cref="XRAnchorSubsystem" /> for getting an instance of
+    /// Extensions to <see cref="XRReferencePointSubsystem" /> for getting an instance of
     /// <see cref="XRAnchorStore" /> to allow a user to interact with the  Microsoft [SpatialAnchorStore](https://docs.microsoft.com/en-us/uwp/api/windows.perception.spatial.spatialanchorstore?view=winrt-19041).
     /// </summary>
-    public static class XRAnchorSubsystemExtensions
+    public static class XRReferencePointSubsystemExtensions
     {
         internal static class NativeApi
         {
@@ -27,9 +27,9 @@ namespace UnityEngine.XR.WindowsMR
         /// <summary>
         /// Request an instance of <see cref="XRAnchorStore"/>.
         /// </summary>
-        /// <param name="anchorSubsytem">Instance of a running <see cref="XRAnchorSubsystem"/></param>
+        /// <param name="referencePointSubsytem">Instance of a running <see cref="XRReferencePointSubsystem"/></param>
         /// <returns>A [Task](https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1?view=netcore-3.1) that may return an instance of <see cref="XRAnchorStore"/> at some time in the future.</returns>
-        public static Task<XRAnchorStore> TryGetAnchorStoreAsync(this XRAnchorSubsystem anchorSubsytem)
+        public static Task<XRAnchorStore> TryGetAnchorStoreAsync(this XRReferencePointSubsystem referencePointSubsytem)
         {
             return Task<XRAnchorStore>.Run( () => {
                 IntPtr storePtr = NativeApi.UnityWindowsMR_refPoints_tryGetAnchorStore();

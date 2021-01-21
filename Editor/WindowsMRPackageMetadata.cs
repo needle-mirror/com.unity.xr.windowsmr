@@ -1,4 +1,5 @@
 #if XR_MGMT_GTE_320
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -51,11 +52,10 @@ namespace UnityEditor.XR.WindowsMR
 
         public bool PopulateNewSettingsInstance(ScriptableObject obj)
         {
-#if !UNITY_2020_2_OR_NEWER
             WindowsMRPackageSettings packageSettings = obj as WindowsMRPackageSettings;
             if (packageSettings != null)
             {
-                var settings = packageSettings.GetSettingsForBuildTargetGroup(BuildTargetGroup.WSA);                
+                var settings = packageSettings.GetSettingsForBuildTargetGroup(BuildTargetGroup.WSA);
                 if (settings != null)
                 {
 #pragma warning disable 0618
@@ -70,16 +70,14 @@ namespace UnityEditor.XR.WindowsMR
                     }
 
                     settings.UseSharedDepthBuffer = PlayerSettings.VRWindowsMixedReality.depthBufferSharingEnabled;
+#pragma warning restore 0618
                     return true;
 #pragma warning restore 0618
                 }
             }
             return false;
-#else
-            return true;
-#endif //!UNITY_2020_2_OR_NEWER
-        }
 
+        }
     }
 }
 
