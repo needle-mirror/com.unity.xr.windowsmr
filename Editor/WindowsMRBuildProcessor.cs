@@ -116,9 +116,10 @@ namespace UnityEditor.XR.WindowsMR
                 return false;
 
             bool loaderFound = false;
-            for (int i = 0; i < settings.Manager.loaders.Count; ++i)
+            var loaders = settings.Manager.activeLoaders;
+            for (int i = 0; i < loaders.Count; ++i)
             {
-                if (settings.Manager.loaders[i] as WindowsMRLoader != null)
+                if (loaders[i] as WindowsMRLoader != null)
                 {
                     loaderFound = true;
                     break;
@@ -211,6 +212,17 @@ namespace UnityEditor.XR.WindowsMR
             "WindowsMRXRSDK.dll",
         };
 
+        /// <summary>
+        /// Used to determine whether or not plugins used for WMR runtime should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
+        public bool ShouldIncludeRuntimePluginsInBuild(string path)
+        {
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
+        }
+
         internal bool ShouldIncludeRuntimePluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
         {
             return HasLoaderEnabledForTarget(buildTargetGroup);
@@ -219,7 +231,18 @@ namespace UnityEditor.XR.WindowsMR
         private readonly string spatializerPluginName = "AudioPluginMsHRTF.dll";
         private readonly string spatializerReadableName = "MS HRTF Spatializer";
 
-        internal bool ShouldIncludeSpatializerPluginsInBuild(string path)
+        /// <summary>
+        /// Used to determine whether or not the MicrosoftHRTFAudioSpatializer plugin should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
+        public bool ShouldIncludeSpatializerPluginsInBuild(string path)
+        {
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
+        }
+
+        internal bool Internal_ShouldIncludeSpatializerPluginsInBuild(string path)
         {
             string currentSpatializerPluginName = AudioSettings.GetSpatializerPluginName();
 
@@ -235,6 +258,17 @@ namespace UnityEditor.XR.WindowsMR
             "PerceptionDevice.dll",
             "UnityRemotingWMR.dll"
         };
+
+        /// <summary>
+        /// Used to determine whether or not the WMR remoting plugin should be included in the final build.
+        /// </summary>
+        /// <param name="path">The path to the plugin.</param>
+        /// <returns>True if the plugin should be included, false otherwise.</returns>
+        [Obsolete("This API is obsolete and will be removed in a future version of the package.", false)]
+        public bool ShouldIncludeRemotingPluginsInBuild(string path)
+        {
+            throw new NotImplementedException("This API is no longer supported and should not be used.");
+        }
 
         internal bool ShouldIncludeRemotingPluginsInBuild(string path, BuildTargetGroup buildTargetGroup)
         {
@@ -303,7 +337,7 @@ namespace UnityEditor.XR.WindowsMR
 
                     if (plugin.assetPath.Contains(spatializerPluginName))
                     {
-                        plugin.SetIncludeInBuildDelegate(ShouldIncludeSpatializerPluginsInBuild);
+                        plugin.SetIncludeInBuildDelegate(Internal_ShouldIncludeSpatializerPluginsInBuild);
                     }
                 }
             }

@@ -34,7 +34,7 @@ public class TestSetupHelpers : TestBaseSetup
     internal void SetupXR()
     {
 #if UNITY_EDITOR
-        XRPackageMetadataStore.AssignLoader(XRGeneralSettings.Instance.Manager, typeof(WindowsMRLoader).Name, BuildTargetGroup.Standalone);
+        EnableLoader(typeof(WindowsMRLoader).Name, true);
 #endif
         XRGeneralSettings.Instance.Manager.InitializeLoaderSync();
         XRGeneralSettings.Instance.Manager.StartSubsystems();
@@ -45,7 +45,7 @@ public class TestSetupHelpers : TestBaseSetup
         XRGeneralSettings.Instance.Manager.StopSubsystems();
         XRGeneralSettings.Instance.Manager.DeinitializeLoader();
 #if UNITY_EDITOR
-        XRPackageMetadataStore.RemoveLoader(XRGeneralSettings.Instance.Manager, typeof(WindowsMRLoader).Name, BuildTargetGroup.Standalone);
+        EnableLoader(typeof(WindowsMRLoader).Name, false);
 #endif
     }
 

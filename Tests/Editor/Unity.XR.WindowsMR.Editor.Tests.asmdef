@@ -1,7 +1,6 @@
 {
     "name": "Unity.XR.WindowsMR.Editor.Tests",
     "references": [
-        "Unity.XR.WindowsMR.Editor",
         "Unity.XR.WindowsMR",
         "Unity.XR.WindowsMixedReality",
         "UnityEngine.SpatialTracking",

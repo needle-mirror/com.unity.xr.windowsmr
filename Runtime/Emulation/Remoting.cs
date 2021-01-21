@@ -52,7 +52,7 @@ namespace UnityEngine.XR.WindowsMR
         /// <summary>Incompatible transport protocols used</summary>
         IncompatibleTransportProtocols = 8,
         /// <summary>Handshake failed</summary>
-        HandshakeFailed = 9,
+        HandshakeAttemptFailed = 9,
         /// <summary>Transport protocol port busy or already in use</summary>
         TransportPortBusy = 10,
         /// <summary>Transport protocol could not find device at port specified</summary>
@@ -60,7 +60,7 @@ namespace UnityEngine.XR.WindowsMR
         /// <summary>Transport protocol connection failed</summary>
         TransportConnectionFailed = 12,
         /// <summary>Transport protocol version mismatch between app and Holographic Remoting Player</summary>
-        ProtocolVersionMismatch = 13,
+        ProtocolVersionsMismatch = 13,
         /// <summary>Transport protocol error</summary>
         ProtocolError = 14,
         /// <summary>Video Codec not supported</summary>
@@ -68,11 +68,28 @@ namespace UnityEngine.XR.WindowsMR
         /// <summary>Connection cancelled</summary>
         Canceled = 16,
         /// <summary>Connection lost</summary>
-        ConnectionLost = 17,
+        ConnectionWasLost = 17,
         /// <summary>Device lost</summary>
         DeviceLost = 18,
         /// <summary>Manual disconnect requested</summary>
-        DisconnectRequest = 19
+        DisconnectRequest = 19,
+
+        /// <summary>Obsolete and should not be used.</summary>
+        [Obsolete("This enumeration value is obsolete.", false)]
+        Unreachable = 2,
+
+        /// <summary>Obsolete and should not be used.</summary>
+        [Obsolete("This enumeration value is obsolete.", false)]
+        HandshakeFailed = 3,
+
+        /// <summary>Obsolete and should not be used.</summary>
+        [Obsolete("This enumeration value is obsolete.", false)]
+        ProtocolVersionMismatch = 4,
+
+        /// <summary>Obsolete and should not be used.</summary>
+        [Obsolete("This enumeration value is obsolete.", false)]
+        ConnectionLost = 5,
+
     }
 
     // Do not change this enum, it matches what's inside a DLL we call into

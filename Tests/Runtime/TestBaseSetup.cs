@@ -1,4 +1,10 @@
 ﻿#if JENKINS
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
@@ -29,6 +35,58 @@ public class TestBaseSetup
         {
             return XRGeneralSettings.Instance.Manager.activeLoader;
         }
+    }
+
+    internal static ScriptableObject GetInstanceOfTypeWithNameFromAssetDatabase(string typeName)
+    {
+        var assets = AssetDatabase.FindAssets(String.Format("t:{0}", typeName));
+        if (assets.Any())
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(assets[0]);
+            var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(ScriptableObject));
+            return asset as ScriptableObject;
+        }
+        return null;
+    }
+
+    protected bool IsLoaderEnabledForTarget(string loaderTypeName)
+    {
+        XRGeneralSettings settings  = XRGeneralSettings.Instance;
+
+        if (settings == null || settings.Manager == null)
+            return false;
+
+        var instance = TestBaseSetup.GetInstanceOfTypeWithNameFromAssetDatabase(loaderTypeName);
+        if (instance == null || !(instance is XRLoader))
+            return false;
+
+        XRLoader loader = instance as XRLoader;
+        return settings.Manager.activeLoaders.Contains(loader);
+    }
+
+    protected bool EnableLoader(string loaderTypeName, bool enable)
+    {
+        XRGeneralSettings settings  = XRGeneralSettings.Instance;
+
+        if (settings == null || settings.Manager == null)
+            return false;
+
+        var instance = TestBaseSetup.GetInstanceOfTypeWithNameFromAssetDatabase(loaderTypeName);
+        if (instance == null || !(instance is XRLoader))
+            return false;
+
+        XRLoader loader = instance as XRLoader;
+        bool ret = true;
+
+#pragma warning disable CS0618
+        if (enable)
+            settings.Manager.loaders.Add(loader);
+        else
+            ret = settings.Manager.loaders.Remove(loader);
+#pragma warning restore CS0618
+
+        return ret;
+
     }
 
     [SetUp]
