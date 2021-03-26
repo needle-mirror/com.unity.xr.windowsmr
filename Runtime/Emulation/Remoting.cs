@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Scripting;
+
 using UnityEngine.XR.WindowsMRInternals;
 
 #if UNITY_EDITOR
@@ -111,18 +112,8 @@ namespace UnityEngine.XR.WindowsMR
         {
             WindowsMRInternal.Init();
 
-            #if UNITY_EDITOR
-            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-            #endif
         }
 
-        #if UNITY_EDITOR
-        static void OnPlayModeStateChanged(PlayModeStateChange stateChange)
-        {
-            if (stateChange == PlayModeStateChange.ExitingPlayMode)
-                Disconnect();
-        }
-        #endif
 
         /// <summary>Enable Audio when remoting</summary>
         public static bool isAudioEnabled
@@ -254,7 +245,7 @@ namespace UnityEngine.XR.WindowsMR
         public static extern void UnityWindowsMR_Remoting_SetRemoteMachineName([MarshalAs(UnmanagedType.LPWStr)] string clientMachineName);
 
         [DllImport("WindowsMRXRSDK")]
-        public static extern void UnityWindowsMR_Remoting_GetRemoteMachineName(System.Text.StringBuilder sb, int capacity);
+        public static extern void UnityWindowsMR_Remoting_GetRemoteMachineName([MarshalAs(UnmanagedType.LPWStr)]System.Text.StringBuilder sb, int capacity);
 
         [DllImport("WindowsMRXRSDK")]
         public static extern bool UnityWindowsMR_Remoting_IsConnected();

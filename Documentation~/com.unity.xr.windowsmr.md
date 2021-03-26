@@ -273,6 +273,10 @@ Note that the XR settings tab now has a dropdown for "Windows Mixed Reality". Na
 
 ![Project Settings for Windows Standlone support](images/StandaloneSettings.png)
 
+## Build Settings
+
+* __Holographic Remoting__ - Enable or disable support for Holographic Remoting in the built application.
+
 ## Runtime Settings
 
 * __Shared Depth Buffer__ - Enabled or disable support for using a shared depth buffer. This allows Unity and the Mixed Reality Subsystem to use a common depth buffer. This allows the _Windows Mixed Reality_ system to provide better stabilization and integrated overlay support. Disabled by default.
@@ -284,7 +288,10 @@ Note that the XR settings tab now has a dropdown for "Windows Mixed Reality". Na
 ![Project Settings for Windows UWP support](images/UWPSettings.png)
 
 ## Build Settings
+
 * __Use Primary Window__ - Toggle to set the provider instance to immediately initialize XR SDK using the primary UWP window spawned by Unity. Set enabled by default. WSA/UWP Only.
+
+* __Holographic Remoting__ - Enable or disable support for Holographic Remoting in the built application.
 
 ## Runtime Settings
 
@@ -300,11 +307,17 @@ If __Session__ successfully initializes, then it is still possible for starting 
 
 All other subsystems depend on session but, unlike session, failure to initialize or start will not cause the whole provider to fail.
 
-## Editor Remoting
+## Remoting
+
+Remoting allows you to connect to a HoloLens 2 device running the "Holographic Remoting Player" to serve as the head mounted display for your application.
+
+# Editor
+
+For Play in Editor remoting support, the Emulation Window is the fastest option. It can be opened using the menu item **Window** -> **XR** -> **Windows XR Plugin Remoting**. A manual connection can also be established in the editor by using the method described in the [Runtime](#Runtime) section below.
+
+With the Emulation Window open, select the Emulation Mode "Remote to Device". You can use this window to set the emulation mode, device name to attach to, and the remaining settings. A connection attempt will automatically be made when entering play mode and the connection will be automatically closed when you exit play mode. The "Connection Status" will automatically update during the connection process.
 
 ![Emulation Window for Editor Remoting](images/EmulationWindow.png)
-
-Remoting allows you to use a HoloLens 2 device with the Editor or a Standalone UWP application. You must connect to the HoloLens 2 using the Holographic Remoting Player application on device. For Play in Editor support, you must make sure you connect to the remote device using the Remoting UI before entering play mode. For application support, you must make sure to connect to the device using the scripting API before you start the Windows Mixed Reality XR Plug-in.
 
 * __Emulation Mode__ - Toggle what mode of emulation you are targeting.
 
@@ -316,8 +329,20 @@ Remoting allows you to use a HoloLens 2 device with the Editor or a Standalone U
 
 * __Max Bitrate__ - The birate at which to send data to the HoloLens 2 device.
 
-* __Connection Status__ - Tells the user what state the connection to device is currently in.
+* __Connection Status__ - The current state of the connection to the specified remote machine.
 
-* __Connect__ - Attempt to connect to the device.
+# Runtime
 
-* __Disconnect__ - Disconnect from the device. Shows once a connection is esablished.
+Runtime/Application remoting is possible with x64 Desktop and UWP applications. For Runtime/Application support, you must use the **WindowsMRRemoting** scripting API to establish a remoting connection prior to starting the Windows Mixed Reality XR Plug-in. For an example of how to use the **WindowsMRRemoting** scripting API, please see the "RemotingConnect" script in the Remoting sample found in the package. The example script shows you how to establish a connection and start the XR Plug-in as well as stop the XR Plug-in and close the connection. The sample can be accessed through the **Package Manager** Window by navigating to the **Windows Mixed Reality** package.
+
+The remoting connection must be established prior to starting the Windows Mixed Reality XR Plug-in. The "Initialize XR on Startup" toggle must be disabled in the XR Management Settings in order to accomplish this. Enabling remoting in the **Windows Mixed Reality** Settings pane will automatically switch this setting off for you.
+
+![XR Management Settings for Remoting in a Built Application](images/RemotingManagementSettings.png)
+
+If you are using runtime/scripting API in a built application to remote to a device, additional settings are required. To enable remoting in built applications, you must enable "Holographic Remoting" in the Windows Mixed Reality Build Settings and disable Use Primary Window(see below). When remoting is selected in the UI, Use Primary Window will be automatically disabled. It will remain disabled as long as you have remoting enabled.
+
+![Windows Mixed Reality Settings for Remoting in a Built Application](images/UWPRemotingSettings.png)
+
+For applications targeting the UWP paltform you will also need to enable the networking capabilities to allow for network connections to/from the device. Capabilities can be set from **Project Settings** -> **Player** -> **Publishing Settings** -> **Capabilities**. Make sure to enable the settings shown below.
+
+![Player Settings Capabilities for Remoting in a Built Application](images/RemotingCapabilities.png)
