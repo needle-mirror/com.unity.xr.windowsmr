@@ -78,12 +78,13 @@ public class TestBaseSetup
         XRLoader loader = instance as XRLoader;
         bool ret = true;
 
-#pragma warning disable CS0618
         if (enable)
-            settings.Manager.loaders.Add(loader);
+        {
+            List<XRLoader> loaders = new List<XRLoader>{ loader };
+            settings.Manager.TrySetLoaders(loaders);
+        }
         else
-            ret = settings.Manager.loaders.Remove(loader);
-#pragma warning restore CS0618
+            ret = settings.Manager.TryRemoveLoader(loader);
 
         return ret;
 
@@ -112,7 +113,6 @@ public class TestBaseSetup
             // Configure StandAlone build
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows64);
             EditorUserBuildSettings.wsaUWPBuildType = WSAUWPBuildType.D3D;
-            EditorUserBuildSettings.wsaSubtarget = WSASubtarget.AnyDevice;
             EditorUserBuildSettings.allowDebugging = true;
 
             PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.IL2CPP);

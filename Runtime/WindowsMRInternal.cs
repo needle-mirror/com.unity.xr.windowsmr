@@ -17,6 +17,8 @@ namespace UnityEngine.XR.WindowsMRInternals
         {
 #if UNITY_EDITOR_WIN
             string pluginFolderPathBase = Path.GetFullPath("Packages/com.unity.xr.windowsmr/Runtime/Plugins/x64");
+#elif UNITY_STANDALONE_WIN
+            string pluginFolderPathBase = Path.GetFullPath($"{Application.dataPath}/Plugins/x86_64");
 #else
             string pluginFolderPathBase = "";
 #endif

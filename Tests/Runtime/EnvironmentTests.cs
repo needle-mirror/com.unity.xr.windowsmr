@@ -12,6 +12,8 @@ using System;
 
 namespace UnityEngine.XR.WindowsMR.Tests
 {
+    [PrebuildSetup(typeof(TestSetupHelpers))]
+    [PostBuildCleanup(typeof(TestSetupHelpers))]
     internal class EnvironmentTests : TestBaseSetup
     {
         [UnityTest]
@@ -34,7 +36,7 @@ namespace UnityEngine.XR.WindowsMR.Tests
             yield return new WaitForSeconds(1);
             Assert.IsTrue(WindowsMREnvironment.CurrentHolographicRenderFrame.ToInt64() != 0);
         }
-    
+
         [UnityTest]
         public IEnumerator SimulationHolographicFrameAccess()
         {

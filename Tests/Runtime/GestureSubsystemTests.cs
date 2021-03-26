@@ -11,6 +11,8 @@ using System;
 
 namespace Unity.XR.WindowsMR.Tests
 {
+    [PrebuildSetup(typeof(TestSetupHelpers))]
+    [PostBuildCleanup(typeof(TestSetupHelpers))]
     public class GestureSubsystemTests : TestBaseSetup
     {
         [Test]

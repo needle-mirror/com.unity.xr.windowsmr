@@ -10,6 +10,8 @@ using System;
 
 namespace UnityEngine.XR.WindowsMR.Tests
 {
+    [PrebuildSetup(typeof(TestSetupHelpers))]
+    [PostBuildCleanup(typeof(TestSetupHelpers))]
     public class InputSubsystemTests : TestBaseSetup
     {
         [UnityTest]

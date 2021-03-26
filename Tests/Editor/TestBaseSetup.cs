@@ -113,7 +113,6 @@ public class TestBaseSetup
             // Configure StandAlone build
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows64);
             EditorUserBuildSettings.wsaUWPBuildType = WSAUWPBuildType.D3D;
-            EditorUserBuildSettings.wsaSubtarget = WSASubtarget.AnyDevice;
             EditorUserBuildSettings.allowDebugging = true;
 
             PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.IL2CPP);

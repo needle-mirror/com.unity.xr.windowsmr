@@ -48,5 +48,10 @@ namespace Unity.XR.WindowsMR
         /// </summary>
         /// <remarks>This data is HoloLens2-specific. </remarks>
         public static InputFeatureUsage<bool> EyeGazeAvailable = new InputFeatureUsage<bool>("EyeGazeAvailable");
+        /// <summary>
+        /// A bool letting a user know eye gaze is being tracked.
+        /// </summary>
+        /// <remarks>This data is HoloLens2-specific. </remarks>
+        public static InputFeatureUsage<bool> EyeGazeTracked = new InputFeatureUsage<bool>("EyeGazeTracked");
     }
 }

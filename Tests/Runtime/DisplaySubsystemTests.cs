@@ -13,6 +13,8 @@ using System;
 
 namespace UnityEngine.XR.WindowsMR.Tests
 {
+    [PrebuildSetup(typeof(TestSetupHelpers))]
+    [PostBuildCleanup(typeof(TestSetupHelpers))]
     internal class DisplaySubsystemTests : TestBaseSetup
     {
         public IEnumerator ContentProtection()

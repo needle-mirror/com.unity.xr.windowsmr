@@ -11,6 +11,8 @@ namespace UnityEngine.XR.WindowsMR.Tests
 {
     class RuntimeTests
     {
+        [PrebuildSetup(typeof(TestSetupHelpers))]
+        [PostBuildCleanup(typeof(TestSetupHelpers))]
         internal class GraphicsCheck : TestBaseSetup
         {
             enum States

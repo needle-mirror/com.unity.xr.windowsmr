@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.windowsmr",
   "displayName": "Windows XR Plugin",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "unity": "2021.1",
   "unityRelease": "0a4",
   "description": "Provides implementation and support for Unity XR SDK, allowing integration and use of Windows Mixed Reality devices.",
@@ -26,9 +26,16 @@
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/xr.sdk.windowsmr.git",
     "type": "git",
-    "revision": "91f105add1787500ea641b28876b0725b2c52ebc"
+    "revision": "b496c7ef77cdb85af3c2de42157841faa755939f"
   },
+  "samples": [
+    {
+      "displayName": "Remoting",
+      "description": "Basic sample showing how to setup and connect an application to a remote instance running on HoloLens v2 device.",
+      "path": "Samples~/Remoting"
+    }
+  ],
   "upmCi": {
-    "footprint": "b668bc3cac0056b543e5ac442b51a09d1b9da6a8"
+    "footprint": "c3173e497393e94c2e6b49f6848857fc1b5e008f"
   }
 }

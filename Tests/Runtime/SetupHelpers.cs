@@ -1,6 +1,9 @@
 #if JENKINS
+using NUnit.Framework;
+
 using UnityEngine;
 using UnityEngine.SpatialTracking;
+using UnityEngine.TestTools;
 using UnityEngine.XR.Management;
 using UnityEngine.XR.WindowsMR;
 
@@ -27,15 +30,26 @@ public enum TestCubesConfig
     TestMassCube
 }
 
-public class TestSetupHelpers : TestBaseSetup
+public class TestSetupHelpers : TestBaseSetup, IPrebuildSetup, IPostBuildCleanup
 {
     private int m_CubeCount = 0;
 
-    internal void SetupXR()
+    public void Setup()
     {
 #if UNITY_EDITOR
         EnableLoader(typeof(WindowsMRLoader).Name, true);
 #endif
+    }
+
+    public void Cleanup()
+    {
+#if UNITY_EDITOR
+        EnableLoader(typeof(WindowsMRLoader).Name, false);
+#endif
+    }
+
+    internal void SetupXR()
+    {
         XRGeneralSettings.Instance.Manager.InitializeLoaderSync();
         XRGeneralSettings.Instance.Manager.StartSubsystems();
     }
@@ -44,9 +58,6 @@ public class TestSetupHelpers : TestBaseSetup
     {
         XRGeneralSettings.Instance.Manager.StopSubsystems();
         XRGeneralSettings.Instance.Manager.DeinitializeLoader();
-#if UNITY_EDITOR
-        EnableLoader(typeof(WindowsMRLoader).Name, false);
-#endif
     }
 
     public void CreateXRGameObjects()
