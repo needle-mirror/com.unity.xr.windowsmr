@@ -20,7 +20,7 @@ namespace UnityEditor.XR.WindowsMR
         static GUIContent s_DepthBufferFormatLabel = new GUIContent("Depth Buffer Format");
         static GUIContent s_SharedDepthBufferLabel = new GUIContent("Shared Depth Buffer");
         static GUIContent s_HolographicRemotingLabel = new GUIContent("Holographic Remoting");
-        static GUIContent s_ForcePrimaryWindowHologrpahicLabel = new GUIContent("Use Primary Window");
+        static GUIContent s_forcePrimaryWindowHolographicLabel = new GUIContent("Use Primary Window");
         static GUIContent s_ShowBuildSettingsLabel = new GUIContent("Build Settings");
         static GUIContent s_ShowRuntimeSettingsLabel = new GUIContent("Runtime Settings");
 
@@ -41,35 +41,58 @@ namespace UnityEditor.XR.WindowsMR
 
             if (buildTargetGroup == BuildTargetGroup.Standalone || buildTargetGroup == BuildTargetGroup.WSA)
             {
+                var mgmtsettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(buildTargetGroup);
+
                 serializedObject.Update();
 
-                if (buildTargetGroup == BuildTargetGroup.WSA)
+                m_ShowBuildSettings = EditorGUILayout.Foldout(m_ShowBuildSettings, s_ShowBuildSettingsLabel);
+                if (m_ShowBuildSettings)
                 {
-                    m_ShowBuildSettings = EditorGUILayout.Foldout(m_ShowBuildSettings, s_ShowBuildSettingsLabel);
-                    if (m_ShowBuildSettings)
+                    var serializedSettingsObject = new SerializedObject(settings.GetBuildSettingsForBuildTargetGroup(buildTargetGroup));
+                    serializedSettingsObject.Update();
+
+                    SerializedProperty holographicRemoting = serializedSettingsObject.FindProperty(k_HolographicRemoting);
+                    SerializedProperty forcePrimaryWindowHolographic = serializedSettingsObject.FindProperty(k_ForcePrimaryWindowHolographic);
+                    EditorGUI.indentLevel++;
+
+                    if (buildTargetGroup == BuildTargetGroup.WSA)
                     {
-                        var serializedSettingsObject = new SerializedObject(settings.GetBuildSettingsForBuildTargetGroup(buildTargetGroup));
-                        serializedSettingsObject.Update();
+                        EditorGUI.BeginDisabledGroup(holographicRemoting.boolValue);
 
-                        SerializedProperty forcePrimaryWindowHologrpahic = serializedSettingsObject.FindProperty(k_ForcePrimaryWindowHolographic);
-                        SerializedProperty holographicRemoting = serializedSettingsObject.FindProperty(k_HolographicRemoting);
+                        if (holographicRemoting.boolValue && forcePrimaryWindowHolographic.boolValue)
+                        {
+                            forcePrimaryWindowHolographic.boolValue = false;
+                            Debug.LogWarning("Holographic remoting has been enabled. This requires use of primary window to be disabled.");
+                        }
 
-                        EditorGUI.indentLevel++;
-                        EditorGUILayout.PropertyField(forcePrimaryWindowHologrpahic, s_ForcePrimaryWindowHologrpahicLabel);
+                        EditorGUILayout.PropertyField(forcePrimaryWindowHolographic, s_forcePrimaryWindowHolographicLabel);
+                        EditorGUI.EndDisabledGroup();
                         EditorGUILayout.Space();
-                        EditorGUILayout.PropertyField(holographicRemoting, s_HolographicRemotingLabel);
-                        EditorGUI.indentLevel--;
-                        serializedSettingsObject.ApplyModifiedProperties();
                     }
 
+                    EditorGUILayout.PropertyField(holographicRemoting, s_HolographicRemotingLabel);
+                    EditorGUI.indentLevel--;
+
+
+                    if (mgmtsettings != null)
+                    {
+                        if (holographicRemoting.boolValue == mgmtsettings.InitManagerOnStart)
+                        {
+                            mgmtsettings.InitManagerOnStart = !holographicRemoting.boolValue;
+                            if (!mgmtsettings.InitManagerOnStart)
+                                Debug.LogWarning("Holographic remoting has been enabled. This requires XR Plug-in Management Initialize on Startup to be disabled.");
+                            else
+                                Debug.LogWarning("Holographic remoting has been disabled. XR Plug-in Management Initialize on Startup has been re-enabled.");
+                        }
+                    }
+
+                    serializedSettingsObject.ApplyModifiedProperties();
                 }
+
 
                 EditorGUILayout.Space();
 
-                if (buildTargetGroup == BuildTargetGroup.WSA)
-                    m_ShowRuntimeSettings = EditorGUILayout.Foldout(m_ShowRuntimeSettings, s_ShowRuntimeSettingsLabel);
-                else
-                    m_ShowRuntimeSettings = true;
+                m_ShowRuntimeSettings = EditorGUILayout.Foldout(m_ShowRuntimeSettings, s_ShowRuntimeSettingsLabel);
 
                 if (m_ShowRuntimeSettings)
                 {

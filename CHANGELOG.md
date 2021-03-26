@@ -4,6 +4,20 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.4.2] - 2021-03-26
+* Make Game View default to Left Eye, consistent with other providers.
+* Make remoting work in Win32 apps.
+* Add remoting sample to package.
+* Support for XR Locatable Camera fully implemented. Now photos taken with an HLv2 headset will correctly inject the camera to world and projection transforms into the photo stream.
+* Fix eye tracking to work in Remoting.
+* Fix eye tracking gaze direction/rotation to be in Unity coordinate system.
+* Fix eye tracking to report in World Coordinates instead of pose relative coordinates.
+* Fix crash on entering play mode after headset sleep.
+* Allow remoting to now auto connect/disconnect on Play state change.
+* Persist remoting sessions across editor sessions.
+* Add EyeGazeTracked usage to allow for checking if gaze has or has lost tracking.
+* Update Documentation for Remoting in Editor and Runtime.
+
 ## [4.4.1] - 2021-01-21
 * Update XR Management dependency to version 4.0.1.
 

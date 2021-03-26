@@ -20,7 +20,7 @@ namespace UnityEngine.XR.WindowsMR
         public bool UsePrimaryWindowForDisplay = true;
 
         /// <summary>True if we want to use holographic remoting in a UWP desktop build, false otherwise.</summary>
-        [SerializeField, Tooltip("Enable holographic remoting support in UWP desktop builds.")]
+        [SerializeField, Tooltip("Enable holographic remoting support in UWP desktop builds. Enabling remoting will disable Primary Window and XR Plug-in Management Initialize on Start.")]
         public bool HolographicRemoting = false;
     }
 }

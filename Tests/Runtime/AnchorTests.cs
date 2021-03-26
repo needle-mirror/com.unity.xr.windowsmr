@@ -33,6 +33,21 @@ namespace UnityEngine.XR.WindowsMR.Tests
             ClearAnchorStore();
         }
 
+        bool CheckThereAreNoAnchors()
+        {
+            XRAnchorSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRAnchorSubsystem>();
+            Assert.NotNull(rpsub);
+
+            TrackableChanges<XRAnchor>? currentRps = rpsub.GetChanges(Allocator.Temp);
+
+            bool hasNoAnchors = (currentRps == null) ? false :
+                currentRps?.added.Length == 0 &&
+                currentRps?.removed.Length == 0 &&
+                currentRps?.updated.Length == 0;
+
+            return hasNoAnchors;
+        }
+
         IEnumerator AddAndCheckAnchor(Action<TrackableId> callback)
         {
             XRAnchorSubsystem rpsub = ActiveLoader.GetLoadedSubsystem<XRAnchorSubsystem>();
@@ -201,6 +216,8 @@ namespace UnityEngine.XR.WindowsMR.Tests
         {
             const string testRpName = "unity://anchors/Persist Test Anchor";
 
+            ClearAnchorStore();
+
             TrackableId rpId = defaultId;
             yield return AddAndCheckAnchor((tid) => {
                 Assert.AreNotEqual(rpId, tid);
@@ -223,6 +240,8 @@ namespace UnityEngine.XR.WindowsMR.Tests
             yield return RemoveAndCheckAnchor(rpId, (tid) => {
                 Assert.AreEqual(rpId, tid);
             });
+
+            Assert.IsTrue(CheckThereAreNoAnchors());
         }
 
 
