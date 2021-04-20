@@ -1,5 +1,7 @@
 # About XR SDK for Windows MR
 
+**Notice: Microsoft has transitioned support of Windows MR devices to OpenXR in Unity 2021, and recommends using Unity's OpenXR plugin. As such, this Windows XR plugin is marked as deprecated and will be removed in the 2021.2 release. It will continue to be supported in the 2020 LTS.**
+
 This package provides an XR SDK implementation of _Windows Mixed Reality_ support for Unity.
 
 # Supported rendering modes

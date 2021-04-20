@@ -16,6 +16,19 @@ namespace UnityEditor.XR.WindowsMR
 {
     class XRPackage : IXRPackage
     {
+        const string k_PackageNotificationTooltip =
+@"Microsoft has transitioned support of Windows MR devices to OpenXR in Unity 2021, and recommends using Unity's OpenXR plugin. As such, this Windows XR plugin is marked as deprecated and will be removed in the 2021.2 release. It will continue to be supported in the 2020 LTS.";
+        const string k_NotificationKey = "DidWarnAboutWindowsMRDeprecation";
+
+        static XRPackage()
+        {
+            if (!SessionState.GetBool(k_NotificationKey, false))
+            {
+                Debug.LogWarning(k_PackageNotificationTooltip);
+                SessionState.SetBool(k_NotificationKey, true);
+            }
+        }
+
         private class WMRLoaderMetadata : IXRLoaderMetadata
         {
             public string loaderName { get; set; }
@@ -28,9 +41,9 @@ namespace UnityEditor.XR.WindowsMR
             public string packageName { get; set; }
             public string packageId { get; set; }
             public string settingsType { get; set; }
-            public List<IXRLoaderMetadata> loaderMetadata { get; set; } 
+            public List<IXRLoaderMetadata> loaderMetadata { get; set; }
         }
-        
+
         private static IXRPackageMetadata s_Metadata = new WMRPackageMetadata(){
                 packageName = "Windows XR Plugin",
                 packageId = "com.unity.xr.windowsmr",
@@ -55,7 +68,7 @@ namespace UnityEditor.XR.WindowsMR
             WindowsMRPackageSettings packageSettings = obj as WindowsMRPackageSettings;
             if (packageSettings != null)
             {
-                var settings = packageSettings.GetSettingsForBuildTargetGroup(BuildTargetGroup.WSA);                
+                var settings = packageSettings.GetSettingsForBuildTargetGroup(BuildTargetGroup.WSA);
                 if (settings != null)
                 {
 #pragma warning disable 0618

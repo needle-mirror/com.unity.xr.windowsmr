@@ -4,6 +4,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.3.0] - 2021-04-20
+* Fix crash in Meshing when user configures ARMeshManager to not return normals.
+* Add deprecation messaging and UI changes to clarify that the Windows XR Plugin is being deprecated and replaced by OpenXR.
+* Fixed headset input device not reconnecting after an application is resumed after being suspended when Run In Background is disabled.
+* Fix depth reprojection stability issues.
+* Add back in option to manually connect to remoting. Added toggle to XR Remoting window UI to enable manual connection option.
+* Fix IsValidMatrix exception when connecting to remoting.
+* Fix MonoCamera render for PV Cameras.
+* Update remoting libraries to version 2.5.0.
+
 ## [5.2.2] - 2021-03-26
 * Make Game View default to Left Eye, consistent with other providers.
 * Make remoting work in Win32 apps.
@@ -20,9 +30,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [5.2.1] - 2021-01-21
 * Update XR Management dependency to version 4.0.1.
-
-## [5.1.0-exp.2] - 2020-11-16
-* Update management dependency version.
 
 ## [5.2.0] - 2020-12-02
 * Fixed issues in native code to address bugs that appeared when remoting to HoloLens devices.
