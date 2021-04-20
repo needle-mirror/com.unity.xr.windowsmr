@@ -4,6 +4,15 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2021-04-20
+* Fixed headset input device not reconnecting after an application is resumed after being suspended when Run In Background is disabled.
+* Fix depth reprojection stability issues.
+* Add back in option to manually connect to remoting. Added toggle to XR Remoting window UI to enable manual connection option.
+* Fix IsValidMatrix exception when connecting to remoting.
+* Fix crash in Meshing when user configures ARMeshManager to not return normals.
+* Fix MonoCamera render for PV Cameras.
+* Update remoting libraries to version 2.5.0.
+
 ## [2.7.0] - 2021-03-26
 * Make Game View default to Left Eye, consistent with other providers.
 * Support for XR Locatable Camera fully implemented. Now photos taken with an HLv2 headset will correctly inject the camera to world and projection transforms into the photo stream.
@@ -16,7 +25,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Allow remoting to now auto connect/disconnect on Play state change.
 * Persist remoting sessions across editor sessions.
 * Add EyeGazeTracked usage to allow for checking if gaze has or has lost tracking.
-* Update Documentation for Remoting in Editor and Runtime.
 
 ## [2.6.1] - 2021-01-21
 * Update XR Management dependency to version 4.0.1.
