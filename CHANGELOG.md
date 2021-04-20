@@ -4,6 +4,15 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.5.0] - 2021-04-20
+* Fixed headset input device not reconnecting after an application is resumed after being suspended when Run In Background is disabled.
+* Fix depth reprojection stability issues.
+* Add back in option to manually connect to remoting. Added toggle to XR Remoting window UI to enable manual connection option.
+* Fix IsValidMatrix exception when connecting to remoting.
+* Fix crash in Meshing when user configures ARMeshManager to not return normals.
+* Fix MonoCamera render for PV Cameras.
+* Update remoting libraries to version 2.5.0.
+
 ## [4.4.2] - 2021-03-26
 * Make Game View default to Left Eye, consistent with other providers.
 * Make remoting work in Win32 apps.

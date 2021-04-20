@@ -66,6 +66,14 @@ namespace UnityEditor.XR.WindowsMR
             }
         }
 
+        public void ClearEntryForKey(string key)
+        {
+            if (bootConfigSettings.ContainsKey(key))
+            {
+                bootConfigSettings.Remove(key);
+            }
+        }
+
         public void WriteBootConfig()
         {
             // boot settings string format
@@ -203,6 +211,17 @@ namespace UnityEditor.XR.WindowsMR
 
             if (!HasLoaderEnabledForTarget(report.summary.platformGroup))
                 return;
+
+            BootConfig bootConfig = new BootConfig(report);
+            bootConfig.ReadBootConfg();
+
+            bootConfig.ClearEntryForKey(k_ForcePrimaryWindowHolographic);
+            bootConfig.ClearEntryForKey(k_VrEnabled);
+            bootConfig.ClearEntryForKey(k_WmrLibrary);
+            bootConfig.ClearEntryForKey(k_WmrLibraryName);
+            bootConfig.ClearEntryForKey(k_EarlyBootHolographic);
+
+            bootConfig.WriteBootConfig();
 
             base.OnPostprocessBuild(report);
         }
