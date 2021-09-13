@@ -3,9 +3,10 @@ using System.IO;
 
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.XR.Management;
 using UnityEngine.XR.WindowsMR;
 
-using UnityEngine.XR.Management;
 using UnityEditor.XR.Management;
 
 namespace UnityEditor.XR.WindowsMR
@@ -24,8 +25,13 @@ namespace UnityEditor.XR.WindowsMR
         public int m_MaxBitRateKbps = 99999;
 
         [SerializeField]
-        public bool autoConnectOnPlay = true;
+        [FormerlySerializedAs("autoConnectOnPlay")]
+        public bool m_AutoConnectOnPlay = true;
+
+        [SerializeField]
+        public bool m_shouldListen = false;
     }
+
 
     /// <summary>
     /// Remoting Window Class, GUI content and callbacks to WMRRemoting apis.
@@ -47,12 +53,16 @@ namespace UnityEditor.XR.WindowsMR
         static GUIContent s_EnableVideoText = EditorGUIUtility.TrTextContent("Enable Video");
         static GUIContent s_EnableAudioText = EditorGUIUtility.TrTextContent("Enable Audio");
         static GUIContent s_MaxBitrateText = EditorGUIUtility.TrTextContent("Max Bitrate (kbps)");
-        static GUIContent s_AutoConnectRemoting = new GUIContent("Connect on Play", null, "When enabled, will auto connect remoting when the Editor enters play mode.");
+        static GUIContent s_ShouldListenText = EditorGUIUtility.TrTextContent("Listen for connection");
+        static GUIContent s_AutoConnectOnPlay = new GUIContent("Connect on Play", null, "When enabled, will auto connect remoting when the Editor enters play mode.");
+        static GUIContent s_AutoListenOnPlay = new GUIContent("Listen on Play", null, "When enabled, will automatically create a listening remoting server when the Editor enters play mode.");
         static GUIContent s_ConnectionButtonConnectText = EditorGUIUtility.TrTextContent("Connect");
+        static GUIContent s_ConnectionButtonListenText = EditorGUIUtility.TrTextContent("Listen");
         static GUIContent s_ConnectionButtonDisconnectText = EditorGUIUtility.TrTextContent("Disconnect");
 
         static GUIContent s_ConnectionStateDisconnectedText = EditorGUIUtility.TrTextContent("Disconnected");
         static GUIContent s_ConnectionStateConnectingText = EditorGUIUtility.TrTextContent("Connecting");
+        static GUIContent s_ConnectionStateListeningText = EditorGUIUtility.TrTextContent("Listening");
         static GUIContent s_ConnectionStateConnectedText = EditorGUIUtility.TrTextContent("Connected");
 
         static GUIContent s_RemotingSettingsReminder = EditorGUIUtility.TrTextContent("The Editor uses player settings from the 'Standalone' platform for play mode and a remoting connection can be established without 'Windows Mixed Reality' enabled.");
@@ -88,9 +98,11 @@ namespace UnityEditor.XR.WindowsMR
             return s_Connector;
         }
 
+        bool m_IsListening = false;
+
         static RemoteSettings s_RemoteSettings = null;
 
-        const string s_SettingsPath = "UserSettings";
+        static string s_SettingsPath => Path.Combine(Application.dataPath, "../UserSettings");
         const string s_SettingsFileName = "WindowsMRRemoteSettings.asset";
 
         internal static void LoadSettings()
@@ -170,7 +182,7 @@ namespace UnityEditor.XR.WindowsMR
             if (WindowsMREmulation.mode == WindowsMREmulationMode.Remoting && WindowsMRRemoting.isConnected)
             {
                 var connector = GetConnector();
-                if (EditorApplication.isPlaying && s_RemoteSettings.autoConnectOnPlay && connector)
+                if (EditorApplication.isPlaying && s_RemoteSettings.m_AutoConnectOnPlay && connector)
                 {
                     connector.StopRemotingConnection();
                     GameObject.Destroy(s_Connector);
@@ -199,9 +211,9 @@ namespace UnityEditor.XR.WindowsMR
 
                 case PlayModeStateChange.EnteredPlayMode:
                     LoadSettings();
-                    if (WindowsMREmulation.mode == WindowsMREmulationMode.Remoting && connector && s_RemoteSettings.autoConnectOnPlay)
+                    if (WindowsMREmulation.mode == WindowsMREmulationMode.Remoting && connector && s_RemoteSettings.m_AutoConnectOnPlay)
                     {
-                        if (string.IsNullOrEmpty(s_RemoteSettings.m_RemoteMachineName))
+                        if (!s_RemoteSettings.m_shouldListen && string.IsNullOrEmpty(s_RemoteSettings.m_RemoteMachineName))
                         {
                             Debug.LogError("Atempting to initiate remoting connection with no valid machine name set.");
                             return;
@@ -210,7 +222,8 @@ namespace UnityEditor.XR.WindowsMR
                             s_RemoteSettings.m_RemoteMachineName,
                             s_RemoteSettings.m_EnableAudio,
                             s_RemoteSettings.m_EnableVideo,
-                            s_RemoteSettings.m_MaxBitRateKbps);
+                            s_RemoteSettings.m_MaxBitRateKbps,
+                            s_RemoteSettings.m_shouldListen);
                     }
 
                     break;
@@ -245,12 +258,12 @@ namespace UnityEditor.XR.WindowsMR
                 return;
             }
 
-            if (previousConnectionState == ConnectionState.Connecting && connectionState == ConnectionState.Disconnected)
+            if (previousConnectionState == ConnectionState.Connecting && connectionState == ConnectionState.Disconnected && !s_RemoteSettings.m_shouldListen)
             {
                 ConnectionFailureReason failureReason;
                 WindowsMRRemoting.TryGetConnectionFailureReason(out failureReason);
 
-                Debug.Log("Connection Failure Reason: " + failureReason);
+                Debug.Log("Remoting Failure Reason: " + failureReason);
             }
 
             if (previousConnectionState != connectionState)
@@ -263,17 +276,20 @@ namespace UnityEditor.XR.WindowsMR
             {
                 case ConnectionState.Disconnected:
                 default:
+                    m_IsListening = false;
                     labelContent = s_ConnectionStateDisconnectedText;
                     buttonContent = s_ConnectionButtonConnectText;
                     break;
 
                 case ConnectionState.Connecting:
-                    labelContent = s_ConnectionStateConnectingText;
+                    m_IsListening = s_RemoteSettings.m_shouldListen;
+                    labelContent = s_RemoteSettings.m_shouldListen ? s_ConnectionStateListeningText : s_ConnectionStateConnectingText;
                     buttonContent = s_ConnectionButtonDisconnectText;
                     Repaint();
                     break;
 
                 case ConnectionState.Connected:
+                    m_IsListening = false;
                     labelContent = s_ConnectionStateConnectedText;
                     buttonContent = s_ConnectionButtonDisconnectText;
                     break;
@@ -282,22 +298,26 @@ namespace UnityEditor.XR.WindowsMR
 
         void HandleManualConnect()
         {
-            if (!s_RemoteSettings.autoConnectOnPlay)
+            if (!s_RemoteSettings.m_AutoConnectOnPlay)
             {
                 if (connectionState != ConnectionState.Connected)
                 {
-                    bool shouldDisableButton = string.IsNullOrEmpty(s_RemoteSettings.m_RemoteMachineName) ||
-                        EditorApplication.isPlayingOrWillChangePlaymode ||
-                        connectionState != ConnectionState.Disconnected;
+                    bool shouldDisableButton = false;
+
+                    if (!s_RemoteSettings.m_shouldListen)
+                        shouldDisableButton = (string.IsNullOrEmpty(s_RemoteSettings.m_RemoteMachineName) ||
+                                EditorApplication.isPlayingOrWillChangePlaymode ||
+                                connectionState != ConnectionState.Disconnected);
 
                     EditorGUILayout.Space();
                     EditorGUI.BeginDisabledGroup(shouldDisableButton);
-                    if (GUILayout.Button(s_ConnectionButtonConnectText))
+                    if (GUILayout.Button(
+                            m_IsListening ? s_ConnectionButtonDisconnectText :
+                                    s_RemoteSettings.m_shouldListen ? s_ConnectionButtonListenText : s_ConnectionButtonConnectText))
                     {
                         var connector = GetConnector();
                         if (connector)
                         {
-                            Debug.Log("Attempting to start remoting...");
                             if (!WindowsMRRemoting.TryGetConnectionState(out connectionState))
                             {
                                 Debug.LogError("Failed to get connection state! Connection attempt terminated");
@@ -308,7 +328,24 @@ namespace UnityEditor.XR.WindowsMR
                             WindowsMRRemoting.isAudioEnabled = s_RemoteSettings.m_EnableAudio;
                             WindowsMRRemoting.isVideoEnabled = s_RemoteSettings.m_EnableVideo;
                             WindowsMRRemoting.maxBitRateKbps = s_RemoteSettings.m_MaxBitRateKbps;
-                            WindowsMRRemoting.Connect();
+
+                            if (s_RemoteSettings.m_shouldListen)
+                            {
+                                if (m_IsListening)
+                                {
+                                    WindowsMRRemoting.Disconnect();
+                                }
+                                else
+                                {
+                                    Debug.Log("Attempting to start listening for remoting connection...");
+                                    WindowsMRRemoting.Listen();
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("Attempting to start remoting...");
+                                WindowsMRRemoting.Connect();
+                            }
                             Repaint();
                         }
                     }
@@ -352,11 +389,16 @@ namespace UnityEditor.XR.WindowsMR
             s_RemoteSettings.m_RemoteMachineName = EditorGUILayout.TextField(s_RemoteMachineText, s_RemoteSettings.m_RemoteMachineName);
             s_RemoteSettings.m_EnableAudio = EditorGUILayout.Toggle(s_EnableVideoText, s_RemoteSettings.m_EnableAudio);
             s_RemoteSettings.m_EnableVideo = EditorGUILayout.Toggle(s_EnableAudioText, s_RemoteSettings.m_EnableVideo);
-            s_RemoteSettings.m_MaxBitRateKbps = EditorGUILayout.IntSlider(s_MaxBitrateText, s_RemoteSettings.m_MaxBitRateKbps, 1024, s_RemoteSettings.m_MaxBitRateKbps);
+            s_RemoteSettings.m_MaxBitRateKbps = EditorGUILayout.IntSlider(s_MaxBitrateText, s_RemoteSettings.m_MaxBitRateKbps, 1024, 99999);
+            s_RemoteSettings.m_shouldListen = EditorGUILayout.Toggle(s_ShouldListenText, s_RemoteSettings.m_shouldListen);
+
+            if (!s_RemoteSettings.m_shouldListen && m_IsListening)
+                WindowsMRRemoting.Disconnect();
 
             EditorGUILayout.Space();
-            s_RemoteSettings.autoConnectOnPlay = EditorGUILayout.Toggle(s_AutoConnectRemoting, s_RemoteSettings.autoConnectOnPlay);
-            if (s_RemoteSettings.autoConnectOnPlay)
+
+            s_RemoteSettings.m_AutoConnectOnPlay = EditorGUILayout.Toggle(s_RemoteSettings.m_shouldListen ? s_AutoListenOnPlay : s_AutoConnectOnPlay, s_RemoteSettings.m_AutoConnectOnPlay);
+            if (s_RemoteSettings.m_AutoConnectOnPlay)
             {
                 EditorGUILayout.HelpBox(s_AutoRemotingConnectionHelp);
             }

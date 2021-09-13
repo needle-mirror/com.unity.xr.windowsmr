@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 
 using UnityEngine;
-using UnityEditor;
+using UnityEngine.XR.Management;
 using UnityEngine.XR.WindowsMR;
 
-using UnityEngine.XR.Management;
+using UnityEditor;
 
 namespace UnityEngine.XR.WindowsMR
 {
@@ -15,7 +15,7 @@ namespace UnityEngine.XR.WindowsMR
         bool m_EnableAudio = false;
         bool m_EnableVideo = false;
         int m_MaxBitRateKbps = 0;
-
+        bool m_Listen = false;
 
         IEnumerator StartRemotingSession()
         {
@@ -40,7 +40,14 @@ namespace UnityEngine.XR.WindowsMR
             WindowsMRRemoting.isVideoEnabled = m_EnableVideo;
             WindowsMRRemoting.maxBitRateKbps = m_MaxBitRateKbps;
 
-            WindowsMRRemoting.Connect();
+            if (m_Listen)
+            {
+                WindowsMRRemoting.Listen();
+            }
+            else
+            {
+                WindowsMRRemoting.Connect();
+            }
 
             yield return new WaitForEndOfFrame();
             ConnectionState connectionState = ConnectionState.Disconnected;
@@ -52,7 +59,10 @@ namespace UnityEngine.XR.WindowsMR
                 connectionTryCount++;
                 if (connectionState == ConnectionState.Connecting)
                 {
-                    Debug.Log($"Still connecting to {WindowsMRRemoting.remoteMachineName}...");
+                    if (m_Listen)
+                        Debug.Log($"Still listening for a connection request...");
+                    else
+                        Debug.Log($"Still connecting to {WindowsMRRemoting.remoteMachineName}...");
                     yield return new WaitForSeconds(1);
                     continue;
                 }
@@ -62,7 +72,10 @@ namespace UnityEngine.XR.WindowsMR
             switch (connectionState)
             {
                 case ConnectionState.Connected:
-                    Debug.Log($"Successfully connected to {WindowsMRRemoting.remoteMachineName} after {connectionTryCount} seconds.");
+                    if (m_Listen)
+                        Debug.Log($"Connection request accepted...");
+                    else
+                        Debug.Log($"Successfully connected to {WindowsMRRemoting.remoteMachineName} after {connectionTryCount} seconds.");
 
                     yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
                     if (XRGeneralSettings.Instance.Manager.activeLoader != null)
@@ -70,20 +83,24 @@ namespace UnityEngine.XR.WindowsMR
                     break;
 
                 case ConnectionState.Disconnected:
-                    Debug.LogError($"Unable to connect to {WindowsMRRemoting.remoteMachineName} after {connectionTryCount} seconds");
+                    if (m_Listen)
+                        Debug.Log($"Failure to get a connection request  after {connectionTryCount} seconds.");
+                    else
+                        Debug.LogError($"Unable to connect to {WindowsMRRemoting.remoteMachineName} after {connectionTryCount} seconds.");
                     ConnectionFailureReason failureReason = ConnectionFailureReason.None;
                     WindowsMRRemoting.TryGetConnectionFailureReason(out failureReason);
-                    Debug.LogError($"Connection Failure Reason {failureReason}");
+                    Debug.LogError($"Remoting Failure Reason {failureReason}");
                     break;
             }
         }
 
-        public void StartRemotingConnection(string remoteMachineName, bool enableAudio, bool enableVideo, int maxBitRateKbps)
+        public void StartRemotingConnection(string remoteMachineName, bool enableAudio, bool enableVideo, int maxBitRateKbps, bool listen = false)
         {
             m_RemoteMachineName = remoteMachineName;
             m_EnableAudio = enableAudio;
             m_EnableVideo = enableVideo;
             m_MaxBitRateKbps = maxBitRateKbps;
+            m_Listen = listen;
             StartCoroutine(StartRemotingSession());
         }
 
