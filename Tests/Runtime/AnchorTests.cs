@@ -19,7 +19,7 @@ namespace UnityEngine.XR.WindowsMR.Tests
     public class AnchorTests : TestBaseSetup
     {
         static TrackableId defaultId = default(TrackableId);
-        static Pose defaultPose = new Pose{ position = Vector3.zero, rotation = Quaternion.identity };
+        static Pose defaultPose = new Pose{ position = Vector3.forward, rotation = Quaternion.identity };
 
         [SetUp]
         public void SetUp()
@@ -57,6 +57,7 @@ namespace UnityEngine.XR.WindowsMR.Tests
             bool ret = rpsub.TryAddAnchor(defaultPose, out rp);
             Assert.IsTrue(ret);
             Assert.AreNotEqual(defaultId, rp.trackableId);
+            Assert.AreEqual(defaultPose, rp.pose);
 
             yield return null;
 

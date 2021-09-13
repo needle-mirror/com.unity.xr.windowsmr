@@ -53,5 +53,12 @@ namespace Unity.XR.WindowsMR
         /// </summary>
         /// <remarks>This data is HoloLens2-specific. </remarks>
         public static InputFeatureUsage<bool> EyeGazeTracked = new InputFeatureUsage<bool>("EyeGazeTracked");
+        /// <summary>
+        /// A integer value that reports position data accuracy status.
+        /// A value of 0 is accurate position.
+        /// A value of 1 is estimated position.
+        /// </summary>
+        /// <remarks>This data is HoloLens2-specific. </remarks>
+        public static InputFeatureUsage<uint> PositionAccuracy = new InputFeatureUsage<uint>("PositionAccuracy");
     }
 }

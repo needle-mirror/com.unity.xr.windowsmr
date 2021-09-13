@@ -4,6 +4,21 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.6.0] - 2021-09-13
+* Update minor version to accomodat new APIs added in this release.
+
+## [4.5.1] - 2021-09-09
+* Add missing velocity for hand tracking.
+* Fix regression in remoting UI that broke max bit rate slider.
+* Change tracking state check for anchors based on feedback from partner.
+* Fix issue with meshes never being reported as removed. Issue: [1348765](https://issuetracker.unity3d.com/product/unity/issues/guid/1348675/)
+* Check holographic space availability before creating anything to make sure we fail gracefully when there is no MRP or device connected.
+* Fix the UserSettings path potentially saving the user settings outside of the Project folder.
+* Add support for running app as a remoting server as well as a remoting client.
+* Update remoting to version 2.6.2.
+* Change preferred video codec from H264 to Any in order to prevent issue with machines using H265.
+* Add WindowsMR InputFeatureUsage PositionAccuracy for camera, controllers, and hands.
+
 ## [4.5.0] - 2021-04-20
 * Fixed headset input device not reconnecting after an application is resumed after being suspended when Run In Background is disabled.
 * Fix depth reprojection stability issues.
