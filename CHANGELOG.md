@@ -4,6 +4,25 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.4.1] - 2021-09-14
+* Resolve Linux build issue when using package.
+
+## [5.4.0] - 2021-09-13
+* Update minor version to accomodate new APIs added in this release.
+
+## [5.3.1] - 2021-09-09
+* Add missing velocity for hand tracking.
+* Fix regression in remoting UI that broke max bit rate slider.
+* Change tracking state check for anchors based on feedback from partner.
+* Fix issue with meshes never being reported as removed. Issue: [1348765](https://issuetracker.unity3d.com/product/unity/issues/guid/1348675/)
+* Fix anchor tracking state issue.
+* Check holographic space availability before creating anything to make sure we fail gracefully when there is no MRP or device connected.
+* Fix the UserSettings path potentially saving the user settings outside of the Project folder.
+* Add support for running app as a remoting server as well as a remoting client.
+* Update remoting to version 2.6.2.
+* Change preferred video codec from H264 to Any in order to prevent issue with machines using H265.
+* Add WindowsMR InputFeatureUsage PositionAccuracy for camera, controllers, and hands.
+
 ## [5.3.0] - 2021-04-20
 * Fix crash in Meshing when user configures ARMeshManager to not return normals.
 * Add deprecation messaging and UI changes to clarify that the Windows XR Plugin is being deprecated and replaced by OpenXR.
@@ -30,6 +49,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [5.2.1] - 2021-01-21
 * Update XR Management dependency to version 4.0.1.
+
+## [5.1.0-exp.2] - 2020-11-16
+* Update management dependency version.
 
 ## [5.2.0] - 2020-12-02
 * Fixed issues in native code to address bugs that appeared when remoting to HoloLens devices.

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Scripting;
 
@@ -12,9 +13,6 @@ using UnityEditor;
 using UnityEngineInternal.XR.WSA;
 #endif
 
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WINRT
-using System.Runtime.InteropServices;
-#endif
 
 namespace UnityEngine.XR.WindowsMR
 {
@@ -161,17 +159,137 @@ namespace UnityEngine.XR.WindowsMR
             }
         }
 
-        /// <summary>Attempt to connect to the Holographic Remoting Player on the device specified by the remoteMachineName</summary>
-        public static void Connect()
+        private static void EnableRemoteSpeech()
         {
 #if UNITY_2019_3_OR_NEWER && !UNITY_2020_2_OR_NEWER
 #pragma warning disable 0618
             RemoteSpeechAccess.EnableRemoteSpeech(UnityEngine.XR.WSA.RemoteDeviceVersion.V2);
 #pragma warning restore 0618
 #endif
+        }
+
+        /// <summary>
+        /// Setup a listening port for a server to attempt to connect
+        /// to the client application on the device.
+        /// </summary>
+        public static void Listen()
+        {
+            EnableRemoteSpeech();
+            // throw exception on failed connection?
+            Debug.Log("Remoting listen returned: " + UnityWindowsMR_Remoting_TryListen());
+        }
+
+        /// <summary>
+        /// Callback server API used to request validation of the token sent from the client. Passed to <see cref="Listen"/>
+        /// to be used later to request that a token be validated as authentic.
+        ///
+        /// See <see href="https://docs.microsoft.com/en-us/windows/mixed-reality/develop/platform-capabilities-and-apis/holographic-remoting-secure-connection">Microsoft documentation</see>
+        /// about secure Holographic Remoting Connections for how a secure connection is setup and used.
+        /// </summary>
+        /// <param name="token">Token value passed to the <see cref="Listen"/> as part of the <see cref="SecureListenData.token" />.</param>
+        /// <param name="tokenToCheck">Shared secret that needs to be validated.</param>
+        public delegate bool ValidateToken([MarshalAs(UnmanagedType.LPWStr)]string token, [MarshalAs(UnmanagedType.LPWStr)]string tokenToCheck);
+
+        /// <summary>
+        /// Used to pass vertificate and authentication validation to the remoting runtime when
+        /// remoting is setup using the secure <see cref="Listn"/> API.
+        ///
+        /// See <see href="https://docs.microsoft.com/en-us/windows/mixed-reality/develop/platform-capabilities-and-apis/holographic-remoting-secure-connection">Microsoft documentation</see>
+        /// about secure Holographic Remoting Connections for how a secure connection is setup and used.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public struct SecureListenData
+        {
+            /// <summary>
+            /// Byte array that contains the encrypted certificate information that the secure <see cref="Listen" />
+            /// API will use to validate it's authenticity with the client.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPArray)]
+            public byte[] certificate;
+
+            /// <summary>
+            /// Count of bytes in the <see cref="certificate"/> array.
+            /// </summary>
+            public uint certificateByteCount;
+
+            /// <summary>
+            /// The subject of the certificate. Used to securely retrieve the certificate information
+            /// from the <see cref="certificate"/>.
+            /// 
+            /// Must match the subject name that was used to create the certificate data passed in <see cref="certificate" />.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string certificateSubject;
+
+            /// <summary>
+            /// The password used to securely retrieve the certificate information
+            /// from the <see cref="certificate"/>.
+            /// 
+            /// Must match the password that was used to create the certificate data passed in <see cref="certificate" />.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string certificatePassword;
+
+            /// <summary>
+            /// The Realm of the authentication provider set up with the secure <see cref="Listen"/> API.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string realm;
+
+            /// <summary>
+            /// Shared token used to authenticate the id of the account opening the secure connection.
+            /// 
+            /// Not required if the a validation callback delegate is provided to the <see cref="Listen"/> API call.
+            /// 
+            /// If this is empty, and the validation callback is not used then a secure connection will not
+            /// be established and the Listen call will fallback to non-secure listen mode.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string token;
+        }
+
+        /// <summary>
+        /// Setup a listening port for a server to attempt to connect
+        /// to the client application on the device.
+        ///
+        /// Will used the passed in data to create a secure network connection
+        /// and to authenticate the client.
+        /// 
+        /// If <see cref="SecureListenData.token"/> is empty, and the validation callback is not used then a secure connection will not
+        /// be established and the Listen call will fallback to non-secure listen mode.
+        /// </summary>
+        /// <param name="data">Instance of <see cref="SecureListenData"/> with information for validation and authentication.</param>
+        /// <param name="validateToken">The <see cref="ValidationToken" /> callback used to request validation of the authentication token sent from the client.</param>
+        public static void Listen(SecureListenData data, ValidateToken validateToken)
+        {
+            EnableRemoteSpeech();
+            // throw exception on failed connection?
+            Debug.Log("Remoting listen returned: " + UnityWindowsMR_Remoting_TryListenSecure(data, validateToken));
+
+        }
+
+        /// <summary>Attempt to connect to the Holographic Remoting Player on the device specified by the remoteMachineName</summary>
+        public static void Connect()
+        {
+            EnableRemoteSpeech();
 
             // throw exception on failed connection?
             Debug.Log("Remoting connect returned: " + UnityWindowsMR_Remoting_TryConnect());
+        }
+
+        /// <summary>
+        /// Attempts to create a secure connection to the server.
+        ///
+        /// See <see href="https://docs.microsoft.com/en-us/windows/mixed-reality/develop/platform-capabilities-and-apis/holographic-remoting-secure-connection">Microsoft documentation</see>
+        /// about secure Holographic Remoting Connections for how a secure connection is setup and used.
+        /// </summary>
+        /// <param name="token">Shared secret used to authenticate the client with the server.</param>
+        public static void Connect(string token)
+        {
+            EnableRemoteSpeech();
+
+            // throw exception on failed connection?
+            Debug.Log("Remoting connect returned: " + UnityWindowsMR_Remoting_TryConnectSecure(token));
         }
 
         /// <summary>Disconnect any active remoting connections</summary>
@@ -243,6 +361,15 @@ namespace UnityEngine.XR.WindowsMR
         public static extern bool UnityWindowsMR_Remoting_TryConnect();
 
         [DllImport("WindowsMRXRSDK")]
+        public static extern bool UnityWindowsMR_Remoting_TryConnectSecure([MarshalAs(UnmanagedType.LPWStr)]string token);
+
+        [DllImport("WindowsMRXRSDK")]
+        public static extern bool UnityWindowsMR_Remoting_TryListen();
+
+        [DllImport("WindowsMRXRSDK")]
+        public static extern bool UnityWindowsMR_Remoting_TryListenSecure(SecureListenData data, ValidateToken validateToken);
+
+        [DllImport("WindowsMRXRSDK")]
         public static extern bool UnityWindowsMR_Remoting_TryDisconnect();
 #else
         static void UnityWindowsMR_Remoting_SetVideoEnabled(bool video)
@@ -296,6 +423,21 @@ namespace UnityEngine.XR.WindowsMR
         }
 
         static bool UnityWindowsMR_Remoting_TryConnect()
+        {
+            return false;
+        }
+
+        static bool UnityWindowsMR_Remoting_TryConnectSecure(string token)
+        {
+            return false;
+        }
+
+        static bool UnityWindowsMR_Remoting_TryListen()
+        {
+            return false;
+        }
+
+        static bool UnityWindowsMR_Remoting_TryListenSecure(SecureListenData data, ValidateToken validateToken)
         {
             return false;
         }

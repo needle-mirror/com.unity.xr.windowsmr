@@ -22,7 +22,7 @@ For more info see https://docs.microsoft.com/en-us/windows/mixed-reality/develop
 
 # Supported XR SDK Subsystems
 
-Please see the [XR SDK documentation](https://github.cds.internal.unity3d.com/unity/xr.sdk) for information on all subsystems implemented here.
+Please see the [XR SDK documentation](https://docs.unity3d.com/Manual/xr-sdk.html) for information on all subsystems implemented here.
 
 ## Session
 
