@@ -4,6 +4,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.9.1] - 2021-11-14
+### Fixes
+* Issue [1372667](https://fogbugz.unity3d.com/f/cases/1372667/): Fix AV exception caused by derf of mull ptr. 
+* Fix hand jitter on HoloLens2 when holding hands steady.
+* Fix MaxVideoBitRate in remoting apps forcing 20000 kbps bitrate.
+
 ## [2.9.0] - 2021-09-13
 * Bump minor version to deal with the fact that we added APIs in this last release.
 
