@@ -49,8 +49,7 @@ namespace UnityEngine.XR.WindowsMR.Input
         public QuaternionControl centerEyeRotation { get; private set; }
         [Preserve]
         [InputControl]
-        public AxisControl positionAccuracy { get; private set; }
-
+        public IntegerControl positionAccuracy { get; private set; }
 
         protected override void FinishSetup()
         {
@@ -67,12 +66,12 @@ namespace UnityEngine.XR.WindowsMR.Input
             rightEyeRotation = GetChildControl<QuaternionControl>("rightEyeRotation");
             centerEyePosition = GetChildControl<Vector3Control>("centerEyePosition");
             centerEyeRotation = GetChildControl<QuaternionControl>("centerEyeRotation");
-            positionAccuracy = GetChildControl<AxisControl>("positionAccuracy");
+            positionAccuracy = GetChildControl<IntegerControl>("positionAccuracy");
         }
     }
 
     /// <summary>
-    /// A Windows Mixed Reality XR controller.
+    /// A HoloLens hand.
     /// </summary>
     [Preserve]
     [InputControlLayout(displayName = "HoloLens Hand", commonUsages = new[] { "LeftHand", "RightHand" })]
@@ -104,7 +103,7 @@ namespace UnityEngine.XR.WindowsMR.Input
         public Vector3Control sourceLossMitigationDirection { get; private set; }
         [Preserve]
         [InputControl]
-        public AxisControl positionAccuracy { get; private set; }
+        public IntegerControl positionAccuracy { get; private set; }
 
         protected override void FinishSetup()
         {
@@ -118,10 +117,13 @@ namespace UnityEngine.XR.WindowsMR.Input
             deviceVelocity = GetChildControl<Vector3Control>("deviceVelocity");
             sourceLossRisk = GetChildControl<AxisControl>("sourceLossRisk");
             sourceLossMitigationDirection = GetChildControl<Vector3Control>("sourceLossMitigationDirection");
-            positionAccuracy = GetChildControl<AxisControl>("positionAccuracy");
+            positionAccuracy = GetChildControl<IntegerControl>("positionAccuracy");
         }
     }
 
+    /// <summary>
+    /// A Windows Mixed Reality XR controller.
+    /// </summary>
     [Preserve]
     [InputControlLayout(displayName = "Windows MR Controller", commonUsages = new[] { "LeftHand", "RightHand" })]
     public class WMRSpatialController : XRControllerWithRumble
@@ -192,7 +194,7 @@ namespace UnityEngine.XR.WindowsMR.Input
         public QuaternionControl pointerRotation { get; private set; }
         [Preserve]
         [InputControl]
-        public AxisControl positionAccuracy { get; private set; }
+        public IntegerControl positionAccuracy { get; private set; }
 
         protected override void FinishSetup()
         {
@@ -219,7 +221,7 @@ namespace UnityEngine.XR.WindowsMR.Input
             sourceLossMitigationDirection = GetChildControl<Vector3Control>("sourceLossMitigationDirection");
             pointerPosition = GetChildControl<Vector3Control>("pointerPosition");
             pointerRotation = GetChildControl<QuaternionControl>("pointerRotation");
-            positionAccuracy = GetChildControl<AxisControl>("positionAccuracy");
+            positionAccuracy = GetChildControl<IntegerControl>("positionAccuracy");
         }
     }
 }
