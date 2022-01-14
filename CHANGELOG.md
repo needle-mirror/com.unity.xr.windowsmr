@@ -4,9 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.9.2] - 2022-01-14
+* Update Microsoft App Remoting SDK to 2.7.2
+* Update device layouts for HMD, HoloLens hands, and WMR controllers to allow the input system to access position accuracy.
+* Fix crash when entering play mode when switching to/from normal and remoting session.
+
 ## [2.9.1] - 2021-11-14
 ### Fixes
-* Issue [1372667](https://fogbugz.unity3d.com/f/cases/1372667/): Fix AV exception caused by derf of mull ptr. 
+* Issue [1372667](https://fogbugz.unity3d.com/f/cases/1372667/): Fix AV exception caused by deref of null ptr.
 * Fix hand jitter on HoloLens2 when holding hands steady.
 * Fix MaxVideoBitRate in remoting apps forcing 20000 kbps bitrate.
 
