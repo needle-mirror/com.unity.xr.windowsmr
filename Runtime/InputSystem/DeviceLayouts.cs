@@ -19,34 +19,34 @@ namespace UnityEngine.XR.WindowsMR.Input
         public ButtonControl userPresence { get; private set; }
         [Preserve]
         [InputControl]
-        public IntegerControl trackingState { get; private set; }
+        public new IntegerControl trackingState { get; private set; }
         [Preserve]
         [InputControl]
-        public ButtonControl isTracked { get; private set; }
+        public new ButtonControl isTracked { get; private set; }
         [Preserve]
         [InputControl(aliases = new[] { "HeadPosition" })]
-        public Vector3Control devicePosition { get; private set; }
+        public new Vector3Control devicePosition { get; private set; }
         [Preserve]
         [InputControl(aliases = new[] { "HeadRotation" })]
-        public QuaternionControl deviceRotation { get; private set; }
+        public new QuaternionControl deviceRotation { get; private set; }
         [Preserve]
         [InputControl]
-        public Vector3Control leftEyePosition { get; private set; }
+        public new Vector3Control leftEyePosition { get; private set; }
         [Preserve]
         [InputControl]
-        public QuaternionControl leftEyeRotation { get; private set; }
+        public new QuaternionControl leftEyeRotation { get; private set; }
         [Preserve]
         [InputControl]
-        public Vector3Control rightEyePosition { get; private set; }
+        public new Vector3Control rightEyePosition { get; private set; }
         [Preserve]
         [InputControl]
-        public QuaternionControl rightEyeRotation { get; private set; }
+        public new QuaternionControl rightEyeRotation { get; private set; }
         [Preserve]
         [InputControl]
-        public Vector3Control centerEyePosition { get; private set; }
+        public new Vector3Control centerEyePosition { get; private set; }
         [Preserve]
         [InputControl]
-        public QuaternionControl centerEyeRotation { get; private set; }
+        public new QuaternionControl centerEyeRotation { get; private set; }
         [Preserve]
         [InputControl]
         public IntegerControl positionAccuracy { get; private set; }
@@ -79,16 +79,16 @@ namespace UnityEngine.XR.WindowsMR.Input
     {
         [Preserve]
         [InputControl]
-        public IntegerControl trackingState { get; private set; }
+        public new IntegerControl trackingState { get; private set; }
         [Preserve]
         [InputControl]
-        public ButtonControl isTracked { get; private set; }
+        public new ButtonControl isTracked { get; private set; }
         [Preserve]
         [InputControl(aliases = new[] { "gripPosition" })]
-        public Vector3Control devicePosition { get; private set; }
+        public new Vector3Control devicePosition { get; private set; }
         [Preserve]
         [InputControl(aliases = new[] { "gripOrientation" })]
-        public QuaternionControl deviceRotation { get; private set; }
+        public new QuaternionControl deviceRotation { get; private set; }
         [Preserve]
         [InputControl(aliases = new[] { "gripVelocity" })]
         public Vector3Control deviceVelocity { get; private set; }
@@ -160,16 +160,16 @@ namespace UnityEngine.XR.WindowsMR.Input
         public ButtonControl touchpadTouched { get; private set; }
         [Preserve]
         [InputControl]
-        public IntegerControl trackingState { get; private set; }
+        public new IntegerControl trackingState { get; private set; }
         [Preserve]
         [InputControl]
-        public ButtonControl isTracked { get; private set; }
+        public new ButtonControl isTracked { get; private set; }
         [Preserve]
         [InputControl(aliases = new[] { "gripPosition" })]
-        public Vector3Control devicePosition { get; private set; }
+        public new Vector3Control devicePosition { get; private set; }
         [Preserve]
         [InputControl(aliases = new[] { "gripOrientation" })]
-        public QuaternionControl deviceRotation { get; private set; }
+        public new QuaternionControl deviceRotation { get; private set; }
         [Preserve]
         [InputControl(aliases = new[] { "gripVelocity" })]
         public Vector3Control deviceVelocity { get; private set; }
