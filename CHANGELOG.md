@@ -4,6 +4,9 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.6.5] - 2022-10-26
+* Fix crash when attempting to Update Reference points with invalid WorldOrigin
+
 ## [4.6.4] - 2022-06-15
 * Add debug symbols for WindowsMRXRSDK.dll
 * Update Microsoft App Remoting SDK to 2.8.1

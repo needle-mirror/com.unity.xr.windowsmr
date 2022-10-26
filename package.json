@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.windowsmr",
   "displayName": "Windows XR Plugin",
-  "version": "4.6.4",
+  "version": "4.6.5",
   "unity": "2020.3",
   "unityRelease": "5f1",
   "description": "Provides implementation and support for Unity XR SDK, allowing integration and use of Windows Mixed Reality devices.",
@@ -26,7 +26,7 @@
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/xr.sdk.windowsmr.git",
     "type": "git",
-    "revision": "6b6be756c94124909e90c477c69146f69be0d504"
+    "revision": "4a8cb69eff6896be651dcc87ea54fa3ed34ef2fc"
   },
   "samples": [
     {
@@ -36,6 +36,6 @@
     }
   ],
   "upmCi": {
-    "footprint": "9e3a89ce26b4b0688221a4736367ef1fa690801e"
+    "footprint": "123d3c4d7b38a68814e0204981afddc061655add"
   }
 }
