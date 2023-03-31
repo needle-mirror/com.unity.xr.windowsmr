@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.6.6] - 2023-03-31
+* Fix crash when using Shared Depth Buffer option in the Windows Mixed Reality Settings.
+* Add error to build when using DX12 graphics api as this is not supported.
+
 ## [4.6.5] - 2022-10-26
 * Fix crash when attempting to Update Reference points with invalid WorldOrigin
 

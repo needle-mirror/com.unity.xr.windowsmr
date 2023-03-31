@@ -9,6 +9,7 @@ using UnityEditor.Build.Reporting;
 using UnityEditor.XR.Management;
 
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.XR.Management;
 
 using UnityEngine.XR.WindowsMR;
@@ -304,6 +305,12 @@ namespace UnityEditor.XR.WindowsMR
         {
             if (IsCurrentBuildTargetVaild(report) && HasLoaderEnabledForTarget(report.summary.platformGroup))
             {
+                foreach (GraphicsDeviceType api in PlayerSettings.GetGraphicsAPIs(report.summary.platform))
+                {
+                    if (api == GraphicsDeviceType.Direct3D12)
+                        Debug.LogError("DirectX 12 is not supported when using Windows Mixed Reality XR SDK. Please remove it from the list of Supported Graphics APIs in Player Settings.");
+                }
+
                 base.OnPreprocessBuild(report);
 
                 BootConfig bootConfig = new BootConfig(report);
